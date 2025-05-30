@@ -1,4 +1,4 @@
-# coachtech 勤怠管理
+# coachtech 勤怠管理 制作中です
 
 ## 環境構築
 
