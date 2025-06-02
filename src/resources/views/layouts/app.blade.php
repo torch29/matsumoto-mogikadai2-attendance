@@ -19,27 +19,22 @@
                 </a>
             </h1>
             <ul class="header-nav__list">
+                @if (Auth::check())
+                <li class="header-nav__list-item"><a href="/">勤怠</a></li>
+                <li class="header-nav__list-item"><a href="/">勤怠一覧</a></li>
+                <li class="header-nav__list-item"><a href="/">申請</a></li>
                 <li class="header-nav__list-item">
-                    <ul class="header-nav__list--user">
-                        @if (Auth::check())
-                        <li class="header-nav__user-item">
-                            <form action="/logout" class="header-nav__form" method="post">
-                                @csrf
-                                <button class="header-nav__button-submit">ログアウト</button>
-                            </form>
-                        </li>
-                        @else
-                        <li class="header-nav__user-item">
-                            <form action="/login" method="get">
-                                @csrf
-                                <button class="header-nav__button-submit">ログイン</button>
-                            </form>
-                        </li>
-                        @endif
-                        <li class="header-nav__user-item"><a href="/mypage">マイページ</a></li>
-                        <a href="/sell" class="header-nav__button">出品</a>
-                    </ul>
+                    <form action="/logout" class="header-nav__form" method="post">
+                        @csrf
+                        <button class="header-nav__button-submit">ログアウト</button>
+                    </form>
                 </li>
+                @else
+                <li class="header-nav__list-item">
+
+                </li>
+                @endif
+
             </ul>
         </nav>
     </header>
