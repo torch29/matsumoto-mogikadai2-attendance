@@ -28,8 +28,8 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        /* 初期設定としてコメントアウト　後で消す　消去
         Fortify::createUsersUsing(CreateNewUser::class);
+        /* 初期設定としてコメントアウト　後で消す　消去
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
@@ -51,7 +51,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::loginView(function () {
-            return view('auth.login');
+            return view('staff.auth.login');
         });
 
         RateLimiter::for('login', function (Request $request) {
