@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CorrectionRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +15,9 @@ use App\Http\Controllers\AttendanceController;
 |
 */
 
+//勤怠登録（トップ）画面の表示
 Route::get('/attendance', [AttendanceController::class, 'index']);
+//勤怠一覧の表示
+Route::get('attendance/list', [AttendanceController::class, 'showAttendanceList']);
+//申請一覧の表示
+Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);

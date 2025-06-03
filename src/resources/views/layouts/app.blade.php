@@ -20,9 +20,9 @@
             </h1>
             <ul class="header-nav__list">
                 @if (Auth::check())
-                <li class="header-nav__list-item"><a href="/">勤怠</a></li>
-                <li class="header-nav__list-item"><a href="/">勤怠一覧</a></li>
-                <li class="header-nav__list-item"><a href="/">申請</a></li>
+                <li class="header-nav__list-item"><a href="/attendance">勤怠</a></li>
+                <li class="header-nav__list-item"><a href="/attendance/list">勤怠一覧</a></li>
+                <li class="header-nav__list-item"><a href="/stamp_correction_request/list">申請</a></li>
                 <li class="header-nav__list-item">
                     <form action="/logout" class="header-nav__form" method="post">
                         @csrf
