@@ -6,7 +6,7 @@ body {
     margin: 0 auto;
 }
 .list__title {
-    border-left: 4px solid #333;
+    border-left: 5px solid #333;
     padding-left: 8px;
 }
 
@@ -19,38 +19,47 @@ body {
     justify-content: space-between;
     align-items: center;
 }
-.list__table {
+.attendance-table,
+.request-table {
     background-color: #fff;
     border-radius: 5px;
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
 }
-.list__table-heading {
+.attendance-table__heading,
+.request-table__heading {
     font-weight: normal;
     border-bottom: 3px solid #E1E1E1;
 }
-.list__table-heading:first-child {
+.attendance-table__heading:first-child,
+.request-table__heading:first-child {
     width: 8em;
 }
-.list__table-heading:last-child {
+.attendance-table__heading:last-child,
+.request-table__heading:last-child {
     padding-right: 30px;
 }
-.list__table-row {
+.attendance-table__row,
+.request-table__row {
     border-collapse: collapse;
-    height: 40px;
+    height: 50px;
     text-align: center;
 }
-.list__table-row:last-child:not {
+.attendance-table__row:not(:last-child),
+.request-table__row:not(:last-child) {
     border-bottom: 2px solid #E1E1E1;
 }
-.list__table-data {
+.attendance-table__data,
+.request-table__data {
     padding: 3px 10px;
 }
-.list__table-data:first-child {
+.attendance-table__data:first-child,
+.request-table__data:first-child {
     padding-left: 30px;
 }
-.list__table-data:last-child {
+.attendance-table__data:last-child,
+.request-table__data:last-child {
     font-weight: bold;
     padding: 3px 30px 3px 0px;
 }
