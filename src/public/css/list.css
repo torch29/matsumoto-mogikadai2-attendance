@@ -10,13 +10,14 @@ body {
     padding-left: 8px;
 }
 
-.list__select-area {
+.list__guide-area {
     background-color: #fff;
     margin: 10px 0 25px 0;
     border-radius: 5px;
     height: 50px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .list__table {
     background-color: #fff;
@@ -27,7 +28,7 @@ body {
 }
 .list__table-heading {
     font-weight: normal;
-    border-bottom: 2px solid #E1E1E1;
+    border-bottom: 3px solid #E1E1E1;
 }
 .list__table-heading:first-child {
     width: 8em;
@@ -36,10 +37,12 @@ body {
     padding-right: 30px;
 }
 .list__table-row {
-    border-bottom: 1px solid #E1E1E1;
     border-collapse: collapse;
-    height: 30px;
+    height: 40px;
     text-align: center;
+}
+.list__table-row:last-child:not {
+    border-bottom: 2px solid #E1E1E1;
 }
 .list__table-data {
     padding: 3px 10px;
@@ -49,5 +52,5 @@ body {
 }
 .list__table-data:last-child {
     font-weight: bold;
-    padding-right: 30px;
+    padding: 3px 30px 3px 0px;
 }
