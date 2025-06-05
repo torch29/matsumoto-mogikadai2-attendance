@@ -9,7 +9,7 @@
     <div class="main__content">
         <div class="status-label">勤務外</div>
         <div class="main__content-date">
-            {{ \Carbon\Carbon::now()->isoFormat('Y/M/D（ddd）') }}
+            {{ \Carbon\Carbon::now()->isoFormat('Y年 M月D日（ddd）') }}
         </div>
         <div class="main__content-datetime">
             {{ \Carbon\Carbon::now()->format('H:i') }}
