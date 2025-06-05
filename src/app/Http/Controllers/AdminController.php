@@ -10,4 +10,9 @@ class AdminController extends Controller
     {
         return view('admin.attendance.list');
     }
+
+    public function showStaffList()
+    {
+        return view('admin.staff.list');
+    }
 }

@@ -28,3 +28,5 @@ Route::get('/attendance/detail', [AttendanceController::class, 'showDetail']);
 
 //管理者権限で勤怠一覧画面を表示
 Route::get('/admin/attendance/list', [AdminController::class, 'index']);
+//管理者権限でスタッフ一覧画面を表示
+Route::get('admin/staff/list', [AdminController::class, 'showStaffList']);

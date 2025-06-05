@@ -1,6 +1,7 @@
 .detail__title {
     border-left: 5px solid #333;
-        padding-left: 8px;
+    padding-left: 8px;
+    margin-bottom: 50px;
 }
 body {
     background-color: #F0EFF2;
@@ -8,7 +9,7 @@ body {
 }
 
 .detail__content {
-    margin: 0 auto;
+    margin: 65px auto;
     width: 60%;
 }
 

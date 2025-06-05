@@ -3,11 +3,12 @@ body {
 }
 .list__content {
     width: 70%;
-    margin: 0 auto;
+    margin: 65px auto;
 }
 .list__title {
     border-left: 5px solid #333;
     padding-left: 8px;
+    margin-bottom: 50px;
 }
 
 .list__guide-area {
