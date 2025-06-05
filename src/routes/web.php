@@ -30,3 +30,5 @@ Route::get('/attendance/detail', [AttendanceController::class, 'showDetail']);
 Route::get('/admin/attendance/list', [AdminController::class, 'index']);
 //管理者権限でスタッフ一覧画面を表示
 Route::get('admin/staff/list', [AdminController::class, 'showStaffList']);
+//管理者ログイン画面表示のための仮ルート
+Route::get('admin/login', [AdminController::class, 'login']);

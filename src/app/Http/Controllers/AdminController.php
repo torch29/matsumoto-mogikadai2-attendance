@@ -15,4 +15,10 @@ class AdminController extends Controller
     {
         return view('admin.staff.list');
     }
+
+    //管理者ログイン画面表示
+    public function login()
+    {
+        return view('admin.auth.login');
+    }
 }
