@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CorrectionRequestController extends Controller
+class CorrectRequestController extends Controller
 {
     public function index()
     {
