@@ -10,9 +10,9 @@
         <h3>20XX年〇月◇日の勤怠</h3>
     </div>
     <div class="list__guide-area">
-        <div class="list__guide-link">←前月</div>
-        当月
-        <div class="list__guide-link">翌月→</div>
+        <div class="list__guide-link">←前日</div>
+        当日
+        <div class="list__guide-link">翌日→</div>
     </div>
     <div class="attendance-table__wrapper">
         <table class="attendance-table">

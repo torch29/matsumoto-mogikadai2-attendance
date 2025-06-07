@@ -6,7 +6,13 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function index()
+    //管理者ログイン画面表示
+    public function login()
+    {
+        return view('admin.auth.login');
+    }
+
+    public function showAttendanceListAll()
     {
         return view('admin.attendance.list_all');
     }
@@ -16,9 +22,8 @@ class AdminController extends Controller
         return view('admin.staff.list');
     }
 
-    //管理者ログイン画面表示
-    public function login()
+    public function showAttendanceListByStaff()
     {
-        return view('admin.auth.login');
+        return view('admin.attendance.list_by_staff');
     }
 }

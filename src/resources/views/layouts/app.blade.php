@@ -14,7 +14,7 @@
     <header class="header">
         <nav class="header-nav">
             <h1 class="header-nav__ttl">
-                <a href="/">
+                <a href="/attendance">
                     <img src="{{ asset('img/logo.svg') }}" class="header__title-img" alt="COACHTECHロゴ">
                 </a>
             </h1>
