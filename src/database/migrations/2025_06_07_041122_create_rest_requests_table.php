@@ -20,7 +20,7 @@ class CreateRestRequestsTable extends Migration
             $table->time('corrected_rest_time');
             $table->time('corrected_return_from_rest');
             $table->string('content');
-            $table->string('approve_status')->default('pending');
+            $table->string('approve_status')->default('pending'); // pending or completed
             $table->timestamps();
         });
     }
