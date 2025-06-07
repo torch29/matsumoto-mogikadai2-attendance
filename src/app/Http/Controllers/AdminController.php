@@ -8,7 +8,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.attendance.list');
+        return view('admin.attendance.list_all');
     }
 
     public function showStaffList()

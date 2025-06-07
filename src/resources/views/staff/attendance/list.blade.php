@@ -10,10 +10,6 @@
     <div class="list__title">
         <h3>勤怠一覧</h3>
     </div>
-    {{-- 管理者でログイン時 --}}
-    <div class="list__title">
-        <h3>サンプル　〇〇さんの勤怠</h3>
-    </div>
     <div class="list__guide-area">
         <div class="list__guide-link">←前月</div>
         当月
