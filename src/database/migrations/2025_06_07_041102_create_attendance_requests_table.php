@@ -19,7 +19,7 @@ class CreateAttendanceRequestsTable extends Migration
             $table->time('corrected_clock_in');
             $table->time('corrected_clock_out');
             $table->string('content');
-            $table->string('status');
+            $table->string('approve_status')->default('pending');
             $table->timestamps();
         });
     }
