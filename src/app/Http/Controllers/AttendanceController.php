@@ -12,10 +12,18 @@ class AttendanceController extends Controller
 {
     public function index()
     {
-        return view('staff.attendance.index');
+        Carbon::setLocale('ja');
+        $today = Carbon::now()->format("Y-m-d");
+
+        //当日の勤怠情報があるか
+        $today_attendance = Attendance::whereDate('date', $today)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        return view('staff.attendance.index', compact('today_attendance', 'today'));
     }
 
-    public function stamp()
+    public function clockIn()
     {
         $user = Auth::user();
         Carbon::setLocale('ja');

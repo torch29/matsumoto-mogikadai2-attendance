@@ -26,16 +26,16 @@
                 <th class="attendance-table__heading">合計</th>
                 <th class=" attendance-table__heading">詳細</th>
             </tr>
+            @foreach( $attendances as $attendance )
             <tr class="attendance-table__row">
-                @foreach( $attendances as $attendance )
                 <td class="attendance-table__data">{{ $attendance->date }}</td>
                 <td class="attendance-table__data">{{ $attendance->clock_in }}</td>
                 <td class="attendance-table__data">{{ $attendance->clock_out }}</td>
                 <td class="attendance-table__data">1:00</td>
                 <td class="attendance-table__data">8:00</td>
                 <td class="attendance-table__data">詳細</td>
-                @endforeach
             </tr>
+            @endforeach
         </table>
     </div>
 </div>

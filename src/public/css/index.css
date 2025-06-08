@@ -34,9 +34,13 @@ body {
 }
 
 .attendance-form__button {
+    display: flex;
     margin-top: 30px;
+    gap: 0 30px;
+    justify-content: center;
 }
-.attendance-form__button-submit {
+.attendance-form__button-submit,
+.attendance-form__button-submit--left {
     background-color: #000;
     color: #fff;
     border-radius: 6px;
@@ -44,4 +48,13 @@ body {
     padding: 4px 25px;
     cursor: pointer;
     vertical-align: middle;
+}
+.attendance-form__button-submit--right,
+.attendance-form__button-submit--return {
+    background-color: #fff;
+    color: #000;
+    border-radius: 6px;
+    border: #fff 1px solid;
+    padding: 4px 25px;
+    cursor: pointer;
 }

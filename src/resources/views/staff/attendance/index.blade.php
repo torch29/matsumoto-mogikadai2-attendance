@@ -30,12 +30,18 @@
         </script>
 
         <div class="attendance-form">
-            <form action="attendance/stamp" method="post">
-                @csrf
-                <div class="attendance-form__button">
+            <div class="attendance-form__button">
+                @if( !$today_attendance )
+                <form action="attendance/clockIn" method="post">
+                    @csrf
                     <button class="attendance-form__button-submit">出勤</button>
-                </div>
-            </form>
+                </form>
+                @else
+                <button class="attendance-form__button-submit--return">休憩戻</button>
+                <button class="attendance-form__button-submit--left">退勤</button>
+                <button class="attendance-form__button-submit--right">休憩入</button>
+                @endif
+            </div>
         </div>
     </div>
 </div>

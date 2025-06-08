@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
         //勤怠一覧の表示
         Route::get('/list', [AttendanceController::class, 'showAttendanceList']);
         //勤怠打刻
-        Route::post('stamp', [AttendanceController::class, 'stamp']);
+        Route::post('clockIn', [AttendanceController::class, 'clockIn']);
     });
     //申請一覧の表示
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
