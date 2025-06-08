@@ -30,7 +30,8 @@
         </script>
 
         <div class="attendance-form">
-            <form action="">
+            <form action="attendance/stamp" method="post">
+                @csrf
                 <div class="attendance-form__button">
                     <button class="attendance-form__button-submit">出勤</button>
                 </div>

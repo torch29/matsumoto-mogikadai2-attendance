@@ -10,6 +10,7 @@
     <div class="list__title">
         <h3>勤怠一覧</h3>
     </div>
+    ※一般職員でログイン中 {{-- あとで消す --}}
     <div class="list__guide-area">
         <div class="list__guide-link">←前月</div>
         当月
@@ -26,20 +27,14 @@
                 <th class=" attendance-table__heading">詳細</th>
             </tr>
             <tr class="attendance-table__row">
-                <td class="attendance-table__data">06/01（木）</td>
-                <td class="attendance-table__data">09:00</td>
-                <td class="attendance-table__data">18:00</td>
+                @foreach( $attendances as $attendance )
+                <td class="attendance-table__data">{{ $attendance->date }}</td>
+                <td class="attendance-table__data">{{ $attendance->clock_in }}</td>
+                <td class="attendance-table__data">{{ $attendance->clock_out }}</td>
                 <td class="attendance-table__data">1:00</td>
                 <td class="attendance-table__data">8:00</td>
                 <td class="attendance-table__data">詳細</td>
-            </tr>
-            <tr class="attendance-table__row">
-                <td class="attendance-table__data">XX/XX（◇）</td>
-                <td class="attendance-table__data">08:30</td>
-                <td class="attendance-table__data">17:30</td>
-                <td class="attendance-table__data">1:00</td>
-                <td class="attendance-table__data">8:00</td>
-                <td class="attendance-table__data">詳細</td>
+                @endforeach
             </tr>
         </table>
     </div>
