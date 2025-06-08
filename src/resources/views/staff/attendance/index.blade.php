@@ -7,7 +7,11 @@
 @section('content')
 <div class="main__content-wrapper">
     <div class="main__content">
+        @if( !$today_attendance )
         <div class="status-label">勤務外</div>
+        @else
+        <div class="status-label">出勤中</div>
+        @endif
         <div class="main__content-date">
             {{ \Carbon\Carbon::now()->isoFormat('Y年 M月D日（ddd）') }}
         </div>
