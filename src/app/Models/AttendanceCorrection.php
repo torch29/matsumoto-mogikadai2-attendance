@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rest extends Model
+class AttendanceCorrection extends Model
 {
     use HasFactory;
 
@@ -14,15 +14,11 @@ class Rest extends Model
         return $this->belongsTo(Attendance::class);
     }
 
-    public function restCorrections()
-    {
-        return $this->hasMany(RestCorrection::class);
-    }
-
     protected $fillable = [
-        'user_id',
-        'date',
-        'rest_start',
-        'rest_end',
+        'attendance_id',
+        'corrected_clock_in',
+        'corrected_clock_out',
+        'note',
+        'approve_status',
     ];
 }

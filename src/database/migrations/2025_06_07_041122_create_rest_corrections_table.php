@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRestRequestsTable extends Migration
+class CreateRestCorrectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,12 @@ class CreateRestRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rest_requests', function (Blueprint $table) {
+        Schema::create('rest_corrections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rest_id')->constrained()->cascadeOnDelete();
-            $table->time('corrected_rest_time');
-            $table->time('corrected_return_from_rest');
-            $table->string('content');
+            $table->time('corrected_rest_start');
+            $table->time('corrected_rest_end');
+            $table->string('note');
             $table->string('approve_status')->default('pending'); // pending or completed
             $table->timestamps();
         });
@@ -32,10 +32,10 @@ class CreateRestRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::table('rest_requests', function (Blueprint $table) {
+        Schema::table('rest_corrections', function (Blueprint $table) {
             $table->dropForeign(['rest_id']);
         });
 
-        Schema::dropIfExists('rest_requests');
+        Schema::dropIfExists('rest_corrections');
     }
 }
