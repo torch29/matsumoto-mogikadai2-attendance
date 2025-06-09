@@ -13,6 +13,11 @@ a {
     text-decoration: none;
 }
 
+/*バリデーションエラーメッセージ*/
+.form__error {
+    color: #CB0000;
+}
+
 /*ナビゲーションバー*/
 .header-nav {
     display: grid;

@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         Sanctum::ignoreMigrations();
+        // personal_access_tokensのマイグレーションを防ぐ
     }
 
     /**

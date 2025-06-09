@@ -13,6 +13,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LogoutResponse;
+use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
+use App\Http\Requests\LoginRequest as CustomLoginRequest;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -36,7 +38,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::createUsersUsing(CreateNewUser::class);
-        /* 初期設定としてコメントアウト　後で消す　消去
+        /* 初期設定としてコメントアウト　あとで消す　後で消去
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
@@ -66,5 +68,10 @@ class FortifyServiceProvider extends ServiceProvider
 
             return Limit::perMinute(10)->by($email . $request->ip());
         });
+
+        $this->app->bind(
+            FortifyLoginRequest::class,
+            CustomLoginRequest::class,
+        );
     }
 }

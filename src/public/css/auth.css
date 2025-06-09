@@ -13,6 +13,7 @@
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
+    margin-top: 30px;
 }
 .login-form__item-input,
 .register-form__item-input {
@@ -20,7 +21,6 @@
     height: 35px;
     border: #555 1px solid;
     border-radius: 3px;
-    margin-bottom: 30px;
 }
 
 .login-form__button,
