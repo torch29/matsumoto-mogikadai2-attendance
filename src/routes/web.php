@@ -29,24 +29,31 @@ Route::middleware('auth')->group(function () {
     });
     //申請一覧の表示
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
+    //管理者ログイン画面の表示
+    Route::get('/admin/login', [AdminController::class, 'login']);
 });
 
 
-//view作成/css適用のための仮ルート
+
+Route::middleware(['auth', 'adminOnly'])->group(function () {
+    Route::prefix('admin')->group(function () {
+        //管理者権限で勤怠一覧画面を表示
+        Route::get('/attendance/list', [AdminController::class, 'showAttendanceListAll']);
+    });
+});
 Route::get('/attendance/detail', [AttendanceController::class, 'showDetail']);
 
 //管理者権限での認証を要するルート
 Route::prefix('admin')->group(function () {
-    //管理者ログイン画面の表示
-    Route::get('/login', [AdminController::class, 'login']);
-    //管理者権限で勤怠一覧画面を表示
-    Route::get('/attendance/list', [AdminController::class, 'showAttendanceListAll']);
+
+
     //管理者権限でスタッフ一覧画面を表示
     Route::get('/staff/list', [AdminController::class, 'showStaffList']);
     //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
     Route::get('/attendance/staff/', [AdminController::class, 'showAttendanceListByStaff']);
 });
 
+//ユーザー登録画面
 Route::middleware('guest')->group(
     function () {
         Route::get('/register', [RegisteredUserController::class, 'create']);

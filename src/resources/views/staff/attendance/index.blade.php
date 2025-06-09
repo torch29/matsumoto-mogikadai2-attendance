@@ -7,6 +7,9 @@
 @section('content')
 <div class="main__content-wrapper">
     <div class="main__content">
+        <div>ログイン中のID{{ dump(Auth::id()) }}</div>
+        <div>{{ $user->is_admin }}</div>
+
         @if( !$today_attendance )
         <div class="status-label">勤務外</div>
         @else
