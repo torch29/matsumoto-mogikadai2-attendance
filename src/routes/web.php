@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CorrectionRequestController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +46,10 @@ Route::prefix('admin')->group(function () {
     //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
     Route::get('/attendance/staff/', [AdminController::class, 'showAttendanceListByStaff']);
 });
+
+Route::middleware('guest')->group(
+    function () {
+        Route::get('/register', [RegisteredUserController::class, 'create']);
+        Route::post('/register', [RegisteredUserController::class, 'store']);
+    }
+);

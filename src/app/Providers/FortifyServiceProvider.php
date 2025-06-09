@@ -37,7 +37,9 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        /* 自作のRegisterRequestを使うために削除した
         Fortify::createUsersUsing(CreateNewUser::class);
+        */
         /* 初期設定としてコメントアウト　あとで消す　後で消去
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
