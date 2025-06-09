@@ -11,6 +11,8 @@
         <div class="status-label">勤務外</div>
         @else
         <div class="status-label">出勤中</div>
+        <div class="status-label">休憩中</div>
+        <div class="status-label">退勤済</div>
         @endif
         <div class="main__content-date">
             {{ \Carbon\Carbon::now()->isoFormat('Y年 M月D日（ddd）') }}
