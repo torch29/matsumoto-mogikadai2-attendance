@@ -39,4 +39,23 @@ class AuthenticatedSessionController extends Controller
         // 一般職員＆管理者が一般ログイン画面からログインするときの遷移先
         return redirect()->intended('/attendance');
     }
+
+    //ログアウトの処理
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // 管理者のログアウト後の遷移先
+        if ($user && $user->is_admin) {
+            return redirect('/admin/login');
+        }
+
+        // 一般職員のログアウト後の遷移先
+        return redirect('/login');
+    }
 }

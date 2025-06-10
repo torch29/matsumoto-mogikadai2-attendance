@@ -57,6 +57,7 @@ Route::get('/admin/login', [AdminController::class, 'login']);
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 //ユーザー登録画面
 Route::middleware('guest')->group(
