@@ -15,6 +15,8 @@ use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 use App\Http\Requests\LoginRequest as CustomLoginRequest;
+use Laravel\Fortify\Actions\AttemptToAuthenticate as DefaultAttemptToAuthenticate;
+use App\Actions\Admin\AttemptToAuthenticate;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -59,6 +61,12 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::registerView(function () {
             return view('auth.register');
+        });
+
+        Fortify::authenticateThrough(function (Request $request) {
+            return [
+                AttemptToAuthenticate::class, // ← カスタムの方を呼び出す
+            ];
         });
 
         Fortify::loginView(function () {

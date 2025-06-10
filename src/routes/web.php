@@ -29,12 +29,10 @@ Route::middleware('auth')->group(function () {
     });
     //申請一覧の表示
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
-    //管理者ログイン画面の表示
-    Route::get('/admin/login', [AdminController::class, 'login']);
 });
 
 
-
+//管理者権限での認証を要するルート
 Route::middleware(['auth', 'adminOnly'])->group(function () {
     Route::prefix('admin')->group(function () {
         //管理者権限で勤怠一覧画面を表示
@@ -43,7 +41,7 @@ Route::middleware(['auth', 'adminOnly'])->group(function () {
 });
 Route::get('/attendance/detail', [AttendanceController::class, 'showDetail']);
 
-//管理者権限での認証を要するルート
+
 Route::prefix('admin')->group(function () {
 
 
@@ -52,6 +50,9 @@ Route::prefix('admin')->group(function () {
     //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
     Route::get('/attendance/staff/', [AdminController::class, 'showAttendanceListByStaff']);
 });
+
+//管理者ログイン画面の表示
+Route::get('/admin/login', [AdminController::class, 'login']);
 
 //ユーザー登録画面
 Route::middleware('guest')->group(

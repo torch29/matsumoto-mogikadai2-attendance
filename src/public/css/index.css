@@ -58,3 +58,8 @@ body {
     padding: 4px 25px;
     cursor: pointer;
 }
+
+/*あとで消す　後で*/
+.check span {
+    color: red;
+}
