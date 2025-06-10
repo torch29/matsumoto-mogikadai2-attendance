@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CorrectionRequestController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,9 @@ Route::prefix('admin')->group(function () {
 
 //管理者ログイン画面の表示
 Route::get('/admin/login', [AdminController::class, 'login']);
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
 
 //ユーザー登録画面
 Route::middleware('guest')->group(

@@ -63,20 +63,6 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.register');
         });
 
-        Fortify::authenticateThrough(function (Request $request) {
-            //管理者ログインパス（'admin/login'）のときはAdminかどうか認証を行う
-            if ($request->has('is_admin_login') && $request->input('is_admin_login') == '1') {
-                return [
-                    AdminAttemptToAuthenticate::class,
-                ];
-            }
-
-            //管理者以外はfortifyデフォルトの認証を使用する
-            return [
-                DefaultAttemptToAuthenticate::class,
-            ];
-        });
-
         Fortify::loginView(function () {
             return view('staff.auth.login');
         });

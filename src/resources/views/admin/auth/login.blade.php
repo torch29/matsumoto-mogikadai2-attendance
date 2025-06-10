@@ -9,7 +9,7 @@
     <div class="section__title">
         <h2>管理者ログイン</h2>
     </div>
-    <form action="/login" class="login-form" method="post">
+    <form action="/admin/login" class="login-form" method="post">
         @csrf
         <input type="hidden" name="is_admin_login" value="1">
         <label for="email" class="login-form__item-label">メールアドレス</label>
