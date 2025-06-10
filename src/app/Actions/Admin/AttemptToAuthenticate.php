@@ -47,23 +47,25 @@ class AttemptToAuthenticate extends FortifyAttempt
      */
     public function handle($request, $next)
     {
-        $this->guard->attempt(
-            $request->only(Fortify::username(), 'password'),
-            $request->boolean('remember')
-        );
+        if ($request->is('admin/login')) {
+            $this->guard->attempt(
+                $request->only(Fortify::username(), 'password'),
+                $request->boolean('remember')
+            );
 
-        $user = $this->guard->user();
+            $user = $this->guard->user();
 
-        //管理者でない場合ログアウト
-        if (!$user || !$user->is_admin) {
-            $this->guard->logout();
+            //管理者でない場合ログアウト
+            if (!$user || !$user->is_admin) {
+                $this->guard->logout();
 
-            throw ValidationException::withMessages([
-                Fortify::username() => __('管理者アカウントでログインしてください。'),
-            ]);
+                throw ValidationException::withMessages([
+                    Fortify::username() => __('管理者アカウントでログインしてください。'),
+                ]);
+            }
+
+            return $next($request);
         }
-
-        return $next($request);
     }
 
     /**
