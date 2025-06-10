@@ -11,6 +11,7 @@
     </div>
     <form action="/login" class="login-form" method="post">
         @csrf
+        <input type="hidden" name="is_admin_login" value="1">
         <label for="email" class="login-form__item-label">メールアドレス</label>
         <input type="email" name="email" id="email" class="login-form__item-input" value="{{ old('email') }}">
         <div class="form__error">

@@ -64,24 +64,21 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::authenticateThrough(function (Request $request) {
-            $authenticateActions = [
-                DefaultAttemptToAuthenticate::class,
-            ];
-
             //管理者ログインパス（'admin/login'）のときはAdminかどうか認証を行う
-            if ($request->is('admin/login')) {
-                $authenticateActions = [
+            if ($request->has('is_admin_login') && $request->input('is_admin_login') == '1') {
+                return [
                     AdminAttemptToAuthenticate::class,
                 ];
             }
 
-            return $authenticateActions;
+            //管理者以外はfortifyデフォルトの認証を使用する
+            return [
+                DefaultAttemptToAuthenticate::class,
+            ];
         });
 
-        Fortify::loginView(function (Request $request) {
-            return $request->is('admin/login')
-                ? view('admin.auth.login')
-                : view('staff.auth.login');
+        Fortify::loginView(function () {
+            return view('staff.auth.login');
         });
 
         RateLimiter::for('login', function (Request $request) {
