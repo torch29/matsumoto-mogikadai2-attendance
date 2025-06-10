@@ -13,14 +13,9 @@ class AuthenticatedSessionController extends Controller
 {
     public function store(LoginRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
         if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => __('ログイン情報が正しくありません。'),
+                'email' => __('ログイン情報が登録されていません'),
             ]);
         }
 
