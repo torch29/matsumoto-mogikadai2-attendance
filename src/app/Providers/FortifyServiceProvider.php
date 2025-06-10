@@ -16,7 +16,7 @@ use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 use App\Http\Requests\LoginRequest as CustomLoginRequest;
 use Laravel\Fortify\Actions\AttemptToAuthenticate as DefaultAttemptToAuthenticate;
-use App\Actions\Admin\AttemptToAuthenticate;
+use App\Actions\Admin\AttemptToAuthenticate as AdminAttemptToAuthenticate;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -64,8 +64,16 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::authenticateThrough(function (Request $request) {
+            //管理者ログインパス（'admin/login'）のときはAdminかどうか認証を行う
+            if ($request->is('admin/login')) {
+                return [
+                    AdminAttemptToAuthenticate::class,
+                ];
+            }
+
+            //管理者以外はfortifyデフォルトの認証を使用する
             return [
-                AttemptToAuthenticate::class, // ← カスタムの方を呼び出す
+                DefaultAttemptToAuthenticate::class,
             ];
         });
 
