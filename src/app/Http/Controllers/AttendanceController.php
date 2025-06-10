@@ -22,7 +22,7 @@ class AttendanceController extends Controller
             ->where('user_id', auth()->id())
             ->first();
 
-        return view('staff.attendance.index', compact('today_attendance', 'today', 'user'));
+        return view('staff.attendance.index', compact('today_attendance', 'today', 'user',));
     }
 
     public function clockIn()

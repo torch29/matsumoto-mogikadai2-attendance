@@ -18,23 +18,34 @@
                     <img src="{{ asset('img/logo.svg') }}" class="header__title-img" alt="COACHTECHロゴ">
                 </a>
             </h1>
-            @if (Auth::check())
+            @if ( Auth::check() && Auth::user()->is_admin )
             <ul class="header-nav__list">
-                <li class="header-nav__list-item"><a href="/attendance">勤怠</a></li>
-                <li class="header-nav__list-item"><a href="/attendance/list">勤怠一覧</a></li>
-                <li class="header-nav__list-item"><a href="/stamp_correction_request/list">申請</a></li>
+                <li class="header-nav__list-item"><a href="/admin/attendance/list">勤怠一覧</a></li>
+                <li class="header-nav__list-item"><a href="/admin/staff/list">スタッフ一覧</a></li>
+                <li class="header-nav__list-item"><a href="/stamp_correction_request/list">申請一覧</a></li>
                 <li class="header-nav__list-item">
                     <form action="/logout" class="header-nav__form" method="post">
                         @csrf
                         <button class="header-nav__button-submit">ログアウト</button>
                     </form>
                 </li>
-                @else
-                <li class="header-nav__list-item">
+                @elseif (Auth::check())
+                <ul class="header-nav__list">
+                    <li class="header-nav__list-item"><a href="/attendance">勤怠</a></li>
+                    <li class="header-nav__list-item"><a href="/attendance/list">勤怠一覧</a></li>
+                    <li class="header-nav__list-item"><a href="/stamp_correction_request/list">申請</a></li>
+                    <li class="header-nav__list-item">
+                        <form action="/logout" class="header-nav__form" method="post">
+                            @csrf
+                            <button class="header-nav__button-submit">ログアウト</button>
+                        </form>
+                    </li>
+                    @else
+                    <li class="header-nav__list-item">
 
-                </li>
-            </ul>
-            @endif
+                    </li>
+                </ul>
+                @endif
         </nav>
     </header>
 

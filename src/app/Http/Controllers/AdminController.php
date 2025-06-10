@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Attendance;
 
 class AdminController extends Controller
 {
@@ -14,7 +15,9 @@ class AdminController extends Controller
 
     public function showAttendanceListAll()
     {
-        return view('admin.attendance.list_all');
+        $attendances = Attendance::with('user')->get();
+
+        return view('admin.attendance.list_all', compact('attendances'));
     }
 
     public function showStaffList()

@@ -36,7 +36,7 @@ body {
 }
 .attendance-table__heading:first-child,
 .request-table__heading:first-child {
-    width: 8em;
+    width: 12em;
 }
 .attendance-table__heading:last-child,
 .request-table__heading:last-child {
@@ -54,7 +54,7 @@ body {
 }
 .attendance-table__data,
 .request-table__data {
-    padding: 3px 10px;
+    padding: 3px 8px;
 }
 .attendance-table__data:first-child,
 .request-table__data:first-child {
