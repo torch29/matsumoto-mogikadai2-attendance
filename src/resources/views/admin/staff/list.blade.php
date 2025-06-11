@@ -16,16 +16,13 @@
                 <th class="staff-table__heading">メールアドレス</th>
                 <th class="staff-table__heading">月次勤怠</th>
             </tr>
+            @foreach( $staffLists as $staff )
             <tr class="staff-table__row">
-                <td class="staff-table__data">サンプル　さん</td>
-                <td class="staff-table__data">test@example.com</td>
-                <td class="staff-table__data">詳細</td>
+                <td class="staff-table__data">{{ $staff->name }}</td>
+                <td class="staff-table__data">{{ $staff->email }}</td>
+                <td class="staff-table__data"><a href="">詳細</a></td>
             </tr>
-            <tr class="staff-table__row">
-                <td class="staff-table__data">テスト　さん</td>
-                <td class="staff-table__data">test2@example.com</td>
-                <td class="staff-table__data">詳細</td>
-            </tr>
+            @endforeach
         </table>
     </div>
 </div>
