@@ -7,7 +7,7 @@
 @section('content')
 <div class="list__content">
     <div class="list__title">
-        <h3>20XX年〇月◇日の勤怠</h3>
+        <h3>{{ $titleDate }}の勤怠</h3>
     </div>
     <div class="list__guide-area">
         <div class="list__guide-link">←前日</div>

@@ -19,11 +19,11 @@ class AdminController extends Controller
         //「選ばれたある特定の一日」の「全員の勤怠情報」が必要
 
         //日付のリクエストがあったらその日、なければnowを表示にしたい（？）
-        $date = Carbon::today()->isoFormat('Y-M-D');
-        $formattedDate = Carbon::now()->isoFormat('Y年M月D日');
+        $date = Carbon::today();
+        $titleDate = Carbon::today()->isoFormat('Y年M月D日');
         $attendances = Attendance::whereDate('date', $date)->get();
 
-        return view('admin.attendance.list_all', compact('attendances', 'date'));
+        return view('admin.attendance.list_all', compact('attendances', 'titleDate'));
     }
 
     public function showStaffList()

@@ -11,7 +11,7 @@ class RestCorrection extends Model
 
     public function rest()
     {
-        return $this->belongsTo(Rest::class);
+        return $this->belongsTo(AttendanceCorrection::class);
     }
 
     protected $fillable = [

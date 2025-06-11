@@ -16,11 +16,10 @@ class CreateRestCorrectionsTable extends Migration
     {
         Schema::create('rest_corrections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rest_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('attendance_correction_id')->constrained()->cascadeOnDelete();
             $table->time('corrected_rest_start');
             $table->time('corrected_rest_end');
             $table->string('note');
-            $table->string('approve_status')->default('pending'); // pending or completed
             $table->timestamps();
         });
     }
