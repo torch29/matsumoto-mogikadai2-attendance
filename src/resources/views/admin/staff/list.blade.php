@@ -20,7 +20,7 @@
             <tr class="staff-table__row">
                 <td class="staff-table__data">{{ $staff->name }}</td>
                 <td class="staff-table__data">{{ $staff->email }}</td>
-                <td class="staff-table__data"><a href="">詳細</a></td>
+                <td class="staff-table__data"><a href="/admin/attendance/staff/{{ $staff->id }}">詳細</a></td>
             </tr>
             @endforeach
         </table>
