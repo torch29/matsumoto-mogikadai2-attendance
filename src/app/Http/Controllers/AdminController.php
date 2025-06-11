@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Attendance;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -15,9 +16,14 @@ class AdminController extends Controller
 
     public function showAttendanceListAll()
     {
-        $attendances = Attendance::with('user')->get();
+        //「選ばれたある特定の一日」の「全員の勤怠情報」が必要
 
-        return view('admin.attendance.list_all', compact('attendances'));
+        //日付のリクエストがあったらその日、なければnowを表示にしたい（？）
+        $date = Carbon::today()->isoFormat('Y-M-D');
+        $formattedDate = Carbon::now()->isoFormat('Y年M月D日');
+        $attendances = Attendance::whereDate('date', $date)->get();
+
+        return view('admin.attendance.list_all', compact('attendances', 'date'));
     }
 
     public function showStaffList()

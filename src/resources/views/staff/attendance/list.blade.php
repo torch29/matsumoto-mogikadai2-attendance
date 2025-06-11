@@ -10,7 +10,7 @@
     <div class="list__title">
         <h3>勤怠一覧</h3>
     </div>
-    ※一般職員でログイン中 {{-- あとで消す --}}
+    ※一般職員（{{ Auth::id() }}：{{ Auth::user()->name }}）でログイン中 {{-- あとで消す --}}
     <div class="list__guide-area">
         <div class="list__guide-link">←前月</div>
         当月

@@ -37,14 +37,15 @@ class AttendanceController extends Controller
             'clock_in' => $datetime->toTimeString(),
         ]);
 
-        return redirect('attendance/list');
+        return redirect('attendance');
     }
 
     public function showAttendanceList()
     {
-        $attendances = Attendance::with('user')->get();
+        $user = Auth::user();
+        $attendances = $user->attendances;
 
-        return view('staff.attendance.list', compact('attendances'));
+        return view('staff.attendance.list', compact('attendances', 'user'));
     }
 
     public function showDetail()
