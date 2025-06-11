@@ -18,7 +18,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 |
 */
 
-//認証を要するルート
+//ユーザ認証を要するルート
 Route::middleware('auth')->group(function () {
     Route::prefix('attendance')->group(function () {
         //勤怠登録（トップ）画面の表示
@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/list', [AttendanceController::class, 'showAttendanceList']);
         //勤怠打刻
         Route::post('clockIn', [AttendanceController::class, 'clockIn']);
+        //勤怠詳細画面の表示　※あとで/detailを{id}に変更する
+        Route::get('/detail', [AttendanceController::class, 'showDetail']);
     });
     //申請一覧の表示
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
@@ -38,26 +40,12 @@ Route::middleware(['auth', 'adminOnly'])->group(function () {
     Route::prefix('admin')->group(function () {
         //管理者権限で勤怠一覧画面を表示
         Route::get('/attendance/list', [AdminController::class, 'showAttendanceListAll']);
+        //管理者権限でスタッフ一覧画面を表示
+        Route::get('/staff/list', [AdminController::class, 'showStaffList']);
+        //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
+        Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff']);
     });
 });
-Route::get('/attendance/detail', [AttendanceController::class, 'showDetail']);
-
-
-Route::prefix('admin')->group(function () {
-
-
-    //管理者権限でスタッフ一覧画面を表示
-    Route::get('/staff/list', [AdminController::class, 'showStaffList']);
-    //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
-    Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff']);
-});
-
-//管理者ログイン画面の表示
-Route::get('/admin/login', [AdminController::class, 'login']);
-
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
-Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 //ユーザー登録画面
 Route::middleware('guest')->group(
@@ -66,3 +54,12 @@ Route::middleware('guest')->group(
         Route::post('/register', [RegisteredUserController::class, 'store']);
     }
 );
+
+//一般職員としてログインする
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+//管理者ログイン画面の表示
+Route::get('/admin/login', [AdminController::class, 'login']);
+//管理者としてログインする
+Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
+//ログアウトする
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

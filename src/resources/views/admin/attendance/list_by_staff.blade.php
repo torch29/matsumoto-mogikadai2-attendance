@@ -34,7 +34,6 @@
                 <td class="attendance-table__data">詳細</td>
             </tr>
             @endforeach
-            </tr>
         </table>
     </div>
 </div>
