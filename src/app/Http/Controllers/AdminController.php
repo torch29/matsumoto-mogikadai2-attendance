@@ -69,6 +69,6 @@ class AdminController extends Controller
             ];
         }
 
-        return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords'));
+        return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'currentDay'));
     }
 }
