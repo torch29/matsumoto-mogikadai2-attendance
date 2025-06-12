@@ -31,6 +31,14 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
+        //管理者が一般画面からログインしようとしたら拒否する
+        if ($request->is('login') && $user->is_admin) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => __('こちらは一般職員のログイン画面です。管理者画面からログインしてください。'),
+            ]);
+        }
+
         // 管理者が管理者ログイン画面からログインするときの遷移先
         if ($request->is('admin/login') && $user->is_admin) {
             return redirect('/admin/attendance/list');
