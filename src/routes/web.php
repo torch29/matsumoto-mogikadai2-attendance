@@ -29,6 +29,10 @@ Route::middleware('auth')->group(function () {
         Route::post('clockIn', [AttendanceController::class, 'clockIn']);
         //退勤打刻
         Route::post('clockOut', [AttendanceController::class, 'clockOut']);
+        //休憩入打刻
+        Route::post('restStart', [AttendanceController::class, 'restStart']);
+        //休憩戻打刻
+        Route::post('restEnd', [AttendanceController::class, 'restEnd']);
         //勤怠詳細画面の表示　※あとで/detailを{id}に変更する
         Route::get('/detail', [AttendanceController::class, 'showDetail']);
     });

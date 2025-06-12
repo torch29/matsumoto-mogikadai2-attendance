@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\Rest;
 
 class AttendanceController extends Controller
 {
@@ -25,7 +26,7 @@ class AttendanceController extends Controller
             if ($todayAttendance->clock_out !== null) {
                 $status = '退勤済';
             } else {
-                $lastRest = $todayAttendance->rests->sortByDesc('id')->first();
+                $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
                 if ($lastRest && $lastRest->rest_end === null) {
                     $status = '休憩中';
                 } else {
@@ -64,13 +65,12 @@ class AttendanceController extends Controller
         $user = Auth::user();
         Carbon::setLocale('ja');
         $now = Carbon::now();
-        $today = $now->toDateString();
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
         //退勤打刻
         //出勤時刻データが存在し、退勤時刻データが無い
         if ($todayAttendance && !$todayAttendance->clock_out) {
-            $lastRest = $todayAttendance->rests->sortByDesc('id')->first();
+            $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
             //まだ休憩入データが無いか、休憩入データ＋休憩戻データがセットで存在する
             if (!$lastRest || $lastRest->rest_end) {
                 $todayAttendance->update([
@@ -84,14 +84,42 @@ class AttendanceController extends Controller
 
     public function restStart()
     {
+        $user = Auth::user();
+        Carbon::setLocale('ja');
+        $now = Carbon::now();
+        $todayAttendance = Attendance::todayForUser($user->id)->first();
 
+        $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
+        //まだ休憩に入っていないか、休憩が終了している場合、新しく休憩に入ることができる
+        $canStartRest = !$lastRest || $lastRest->rest_end;
+
+        //出勤中で、新しく休憩に入ることができる状態
+        if ($todayAttendance && !$todayAttendance->clock_out && $canStartRest) {
+            Rest::create([
+                'attendance_id' => $todayAttendance->id,
+                'rest_start' => $now->toTimeString(),
+            ]);
+        }
 
         return redirect('attendance');
     }
 
     public function restEnd()
     {
+        $user = Auth::user();
+        Carbon::setLocale('ja');
+        $now = Carbon::now();
+        $todayAttendance = Attendance::todayForUser($user->id)->first();
 
+        $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
+
+        if ($todayAttendance && !$todayAttendance->clock_out) {
+            if ($lastRest && !$lastRest->rest_end) {
+                $lastRest->update([
+                    'rest_end' => $now->toTimeString(),
+                ]);
+            }
+        }
 
         return redirect('attendance');
     }

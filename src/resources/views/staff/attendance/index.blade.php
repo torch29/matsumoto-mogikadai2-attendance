@@ -36,14 +36,20 @@
                     @csrf
                     <button class="attendance-form__button-submit">出勤</button>
                 </form>
-                @elseif ( $status === '休憩中' )
-                <button class="attendance-form__button-submit--return">休憩戻</button>
                 @elseif ( $status === '出勤中' )
                 <form action="attendance/clockOut" method="post">
                     @csrf
                     <button class="attendance-form__button-submit--left">退勤</button>
                 </form>
-                <button class="attendance-form__button-submit--right">休憩入</button>
+                <form action="attendance/restStart" method="post">
+                    @csrf
+                    <button class="attendance-form__button-submit--right">休憩入</button>
+                </form>
+                @elseif ( $status === '休憩中' )
+                <form action="attendance/restEnd" method="post">
+                    @csrf
+                    <button class="attendance-form__button-submit--return">休憩戻</button>
+                </form>
                 @elseif ( $status === '退勤済' )
                 <p>お疲れさまでした。</p>
                 @endif

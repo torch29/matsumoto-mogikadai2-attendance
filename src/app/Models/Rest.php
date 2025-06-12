@@ -20,7 +20,7 @@ class Rest extends Model
     }
 
     protected $fillable = [
-        'user_id',
+        'attendance_id',
         'date',
         'rest_start',
         'rest_end',
