@@ -19,7 +19,7 @@ class AttendanceController extends Controller
 
         //当日の勤怠情報があるか
         $today_attendance = Attendance::whereDate('date', $today)
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->first();
 
         return view('staff.attendance.index', compact('today_attendance', 'today', 'user',));
@@ -29,13 +29,23 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         Carbon::setLocale('ja');
-        $datetime = Carbon::now();
+        $now = Carbon::now();
+        $today = $now->toDateString();
+        //当日の勤怠情報があるか
+        $todayAttendance = Attendance::where('user_id', $user->id)
+            ->whereDate('date', $today)
+            ->first();
 
-        Attendance::create([
-            'user_id' => $user->id,
-            'date' => $datetime->toDateString(),
-            'clock_in' => $datetime->toTimeString(),
-        ]);
+        //当日に出勤情報がなければ出勤打刻
+        if (!$todayAttendance) {
+            Attendance::create([
+                'user_id' => $user->id,
+                'date' => $today,
+                'clock_in' => $now->toTimeString(),
+            ]);
+        }
+
+
 
         return redirect('attendance');
     }
