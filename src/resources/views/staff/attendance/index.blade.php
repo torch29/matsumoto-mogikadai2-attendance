@@ -23,8 +23,9 @@
         <div class="main__content-date">
             {{ \Carbon\Carbon::now()->isoFormat('Y年 M月D日（ddd）') }}
         </div>
-        <div class="main__content-datetime" id="clock"></div>
-        <script src="{{ asset('js/display_time.js') }}"></script>
+        <div class="main__content-datetime" id="clock">
+            <script src="{{ asset('js/display_time.js') }}"></script>
+        </div>
 
         <div class="attendance-form">
             <div class="attendance-form__button">
