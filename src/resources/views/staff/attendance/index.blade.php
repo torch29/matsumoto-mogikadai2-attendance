@@ -24,22 +24,7 @@
             {{ \Carbon\Carbon::now()->isoFormat('Y年 M月D日（ddd）') }}
         </div>
         <div class="main__content-datetime" id="clock"></div>
-        <script>
-            function nowTime() {
-                const timeSetting = {
-                    timeZone: 'Asia/Tokyo',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                }
-                const timeString = new Date().toLocaleTimeString('ja-JP', timeSetting);
-
-                document.getElementById("clock").textContent = timeString;
-            }
-
-            nowTime(); // 初回表示
-            setInterval(nowTime, 1000); // 毎秒更新
-        </script>
+        <script src="{{ asset('js/display_time.js') }}"></script>
 
         <div class="attendance-form">
             <div class="attendance-form__button">

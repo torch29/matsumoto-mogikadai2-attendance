@@ -55,7 +55,7 @@ Route::middleware('guest')->group(
     }
 );
 
-//一般職員としてログインする
+//一般職員画面からのログイン
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 //管理者ログイン画面の表示
 Route::get('/admin/login', [AdminController::class, 'login']);
