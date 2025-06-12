@@ -22,9 +22,51 @@ class AdminController extends Controller
         //日付のリクエストがあったらその日、なければnowを表示にしたい（？）
         $date = Carbon::today();
         $titleDate = Carbon::today()->isoFormat('Y年M月D日');
-        $attendances = Attendance::whereDate('date', $date)->get();
+        $attendances = Attendance::whereDate('date', $date)
+            ->with(['user', 'rests'])
+            ->get();
 
-        return view('admin.attendance.list_all', compact('attendances', 'titleDate'));
+        $attendanceRecords = [];
+
+        foreach ($attendances as $attendance) {
+            //休憩時間の合計
+            $totalRestMinutes = $attendance->rests->sum(function ($rest) {
+                if ($rest->rest_start && $rest->rest_end) {
+                    return Carbon::parse($rest->rest_end)->diffInMinutes(Carbon::parse($rest->rest_start));
+                }
+                return 0;
+            });
+
+            $totalWorkHours = null;
+            $totalWorkFormatted = null;
+            if ($attendance->clock_in && $attendance->clock_out) {
+                $totalWorkHours = Carbon::parse($attendance->clock_out)->diffInMinutes(Carbon::parse($attendance->clock_in)) - $totalRestMinutes;
+
+                //万が一、出勤＋退勤時間合計 < 休憩時間合計 の場合
+                if ($totalWorkHours >= 0) {
+                    $totalWorkFormatted = Carbon::createFromTime(0, 0)
+                        ->addMinutes($totalWorkHours)
+                        ->isoFormat('H:mm');
+                } else {
+                    $absolute = abs($totalWorkHours);
+                    $totalWorkFormatted = '-' . Carbon::createFromTime(0, 0)
+                        ->addMinutes($absolute)
+                        ->isoFormat('H:mm');
+                }
+            }
+
+            $attendanceRecords[] = [
+                'name' => $attendance->user->name,
+                'clock_in' => $attendance->clock_in_formatted,
+                'clock_out' => $attendance->clock_out_formatted,
+                'total_rest' => $totalRestMinutes,
+                'total_rest_formatted' => Carbon::createFromTime(0, 0)->addMinutes($totalRestMinutes)->isoFormat('H:mm'),
+                'total_work_hours' => $totalWorkHours,
+                'total_work_formatted' => $totalWorkFormatted
+            ];
+        }
+
+        return view('admin.attendance.list_all', compact('attendanceRecords', 'titleDate'));
     }
 
     public function showStaffList()
