@@ -13,7 +13,7 @@
     <div class="check">is_admin:<span>{{ $user->is_admin }}</span> （※1=true=admin, 0=false=従業員）</div>
     {{-- 確認用ここまで　あとで消す　後で --}}
     <div class="main__content">
-        @if( !$today_attendance )
+        @if( !$todayAttendance )
         <div class="status-label">勤務外</div>
         @else
         <div class="status-label">出勤中</div>
@@ -28,7 +28,7 @@
 
         <div class="attendance-form">
             <div class="attendance-form__button">
-                @if( !$today_attendance )
+                @if( !$todayAttendance )
                 <form action="attendance/clockIn" method="post">
                     @csrf
                     <button class="attendance-form__button-submit">出勤</button>

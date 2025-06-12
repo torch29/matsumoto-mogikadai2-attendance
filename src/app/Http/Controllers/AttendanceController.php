@@ -18,11 +18,11 @@ class AttendanceController extends Controller
         $user = Auth::user();
 
         //当日の勤怠情報があるか
-        $today_attendance = Attendance::whereDate('date', $today)
-            ->where('user_id', Auth::id())
+        $todayAttendance = Attendance::where('user_id', Auth::id())
+            ->whereDate('date', $today)
             ->first();
 
-        return view('staff.attendance.index', compact('today_attendance', 'today', 'user',));
+        return view('staff.attendance.index', compact('todayAttendance', 'today', 'user',));
     }
 
     public function clockIn()
@@ -31,12 +31,13 @@ class AttendanceController extends Controller
         Carbon::setLocale('ja');
         $now = Carbon::now();
         $today = $now->toDateString();
+
         //当日の勤怠情報があるか
         $todayAttendance = Attendance::where('user_id', $user->id)
             ->whereDate('date', $today)
             ->first();
 
-        //当日に出勤情報がなければ出勤打刻
+        //当日に出勤情報がなければ出勤打刻する
         if (!$todayAttendance) {
             Attendance::create([
                 'user_id' => $user->id,
@@ -44,8 +45,6 @@ class AttendanceController extends Controller
                 'clock_in' => $now->toTimeString(),
             ]);
         }
-
-
 
         return redirect('attendance');
     }
