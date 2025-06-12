@@ -17,6 +17,7 @@
                 <th class="staff-table__heading">月次勤怠</th>
             </tr>
             @foreach( $staffLists as $staff )
+            @continue( $staff->is_admin )
             <tr class="staff-table__row">
                 <td class="staff-table__data">{{ $staff->name }}</td>
                 <td class="staff-table__data">{{ $staff->email }}</td>

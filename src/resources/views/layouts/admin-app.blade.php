@@ -14,9 +14,7 @@
     <header class="header">
         <nav class="header-nav">
             <h1 class="header-nav__ttl">
-                <a href="/attendance">
-                    <img src="{{ asset('img/logo.svg') }}" class="header__title-img" alt="COACHTECHロゴ">
-                </a>
+                <img src="{{ asset('img/logo.svg') }}" class="header__title-img" alt="COACHTECHロゴ">
             </h1>
             @if ( Auth::check() && Auth::user()->is_admin )
             <ul class="header-nav__list">
