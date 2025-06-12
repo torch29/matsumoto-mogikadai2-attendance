@@ -18,9 +18,7 @@ class AttendanceController extends Controller
         $user = Auth::user();
 
         //当日の勤怠情報があるか
-        $todayAttendance = Attendance::where('user_id', Auth::id())
-            ->whereDate('date', $today)
-            ->first();
+        $todayAttendance = Attendance::todayForUser($user->id)->first();
 
         return view('staff.attendance.index', compact('todayAttendance', 'today', 'user',));
     }
@@ -33,9 +31,7 @@ class AttendanceController extends Controller
         $today = $now->toDateString();
 
         //当日の勤怠情報があるか
-        $todayAttendance = Attendance::where('user_id', $user->id)
-            ->whereDate('date', $today)
-            ->first();
+        $todayAttendance = Attendance::todayForUser($user->id)->first();
 
         //当日に出勤情報がなければ出勤打刻する
         if (!$todayAttendance) {

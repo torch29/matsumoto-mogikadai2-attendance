@@ -32,6 +32,12 @@ class Attendance extends Model
         'clock_out',
     ];
 
+    public function scopeTodayForUser($query, $userId)
+    {
+        return $query->where('user_id', $userId)
+            ->whereDate('date', now()->toDateString());
+    }
+
     public function getClockInFormattedAttribute()
     {
         if (!$this->clock_in) {
