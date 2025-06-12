@@ -13,11 +13,13 @@
     <div class="check">is_admin:<span>{{ $user->is_admin }}</span> （※1=true=admin, 0=false=従業員）</div>
     {{-- 確認用ここまで　あとで消す　後で --}}
     <div class="main__content">
-        @if( !$todayAttendance )
+        @if( $status === '勤務外' )
         <div class="status-label">勤務外</div>
-        @else
+        @elseif ( $status === '出勤中' )
         <div class="status-label">出勤中</div>
+        @elseif ( $status === '休憩中' )
         <div class="status-label">休憩中</div>
+        @elseif ( $status === '退勤済' )
         <div class="status-label">退勤済</div>
         @endif
         <div class="main__content-date">
@@ -29,15 +31,21 @@
 
         <div class="attendance-form">
             <div class="attendance-form__button">
-                @if( !$todayAttendance )
+                @if( $status === '勤務外' )
                 <form action="attendance/clockIn" method="post">
                     @csrf
                     <button class="attendance-form__button-submit">出勤</button>
                 </form>
-                @else
+                @elseif ( $status === '休憩中' )
                 <button class="attendance-form__button-submit--return">休憩戻</button>
-                <button class="attendance-form__button-submit--left">退勤</button>
+                @elseif ( $status === '出勤中' )
+                <form action="attendance/clockOut" method="post">
+                    @csrf
+                    <button class="attendance-form__button-submit--left">退勤</button>
+                </form>
                 <button class="attendance-form__button-submit--right">休憩入</button>
+                @elseif ( $status === '退勤済' )
+                <p>お疲れさまでした。</p>
                 @endif
             </div>
         </div>

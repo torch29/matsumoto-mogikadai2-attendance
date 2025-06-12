@@ -35,7 +35,7 @@ class Attendance extends Model
     public function scopeTodayForUser($query, $userId)
     {
         return $query->where('user_id', $userId)
-            ->whereDate('date', now()->toDateString());
+            ->whereDate('date', now()->toDateString())->with('rests');
     }
 
     public function getClockInFormattedAttribute()

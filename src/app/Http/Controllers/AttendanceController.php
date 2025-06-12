@@ -19,7 +19,22 @@ class AttendanceController extends Controller
         //当日の勤怠情報があるか
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
-        return view('staff.attendance.index', compact('todayAttendance', 'today', 'user',));
+        //viewに渡すstatusの設定
+        $status = '勤務外';
+        if ($todayAttendance) {
+            if ($todayAttendance->clock_out !== null) {
+                $status = '退勤済';
+            } else {
+                $lastRest = $todayAttendance->rests->sortByDesc('id')->first();
+                if ($lastRest && $lastRest->rest_end === null) {
+                    $status = '休憩中';
+                } else {
+                    $status = '出勤中';
+                }
+            }
+        }
+
+        return view('staff.attendance.index', compact('todayAttendance', 'today', 'user', 'status'));
     }
 
     public function clockIn()
@@ -40,6 +55,43 @@ class AttendanceController extends Controller
                 'clock_in' => $now->toTimeString(),
             ]);
         }
+
+        return redirect('attendance');
+    }
+
+    public function clockOut()
+    {
+        $user = Auth::user();
+        Carbon::setLocale('ja');
+        $now = Carbon::now();
+        $today = $now->toDateString();
+        $todayAttendance = Attendance::todayForUser($user->id)->first();
+
+        //退勤打刻
+        //出勤時刻データが存在し、退勤時刻データが無い
+        if ($todayAttendance && !$todayAttendance->clock_out) {
+            $lastRest = $todayAttendance->rests->sortByDesc('id')->first();
+            //まだ休憩入データが無いか、休憩入データ＋休憩戻データがセットで存在する
+            if (!$lastRest || $lastRest->rest_end) {
+                $todayAttendance->update([
+                    'clock_out' => $now->toTimeString(),
+                ]);
+            }
+        }
+
+        return redirect('attendance');
+    }
+
+    public function restStart()
+    {
+
+
+        return redirect('attendance');
+    }
+
+    public function restEnd()
+    {
+
 
         return redirect('attendance');
     }
@@ -78,7 +130,7 @@ class AttendanceController extends Controller
             ];
         }
 
-        return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords'));
+        return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'currentDay'));
     }
 
     public function showDetail()

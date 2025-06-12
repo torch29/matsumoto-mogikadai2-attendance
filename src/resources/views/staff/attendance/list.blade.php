@@ -13,7 +13,7 @@
     ※一般職員（{{ Auth::id() }}：{{ Auth::user()->name }}）でログイン中 {{-- あとで消す --}}
     <div class="list__guide-area">
         <div class="list__guide-link">←前月</div>
-        当月
+        {{ $currentDay->isoFormat('Y/MM') }}
         <div class="list__guide-link">翌月→</div>
     </div>
     <div class="attendance-table__wrapper">
