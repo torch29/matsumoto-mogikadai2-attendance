@@ -14,6 +14,7 @@
         {{ $currentDay->isoFormat('Y/MM') }}
         <div class="list__guide-link">翌月→</div>
     </div>
+    {{-- dd($attendanceRecords) --}}
     <div class="attendance-table__wrapper">
         <table class="attendance-table">
             <tr class="attendance-table__row">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Attendance extends Model
 {
@@ -30,4 +31,22 @@ class Attendance extends Model
         'clock_in',
         'clock_out',
     ];
+
+    public function getClockInFormattedAttribute()
+    {
+        if (!$this->clock_in) {
+            return null;
+        }
+
+        return Carbon::parse($this->clock_in)->format('H:i');
+    }
+
+    public function getClockOutFormattedAttribute()
+    {
+        if (!$this->clock_out) {
+            return null;
+        }
+
+        return Carbon::parse($this->clock_out)->format('H:i');
+    }
 }

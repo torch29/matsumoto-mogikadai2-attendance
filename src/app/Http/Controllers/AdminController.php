@@ -63,7 +63,7 @@ class AdminController extends Controller
 
             $attendanceRecords[] = [
                 'date' => $date->isoFormat('M月D日（ddd）'),
-                'clock_in' => $record && $record->clock_in ? Carbon::parse($record->clock_in)->format('H:i') : '',
+                'clock_in' => optional($record)->clock_in_formatted,
                 'clock_out' => $record && $record->clock_out ? Carbon::parse($record->clock_out)->format('H:i') : '',
                 'record' => $record,
             ];
