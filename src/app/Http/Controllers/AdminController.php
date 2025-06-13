@@ -15,10 +15,9 @@ class AdminController extends Controller
         return view('admin.auth.login');
     }
 
+    //「選ばれたある特定の一日」の全員の勤怠情報
     public function showAttendanceListAll()
     {
-        //「選ばれたある特定の一日」の全員の勤怠情報
-
         //日付のリクエストがあったらその日、なければnowを表示にしたい（？）
         $date = Carbon::today();
         $titleDate = Carbon::today()->isoFormat('Y年M月D日');

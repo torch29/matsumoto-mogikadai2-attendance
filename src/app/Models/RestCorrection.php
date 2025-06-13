@@ -15,10 +15,9 @@ class RestCorrection extends Model
     }
 
     protected $fillable = [
-        'rest_id',
+        'attendance_correction_id',
         'corrected_rest_start',
         'corrected_rest_end',
         'note',
-        'approve_status',
     ];
 }

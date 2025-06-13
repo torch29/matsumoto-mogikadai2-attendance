@@ -21,7 +21,6 @@ class Rest extends Model
 
     protected $fillable = [
         'attendance_id',
-        'date',
         'rest_start',
         'rest_end',
     ];
