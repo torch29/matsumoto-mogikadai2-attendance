@@ -38,6 +38,7 @@ class AttendanceController extends Controller
         return view('staff.attendance.index', compact('todayAttendance', 'today', 'user', 'status'));
     }
 
+    //出勤打刻
     public function clockIn()
     {
         $user = Auth::user();
@@ -60,6 +61,7 @@ class AttendanceController extends Controller
         return redirect('attendance');
     }
 
+    //退勤打刻
     public function clockOut()
     {
         $user = Auth::user();
@@ -82,6 +84,7 @@ class AttendanceController extends Controller
         return redirect('attendance');
     }
 
+    //休憩入打刻
     public function restStart()
     {
         $user = Auth::user();
@@ -90,7 +93,7 @@ class AttendanceController extends Controller
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
         $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
-        //まだ休憩に入っていないか、休憩が終了している場合、新しく休憩に入ることができる
+        //まだ休憩に入っていないか、前の休憩が終了している場合、新しく休憩に入ることができる
         $canStartRest = !$lastRest || $lastRest->rest_end;
 
         //出勤中で、新しく休憩に入ることができる状態
@@ -104,6 +107,7 @@ class AttendanceController extends Controller
         return redirect('attendance');
     }
 
+    //休憩戻打刻
     public function restEnd()
     {
         $user = Auth::user();
@@ -124,11 +128,12 @@ class AttendanceController extends Controller
         return redirect('attendance');
     }
 
+    //職員自身の勤怠一覧
     public function showAttendanceList()
     {
         $user = Auth::user();
 
-        //指定が無ければ今日が属する月を、指定があればその月を設定したい
+        //指定が無ければ今日が属する月を、指定があればその月を設定
         $currentDay = Carbon::today();
         $firstOfMonth = $currentDay->copy()->firstOfMonth();
         $endOfMonth = $currentDay->copy()->endOfMonth();
@@ -151,11 +156,13 @@ class AttendanceController extends Controller
             $record = $attendances[$key] ?? null;
 
             $attendanceRecords[] = [
-                'date' => $date->isoFormat('M月D日（ddd）'),
+                /*/*'date' => $date->isoFormat('M月D日（ddd）'),
                 'clock_in' => optional($record)->clock_in_formatted,
                 'clock_out' => optional($record)->clock_out_formatted,
-                'record' => $record,
+                'record' => $record,*/
             ];
+            
+            
         }
 
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'currentDay'));
