@@ -36,12 +36,13 @@ class AdminController extends Controller
                 return 0;
             });
 
+            //(出勤～退勤) - 休憩時刻 により、実労働時間を計算
             $totalWorkHours = null;
             $totalWorkFormatted = null;
             if ($attendance->clock_in && $attendance->clock_out) {
                 $totalWorkHours = Carbon::parse($attendance->clock_out)->diffInMinutes(Carbon::parse($attendance->clock_in)) - $totalRestMinutes;
 
-                //万が一、出勤＋退勤時間合計 < 休憩時間合計 の場合
+                //実労働時間を[H:mm]形式に整える（万が一、出勤～退勤時間合計 < 休憩時間合計 の場合はマイナス表示する）
                 if ($totalWorkHours >= 0) {
                     $totalWorkFormatted = Carbon::createFromTime(0, 0)
                         ->addMinutes($totalWorkHours)
@@ -54,6 +55,7 @@ class AdminController extends Controller
                 }
             }
 
+            //viewファイルに渡すための設定
             $attendanceRecords[] = [
                 'name' => $attendance->user->name,
                 'clock_in' => $attendance->clock_in_formatted,
@@ -96,7 +98,7 @@ class AdminController extends Controller
             ->get()
             ->KeyBy('date');
 
-        //日付＋勤怠データのセット
+        //viewファイルに渡すための設定
         $attendanceRecords = [];
         foreach ($dates as $date) {
             $key = $date->format('Y-m-d');

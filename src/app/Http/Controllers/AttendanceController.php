@@ -17,11 +17,11 @@ class AttendanceController extends Controller
         Carbon::setLocale('ja');
         $today = Carbon::now()->format("Y-m-d");
 
-        //当日の勤怠情報があるか
+        //当日の勤怠情報がある
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
         //viewに渡すstatusの設定
-        $status = '勤務外';
+        $status = '勤務外'; //デフォルト
         if ($todayAttendance) {
             if ($todayAttendance->clock_out !== null) {
                 $status = '退勤済';

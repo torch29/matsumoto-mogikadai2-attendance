@@ -32,6 +32,7 @@ class Attendance extends Model
         'clock_out',
     ];
 
+    // 指定されたスタッフの「本日分」の勤怠データ（休憩情報含む）を取得する
     public function scopeTodayForUser($query, $userId)
     {
         return $query->where('user_id', $userId)
