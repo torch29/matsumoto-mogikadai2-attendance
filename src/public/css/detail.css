@@ -2,7 +2,7 @@
 .approve__title {
     border-left: 5px solid #333;
     padding-left: 8px;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
 }
 body {
     background-color: #F0EFF2;
@@ -28,7 +28,7 @@ body {
 }
 .detail-table__row,
 .approve-table__row {
-    height: 50px;
+    height: 60px;
 }
 .detail-table__row:not(:last-child),
 .approve-table__row.detail-table__row:not(:last-child) {
@@ -44,9 +44,11 @@ body {
 .approve-table__data-left {
     width: 9em;
 }
-.detail-table__data,
-.approve-table__data {
-    /*border: #333 1px solid;*/
+.detail-table__data span,
+.detail-table__data-left span,
+.approve-table__data span,
+.approve-table__data-left span {
+    padding-left: 6px;
 }
 
 
@@ -56,6 +58,7 @@ body {
     height: 30px;
     border: #E1E1E1 solid 1px;
     border-radius: 5px;
+    padding-left: 5px;
 }
 .approve-table__input,
 .approve-table__textarea {
