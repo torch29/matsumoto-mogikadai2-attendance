@@ -144,25 +144,61 @@ class AttendanceController extends Controller
             $dates[] = $date->copy();
         }
 
+        //今月分の勤怠を取得（休憩を含む）。日付でキー指定する
         $attendances = Attendance::where('user_id', $user->id)
             ->whereBetween('date', [$firstOfMonth, $endOfMonth])
+            ->with('rests')
             ->get()
             ->KeyBy('date');
 
-        //日付＋勤怠データのセット
         $attendanceRecords = [];
+
         foreach ($dates as $date) {
-            $key = $date->format('Y-m-d');
-            $record = $attendances[$key] ?? null;
+            $attendance = $attendances[$date->toDateString()] ?? null;
+
+            $clockIn = optional($attendance)->clock_in;
+            $clockOut = optional($attendance)->clock_out;
+            $clockInFormatted = optional($attendance)->clock_in_formatted;
+            $clockOutFormatted = optional($attendance)->clock_out_formatted;
+
+            //休憩合計時間を計算
+            $rests = optional($attendance)->rests ?? collect();
+            $totalRestMinutes = $rests->sum(
+                function ($rest) {
+                    if ($rest->rest_start && $rest->rest_end) {
+                        return Carbon::parse($rest->rest_end)->diffInMinutes(Carbon::parse($rest->rest_start));
+                    }
+                    return 0;
+                }
+            );
+
+            //休憩合計時間の整形
+            $totalRestFormatted = $totalRestMinutes > 0
+                ? Carbon::createFromTime(0, 0)->addMinutes($totalRestMinutes)->isoFormat('H:mm')
+                : null;
+
+            //(出勤～退勤) - 休憩時刻 により、実労働時間を計算
+            $totalWorkHours = null;
+            $totalWorkFormatted = null;
+            if ($clockIn && $clockOut) {
+                $totalWorkHours = Carbon::parse($attendance->clock_out)->diffInMinutes(Carbon::parse($clockIn)) - $totalRestMinutes;
+                if ($totalWorkHours >= 0) {
+                    $totalWorkFormatted = Carbon::createFromTime(0, 0)->addMinutes($totalWorkHours)->isoFormat('H:mm');
+                } else {
+                    $absolute = abs($totalWorkHours);
+                    $totalWorkFormatted = '-' . Carbon::createFromTime(0, 0)->addMinutes($absolute)->isoFormat('H:mm');
+                }
+            }
 
             $attendanceRecords[] = [
-                /*/*'date' => $date->isoFormat('M月D日（ddd）'),
-                'clock_in' => optional($record)->clock_in_formatted,
-                'clock_out' => optional($record)->clock_out_formatted,
-                'record' => $record,*/
+                'date' => $date->isoFormat('M月D日（ddd）'),
+                'clock_in' => $clockInFormatted,
+                'clock_out' => $clockOutFormatted,
+                'total_rest' => $totalRestMinutes,
+                'total_rest_formatted' => $totalRestFormatted,
+                'total_work_hours' => $totalWorkHours,
+                'total_work_formatted' => $totalWorkFormatted,
             ];
-            
-            
         }
 
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'currentDay'));

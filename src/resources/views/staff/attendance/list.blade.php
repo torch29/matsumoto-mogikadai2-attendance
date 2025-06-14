@@ -28,11 +28,11 @@
             </tr>
             @foreach( $attendanceRecords as $attendance )
             <tr class="attendance-table__row">
-                <td class="attendance-table__data">{{ $attendance['date'] }}</td>
-                <td class="attendance-table__data">{{ $attendance['clock_in'] }}</td>
-                <td class="attendance-table__data">{{ $attendance['clock_out'] }}</td>
-                <td class="attendance-table__data">1:00</td>
-                <td class="attendance-table__data">8:00</td>
+                <td class="attendance-table__data">{{ $attendance['date'] ?? '' }}</td>
+                <td class="attendance-table__data">{{ $attendance['clock_in'] ?? '' }}</td>
+                <td class="attendance-table__data">{{ $attendance['clock_out'] ?? ''}}</td>
+                <td class="attendance-table__data">{{ $attendance['total_rest_formatted'] ?? '' }}</td>
+                <td class="attendance-table__data">{{ $attendance['total_work_formatted']  ?? '' }}</td>
                 <td class="attendance-table__data">詳細</td>
             </tr>
             @endforeach
