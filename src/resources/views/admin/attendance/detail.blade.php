@@ -14,38 +14,44 @@
             <table class="detail-table">
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">名前</th>
-                    <td class="detail-table__data-left" colspan="2">サンプル　名前</td>
+                    <td class="detail-table__data-left" colspan="2">{{ $attendance->user->name }}</td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">日付</th>
-                    <td class="detail-table__data-left">20XX年</td>
-                    <td class="detail-table__data">〇月×日</td>
+                    <td class="detail-table__data-left">{{ $attendance->date }}年</td>
+                    <td class="detail-table__data">{{ $attendance->date }}</td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">出勤・退勤</th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" value="出勤時刻">
+                        <input type="text" class="detail-table__input" value="{{ $attendance->clock_in ?? '' }}">
                     </td>
                     <td class="detail-table__data">
-                        ～　　<input type="text" class="detail-table__input" value="退勤時刻">
+                        ～　　<input type="text" class="detail-table__input" value="{{ $attendance->clock_out ?? '' }}">
                     </td>
                 </tr>
+                @foreach( $attendance->rests as $i => $rest )
                 <tr class="detail-table__row">
-                    <th class="detail-table__heading">休憩</th>
+                    <th class="detail-table__heading">
+                        {{ $i === 0 ? '休憩' : '休憩' . ($i + 1) }}
+                    </th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" value="休憩入">
+                        <input type="text" class="detail-table__input" name="rests[{{ $i }}][rest_start]" value="{{ $rest->rest_start ?? '' }}">
                     </td>
                     <td class="detail-table__data">
-                        ～　　<input type="text" class="detail-table__input" value="休憩戻">
+                        ～　　<input type="text" class="detail-table__input" name="rests[{{ $i }}][rest_end]" value="{{ $rest->rest_end ?? '' }}">
                     </td>
                 </tr>
+                @endforeach
                 <tr class="detail-table__row">
-                    <th class="detail-table__heading">休憩2</th>
+                    <th class="detail-table__heading">
+                        {{ count($attendance->rests) === 0 ? '休憩' : '休憩' . (count($attendance->rests) + 1) }}
+                    </th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" value="休憩入">
+                        <input type="text" class="detail-table__input" name="rests[new][rest_start]" value="追加入力用　休憩入">
                     </td>
                     <td class="detail-table__data">
-                        <input type="text" class="detail-table__input" value="休憩戻">
+                        ～　　<input type="text" class="detail-table__input" name="rests[new][rest_end]" value="追加入力用　休憩戻">
                     </td>
                 </tr>
                 <tr class="detail-table__row">

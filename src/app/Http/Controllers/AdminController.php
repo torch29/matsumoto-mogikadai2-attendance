@@ -154,8 +154,10 @@ class AdminController extends Controller
         return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'currentDay'));
     }
 
-    public function showDetail()
+    public function showDetail($id)
     {
-        return view('admin/attendance/detail');
+        $attendance = Attendance::with('user', 'rests')->findOrFail($id);
+
+        return view('admin/attendance/detail', compact('attendance'));
     }
 }
