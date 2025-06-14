@@ -24,4 +24,10 @@ class Rest extends Model
         'rest_start',
         'rest_end',
     ];
+
+    //指定した方に型変換
+    protected $casts = [
+        'rest_start' => 'datetime',
+        'rest_end' => 'datetime',
+    ];
 }

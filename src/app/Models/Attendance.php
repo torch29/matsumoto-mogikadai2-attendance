@@ -32,6 +32,13 @@ class Attendance extends Model
         'clock_out',
     ];
 
+    //指定した方に型変換
+    protected $casts = [
+        'date' => 'date',
+        'clock_in' => 'datetime',
+        'clock_out' => 'datetime',
+    ];
+
     // 指定されたスタッフの「本日分」の勤怠データ（休憩情報含む）を取得する
     public function scopeTodayForUser($query, $userId)
     {

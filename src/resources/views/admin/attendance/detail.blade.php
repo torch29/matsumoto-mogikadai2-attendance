@@ -18,16 +18,16 @@
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">日付</th>
-                    <td class="detail-table__data-left">{{ $attendance->date }}年</td>
-                    <td class="detail-table__data">{{ $attendance->date }}</td>
+                    <td class="detail-table__data-left">{{ $attendance->date->isoFormat('Y') }}年</td>
+                    <td class="detail-table__data">{{ $attendance->date->isoFormat('M') . '月' . $attendance->date->isoFormat('D') . '日'  }}</td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">出勤・退勤</th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" value="{{ $attendance->clock_in ?? '' }}">
+                        <input type="text" class="detail-table__input" name="clock_in" value="{{ old("clock_in", optional($attendance->clock_in)->isoFormat('H:mm')) }}">
                     </td>
                     <td class="detail-table__data">
-                        ～　　<input type="text" class="detail-table__input" value="{{ $attendance->clock_out ?? '' }}">
+                        ～　　<input type="text" class="detail-table__input" name="clock_out" value="{{ old("clock_out", optional($attendance->clock_out)->isoFormat('H:mm')) }}">
                     </td>
                 </tr>
                 @foreach( $attendance->rests as $i => $rest )
@@ -35,11 +35,11 @@
                     <th class="detail-table__heading">
                         {{ $i === 0 ? '休憩' : '休憩' . ($i + 1) }}
                     </th>
-                    <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" name="rests[{{ $i }}][rest_start]" value="{{ $rest->rest_start ?? '' }}">
+                    <td class=" detail-table__data-left">
+                        <input type="text" class="detail-table__input" name="rests[{{ $i }}][rest_start]" value="{{ old("rests.$i.rest_start", optional($rest->rest_start)->isoFormat('H:mm')) }}">
                     </td>
                     <td class="detail-table__data">
-                        ～　　<input type="text" class="detail-table__input" name="rests[{{ $i }}][rest_end]" value="{{ $rest->rest_end ?? '' }}">
+                        ～　　<input type="text" class="detail-table__input" name="rests[{{ $i }}][rest_end]" value="{{ old("rests.$i.rest_end", optional($rest->rest_end)->isoFormat('H:mm')) }}">
                     </td>
                 </tr>
                 @endforeach
@@ -48,16 +48,16 @@
                         {{ count($attendance->rests) === 0 ? '休憩' : '休憩' . (count($attendance->rests) + 1) }}
                     </th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" name="rests[new][rest_start]" value="追加入力用　休憩入">
+                        <input type="text" class="detail-table__input" name="rests[new][rest_start]" value="">
                     </td>
                     <td class="detail-table__data">
-                        ～　　<input type="text" class="detail-table__input" name="rests[new][rest_end]" value="追加入力用　休憩戻">
+                        ～　　<input type="text" class="detail-table__input" name="rests[new][rest_end]" value="">
                     </td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">備考</th>
                     <td class="detail-table__data" colspan="2">
-                        <textarea name="" id="" class="detail-table__textarea">電車遅延のため</textarea>
+                        <textarea name="note" id="" class="detail-table__textarea" placeholder="例：電車遅延のため">{{ old('note') }}</textarea>
                     </td>
                 </tr>
             </table>
