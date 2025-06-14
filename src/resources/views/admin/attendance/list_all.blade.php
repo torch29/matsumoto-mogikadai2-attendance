@@ -6,6 +6,7 @@
 
 @section('content')
 <div class="list__content">
+    {{-- 特定の一日の全職員の勤怠一覧 --}}
     <div class="list__title">
         <h3>{{ $titleDate }}の勤怠</h3>
     </div>
@@ -31,7 +32,7 @@
                 <td class="attendance-table__data">{{ $attendance['clock_out'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['total_rest_formatted'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['total_work_formatted'] }}</td>
-                <td class="attendance-table__data">詳細</td>
+                <td class="attendance-table__data"><a href="/attendance/{{ $attendance['id'] }}">詳細</a></td>
             </tr>
             @endforeach
         </table>

@@ -58,6 +58,7 @@ class AdminController extends Controller
             //viewファイルに渡すための設定
             $attendanceRecords[] = [
                 'name' => $attendance->user->name,
+                'id' => $attendance->id,
                 'clock_in' => $attendance->clock_in_formatted,
                 'clock_out' => $attendance->clock_out_formatted,
                 'total_rest' => $totalRestMinutes,
@@ -151,5 +152,10 @@ class AdminController extends Controller
         }
 
         return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'currentDay'));
+    }
+
+    public function showDetail()
+    {
+        return view('admin/attendance/detail');
     }
 }

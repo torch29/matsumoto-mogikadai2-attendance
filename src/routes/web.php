@@ -51,6 +51,8 @@ Route::middleware(['auth', 'adminOnly'])->group(function () {
         //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
         Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff']);
     });
+    //選択された日付＋選択されたスタッフの勤怠詳細画面表示
+    Route::get('attendance/{id}', [AdminController::class, 'showDetail']);
 });
 
 //ユーザー登録画面
