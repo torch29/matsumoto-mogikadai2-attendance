@@ -19,7 +19,6 @@ class CreateRestCorrectionsTable extends Migration
             $table->foreignId('attendance_correction_id')->constrained()->cascadeOnDelete();
             $table->time('corrected_rest_start');
             $table->time('corrected_rest_end');
-            $table->string('note');
             $table->timestamps();
         });
     }
