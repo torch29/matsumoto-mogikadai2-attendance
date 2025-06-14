@@ -48,10 +48,10 @@
                         {{ count($attendance->rests) === 0 ? '休憩' : '休憩' . (count($attendance->rests) + 1) }}
                     </th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" name="rests[new][rest_start]" value="">
+                        <input type="text" class="detail-table__input" name="rests[new][rest_start]" value="{{ old("rests.new.rest_start") }}">
                     </td>
                     <td class="detail-table__data">
-                        ～　　<input type="text" class="detail-table__input" name="rests[new][rest_end]" value="">
+                        ～　　<input type="text" class="detail-table__input" name="rests[new][rest_end]" value="{{ old("rests.new.rest_end") }}">
                     </td>
                 </tr>
                 <tr class="detail-table__row">
