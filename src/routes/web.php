@@ -33,8 +33,8 @@ Route::middleware('auth')->group(function () {
         Route::post('restStart', [AttendanceController::class, 'restStart']);
         //休憩戻打刻
         Route::post('restEnd', [AttendanceController::class, 'restEnd']);
-        //勤怠詳細画面の表示　※あとで/detailを{id}に変更する
-        Route::get('/detail', [AttendanceController::class, 'showDetail']);
+        //勤怠詳細画面の表示
+        Route::get('/{id}', [AdminController::class, 'showDetail']);
     });
     //申請一覧の表示
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
@@ -51,8 +51,8 @@ Route::middleware(['auth', 'adminOnly'])->group(function () {
         //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
         Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff']);
     });
-    //選択された日付＋選択されたスタッフの勤怠詳細画面表示
-    Route::get('attendance/{id}', [AdminController::class, 'showDetail']);
+    /*選択された日付＋選択されたスタッフの勤怠詳細画面表示
+    Route::get('attendance/{id}', [AdminController::class, 'showDetail']);*/
 });
 
 //ユーザー登録画面

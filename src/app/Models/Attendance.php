@@ -57,20 +57,22 @@ class Attendance extends Model
     //休憩時間の合計を計算
     public function getTotalRestMinutesAttribute()
     {
-        return $this->rests->sum(function ($rest) {
-            if ($rest->rest_start && $rest->rest_end) {
-                return Carbon::parse($rest->rest_end)->diffInSeconds(Carbon::parse($rest->rest_start));
+        return $this->rests->sum(
+            function ($rest) {
+                if ($rest->rest_start && $rest->rest_end) {
+                    return Carbon::parse($rest->rest_end)->diffInMinutes(Carbon::parse($rest->rest_start));
+                }
+                return 0;
             }
-            return 0;
-        });
+        );
     }
 
     //合計休憩時間のフォーマット
     public function getTotalRestFormattedAttribute()
     {
-        $totalRestSeconds = $this->total_rest_seconds;
-        return $totalRestSeconds > 0
-            ? Carbon::createFromTimeStamp($totalRestSeconds)->isoFormat('H:mm')
+        $totalRestMinutes = $this->total_rest_minutes;
+        return $totalRestMinutes > 0
+            ? Carbon::createFromTime(0, 0)->addMinutes($totalRestMinutes)->isoFormat('H:mm')
             : null;
     }
 
@@ -82,7 +84,7 @@ class Attendance extends Model
         }
 
         $workMinutes = Carbon::parse($this->clock_out)->diffInMinutes(Carbon::parse($this->clock_in));
-        $restMinutes = $this->total_rest_seconds;
+        $restMinutes = $this->total_rest_minutes;
 
         return $workMinutes - $restMinutes;
     }
