@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
         //休憩戻打刻
         Route::post('restEnd', [AttendanceController::class, 'restEnd']);
         //勤怠詳細画面の表示
-        Route::get('/{id}', [AdminController::class, 'showDetail']);
+        Route::get('/{id}', [AttendanceController::class, 'showDetail']);
     });
     //申請一覧の表示
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);

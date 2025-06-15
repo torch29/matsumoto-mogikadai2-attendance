@@ -187,8 +187,15 @@ class AttendanceController extends Controller
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'currentDay'));
     }
 
-    public function showDetail()
+    public function showDetail($id)
     {
-        return view('staff.attendance.detail');
+        $user = Auth::user();
+        $attendance = Attendance::with('user', 'rests')->findOrFail($id);
+
+        if ($user->is_admin) {
+            return view('admin.attendance.detail', compact('attendance'));
+        }
+
+        return view('staff.attendance.detail', compact('attendance'));
     }
 }

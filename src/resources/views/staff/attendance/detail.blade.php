@@ -14,44 +14,50 @@
             <table class="detail-table">
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">名前</th>
-                    <td class="detail-table__data-left" colspan="2">サンプル　名前</td>
+                    <td class="detail-table__data-left" colspan="2">{{ $attendance->user->name }}</td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">日付</th>
-                    <td class="detail-table__data-left">20XX年</td>
-                    <td class="detail-table__data">〇月×日</td>
+                    <td class="detail-table__data-left"><span>{{ $attendance->date->isoFormat('Y') }}年</span></td>
+                    <td class="detail-table__data"><span>{{ $attendance->date->isoFormat('M') . '月' . $attendance->date->isoFormat('D') . '日'  }}</span></td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">出勤・退勤</th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" value="出勤時刻">
+                        <input type="text" class="detail-table__input" name="corrected_clock_in" value="{{ old("corrected_clock_in", optional($attendance->clock_in)->isoFormat('H:mm')) }}">　～
                     </td>
                     <td class="detail-table__data">
-                        ～　　<input type="text" class="detail-table__input" value="退勤時刻">
+                        <input type="text" class="detail-table__input" name="corrected_clock_out" value="{{ old("corrected_clock_out", optional($attendance->clock_out)->isoFormat('H:mm')) }}">
                     </td>
                 </tr>
+                @foreach( $attendance->rests as $i => $rest )
                 <tr class="detail-table__row">
-                    <th class="detail-table__heading">休憩</th>
+                    <th class="detail-table__heading">
+                        {{ $i === 0 ? '休憩' : '休憩' . ($i + 1) }}
+                    </th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" value="休憩入">
+                        <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_start]" value="{{ old("rest_corrections.$i.corrected_rest_start", optional($rest->rest_start)->isoFormat('H:mm')) }}">　～
                     </td>
                     <td class="detail-table__data">
-                        ～　　<input type="text" class="detail-table__input" value="休憩戻">
+                        <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_end]" value="{{ old("rest_corrections.$i.corrected_rest_end", optional($rest->rest_end)->isoFormat('H:mm')) }}">
                     </td>
                 </tr>
+                @endforeach
                 <tr class="detail-table__row">
-                    <th class="detail-table__heading">休憩2</th>
+                    <th class="detail-table__heading">
+                        {{ count($attendance->rests) === 0 ? '休憩' : '休憩' . (count($attendance->rests) + 1) }}
+                    </th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" value="休憩入">
+                        <input type="text" class="detail-table__input" name="rest_corrections[new][corrected_rest_start]" value="{{ old("rest_corrections.new.corrected_rest_start") }}">　～
                     </td>
                     <td class="detail-table__data">
-                        <input type="text" class="detail-table__input" value="休憩戻">
+                        <input type="text" class="detail-table__input" name="rest_corrections[new][corrected_rest_end]" value="{{ old("rest_corrections.new.corrected_rest_end") }}">
                     </td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">備考</th>
                     <td class="detail-table__data" colspan="2">
-                        <textarea name="" id="" class="detail-table__textarea">電車遅延のため</textarea>
+                        <textarea name="note" id="" class="detail-table__textarea" placeholder="例：電車遅延のため">{{ old('note') }}</textarea>
                     </td>
                 </tr>
             </table>
