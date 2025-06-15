@@ -32,7 +32,7 @@ class Attendance extends Model
         'clock_out',
     ];
 
-    //指定した方に型変換
+    //指定した型に型変換
     protected $casts = [
         'date' => 'date',
         'clock_in' => 'datetime',
@@ -46,6 +46,68 @@ class Attendance extends Model
             ->whereDate('date', now()->toDateString())->with('rests');
     }
 
+    // 指定された「日付」の、全ユーザの勤怠一覧を取得
+    public function scopeTodayAttendance($query, $date)
+    {
+        return $query->with(['user', 'rest'])
+            ->whereDate('clock_in', $date)
+            ->orderBy(User::select('name')->whereColumn('users.id', 'attendances.user_id'));
+    }
+
+    //休憩時間の合計を計算
+    public function getTotalRestMinutesAttribute()
+    {
+        return $this->rests->sum(function ($rest) {
+            if ($rest->rest_start && $rest->rest_end) {
+                return Carbon::parse($rest->rest_end)->diffInSeconds(Carbon::parse($rest->rest_start));
+            }
+            return 0;
+        });
+    }
+
+    //合計休憩時間のフォーマット
+    public function getTotalRestFormattedAttribute()
+    {
+        $totalRestSeconds = $this->total_rest_seconds;
+        return $totalRestSeconds > 0
+            ? Carbon::createFromTimeStamp($totalRestSeconds)->isoFormat('H:mm')
+            : null;
+    }
+
+    //実労働時間の合計を計算
+    public function getTotalWorkMinutesAttribute()
+    {
+        if (!$this->clock_in || !$this->clock_out) {
+            return null;
+        }
+
+        $workMinutes = Carbon::parse($this->clock_out)->diffInMinutes(Carbon::parse($this->clock_in));
+        $restMinutes = $this->total_rest_seconds;
+
+        return $workMinutes - $restMinutes;
+    }
+
+    //実労働時間のフォーマット
+    public function getTotalWorkFormattedAttribute()
+    {
+        $totalWorkMinutes = $this->total_work_minutes;
+        if ($totalWorkMinutes === null) {
+            return null;
+        }
+
+        if ($totalWorkMinutes >= 0) {
+            return Carbon::createFromTime(0, 0)
+                ->addMinutes($totalWorkMinutes)
+                ->isoFormat('H:mm');
+        } else {
+            $absolute = abs($totalWorkMinutes);
+            return '-' . Carbon::createFromTime(0, 0)
+                ->addMinutes($absolute)
+                ->isoFormat('H:mm');
+        }
+    }
+
+    //出勤時刻のフォーマット
     public function getClockInFormattedAttribute()
     {
         if (!$this->clock_in) {
@@ -55,6 +117,7 @@ class Attendance extends Model
         return Carbon::parse($this->clock_in)->format('H:i');
     }
 
+    //退勤時刻のフォーマット
     public function getClockOutFormattedAttribute()
     {
         if (!$this->clock_out) {
