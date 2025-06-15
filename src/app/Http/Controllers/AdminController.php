@@ -143,6 +143,7 @@ class AdminController extends Controller
             }
 
             $attendanceRecords[] = [
+                'id' => optional($attendance)->id,
                 'date' => $date->isoFormat('M月D日（ddd）'),
                 'clock_in' => $clockInFormatted,
                 'clock_out' => $clockOutFormatted,
