@@ -149,7 +149,9 @@ class AttendanceController extends Controller
             ->whereBetween('date', [$firstOfMonth, $endOfMonth])
             ->with('rests')
             ->get()
-            ->KeyBy('date');
+            ->mapWithKeys(function ($attendance) {
+                return [$attendance->date->toDateString() => $attendance];
+            });
 
         $attendanceRecords = [];
 

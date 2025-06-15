@@ -78,7 +78,7 @@ class AdminController extends Controller
         return view('admin.staff.list', compact('staffLists'));
     }
 
-    //スタッフ一覧で選択された１人のスタッフの１ヶ月分の勤怠一覧を表示
+    //選択された１人のスタッフの１ヶ月分の勤怠一覧を表示
     public function showAttendanceListByStaff($id)
     {
         $staff = User::with('attendances')->findOrFail($id);
@@ -99,7 +99,9 @@ class AdminController extends Controller
             ->whereBetween('date', [$firstOfMonth, $endOfMonth])
             ->with('rests')
             ->get()
-            ->KeyBy('date');
+            ->mapWithKeys(function ($attendance) {
+                return [$attendance->date->toDateString() => $attendance];
+            });
 
         //viewファイルに渡すための設定
         $attendanceRecords = [];
