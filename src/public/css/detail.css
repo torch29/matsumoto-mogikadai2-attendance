@@ -87,3 +87,12 @@ body {
     border-radius: 3px;
     cursor: pointer;
 }
+
+.error-message__area {
+    background-color: #e6c0c0;
+    color: #6c2735;
+    padding: 5px 10px;
+    display: inline-block;
+    width: 60%;
+    margin: 0 auto 20px;
+}

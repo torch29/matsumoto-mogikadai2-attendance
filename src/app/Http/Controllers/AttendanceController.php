@@ -190,7 +190,15 @@ class AttendanceController extends Controller
     public function showDetail($id)
     {
         $user = Auth::user();
-        $attendance = Attendance::with('user', 'rests')->findOrFail($id);
+        $attendance = Attendance::with('user', 'rests')->find($id);
+
+        if (!$attendance) {
+            return redirect()->back()->with('error', '該当のデータがありません。');
+        }
+
+        if (!$user->is_admin && $attendance->user_id !== $user->id) {
+            return redirect()->back()->with('error', 'アクセス権限がありません。');
+        }
 
         if ($user->is_admin) {
             return view('admin.attendance.detail', compact('attendance'));

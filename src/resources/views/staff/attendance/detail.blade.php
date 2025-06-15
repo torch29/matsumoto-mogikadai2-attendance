@@ -6,6 +6,13 @@
 
 @section('content')
 <div class="detail__content">
+    @if (session('error'))
+    <div class="error-message__area">
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    </div>
+    @endif
     <div class="detail__title">
         <h3>勤怠詳細</h3>
     </div>
