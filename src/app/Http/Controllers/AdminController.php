@@ -28,43 +28,30 @@ class AdminController extends Controller
         $attendanceRecords = [];
 
         foreach ($attendances as $attendance) {
-            //休憩時間の合計
-            $totalRestMinutes = $attendance->rests->sum(function ($rest) {
-                if ($rest->rest_start && $rest->rest_end) {
-                    return Carbon::parse($rest->rest_end)->diffInMinutes(Carbon::parse($rest->rest_start));
-                }
-                return 0;
-            });
+            $clockIn = optional($attendance)->clock_in;
+            $clockOut = optional($attendance)->clock_out;
+            $clockInFormatted = optional($attendance)->clock_in_formatted;
+            $clockOutFormatted = optional($attendance)->clock_out_formatted;
 
-            //(出勤～退勤) - 休憩時刻 により、実労働時間を計算
-            $totalWorkHours = null;
-            $totalWorkFormatted = null;
-            if ($attendance->clock_in && $attendance->clock_out) {
-                $totalWorkHours = Carbon::parse($attendance->clock_out)->diffInMinutes(Carbon::parse($attendance->clock_in)) - $totalRestMinutes;
+            //休憩合計時間をAttendanceモデルから取得
+            $rests = optional($attendance)->rests ?? collect();
+            $totalRestMinutes = optional($attendance)->total_rest_minutes;
+            $totalRestFormatted = optional($attendance)->total_rest_formatted;
 
-                //実労働時間を[H:mm]形式に整える（万が一、出勤～退勤時間合計 < 休憩時間合計 の場合はマイナス表示する）
-                if ($totalWorkHours >= 0) {
-                    $totalWorkFormatted = Carbon::createFromTime(0, 0)
-                        ->addMinutes($totalWorkHours)
-                        ->isoFormat('H:mm');
-                } else {
-                    $absolute = abs($totalWorkHours);
-                    $totalWorkFormatted = '-' . Carbon::createFromTime(0, 0)
-                        ->addMinutes($absolute)
-                        ->isoFormat('H:mm');
-                }
-            }
+            //実労働時間をAttendanceモデルから取得
+            $totalWorkHours = optional($attendance)->total_work_minutes;
+            $totalWorkFormatted = optional($attendance)->total_work_formatted;
 
             //viewファイルに渡すための設定
             $attendanceRecords[] = [
                 'name' => $attendance->user->name,
-                'id' => $attendance->id,
-                'clock_in' => $attendance->clock_in_formatted,
-                'clock_out' => $attendance->clock_out_formatted,
+                'id' => optional($attendance)->id,
+                'clock_in' => $clockInFormatted,
+                'clock_out' => $clockOutFormatted,
                 'total_rest' => $totalRestMinutes,
-                'total_rest_formatted' => Carbon::createFromTime(0, 0)->addMinutes($totalRestMinutes)->isoFormat('H:mm'),
+                'total_rest_formatted' => $totalRestFormatted,
                 'total_work_hours' => $totalWorkHours,
-                'total_work_formatted' => $totalWorkFormatted
+                'total_work_formatted' => $totalWorkFormatted,
             ];
         }
 
