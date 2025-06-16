@@ -11,7 +11,7 @@
     </div>
     <div class="list__guide-area">
         <div class="list__guide-link">←前月</div>
-        {{ $currentDay->isoFormat('Y/MM') }}
+        {{ $selectDate->isoFormat('Y/MM') }}
         <div class="list__guide-link">翌月→</div>
     </div>
     {{-- dd($attendanceRecords) --}}
@@ -27,7 +27,7 @@
             </tr>
             @foreach( $attendanceRecords as $attendance )
             <tr class="attendance-table__row">
-                <td class="attendance-table__data">{{ $attendance['date'] }}</td>
+                <th class="attendance-table__data"><span class="attendance-table__data--date">{{ $attendance['date'] }}</span></th>
                 <td>{{ $attendance['clock_in'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['clock_out'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['total_rest_formatted'] }}</td>

@@ -20,7 +20,7 @@ class AdminController extends Controller
     {
         //日付のリクエストがあったらその日、なければ当日を表示
         $date = Carbon::today();
-        $titleDate = Carbon::today()->isoFormat('Y年M月D日');
+        $titleDate = Carbon::today();
         $attendances = Attendance::whereDate('date', $date)
             ->with(['user', 'rests'])
             ->get();
@@ -66,14 +66,19 @@ class AdminController extends Controller
     }
 
     //選択された１人のスタッフの１ヶ月分の勤怠一覧を表示
-    public function showAttendanceListByStaff($id)
+    public function showAttendanceListByStaff(Request $request, $id)
     {
         $staff = User::with('attendances')->findOrFail($id);
 
-        //指定が無ければ今日が属する月を、指定があればその月を設定したい
-        $currentDay = Carbon::today();
-        $firstOfMonth = $currentDay->copy()->firstOfMonth();
-        $endOfMonth = $currentDay->copy()->endOfMonth();
+        //指定が無ければ今月を、指定があればその月を設定
+        $selectDate = $request->date
+            ? Carbon::parse($request->date)->startOfDay()
+            : Carbon::today();
+        $firstOfMonth = $selectDate->copy()->firstOfMonth();
+        $endOfMonth = $selectDate->copy()->endOfMonth();
+
+        $previousMonth = Attendance::getPreviousMonth($selectDate);
+        $nextMonth = Attendance::getNextMonth($selectDate);
 
         //1日～末日までの日付の配列を作成
         $dates = [];
@@ -121,6 +126,6 @@ class AdminController extends Controller
             ];
         }
 
-        return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'currentDay'));
+        return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 }

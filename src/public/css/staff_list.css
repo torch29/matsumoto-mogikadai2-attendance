@@ -24,6 +24,7 @@ body {
 .staff-table__heading {
     font-weight: normal;
     border-bottom: 3px solid #E1E1E1;
+    color: #737373;
 }
 .staff-table__heading:first-child {
     width: 35%;

@@ -8,12 +8,22 @@
 <div class="list__content">
     {{-- 特定の一日の全職員の勤怠一覧 --}}
     <div class="list__title">
-        <h3>{{ $titleDate }}の勤怠</h3>
+        <h3>{{ $titleDate->isoFormat('Y年M月D日') }}の勤怠</h3>
     </div>
     <div class="list__guide-area">
-        <div class="list__guide-link">←前日</div>
-        当日
-        <div class="list__guide-link">翌日→</div>
+        <div class="list__guide-link">
+            <a href="{{ route('admin.attendances.daily-list') }}">
+                {{-- route(''admin.attendances.daily-list', ['date' => $previousMonth]) --}}
+                <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前月
+            </a>
+        </div>
+        {{ $titleDate->isoFormat('Y/MM/DD') }}
+        <div class="list__guide-link">
+            <a href="{{ route('admin.attendances.daily-list') }}">
+                {{-- route('admin.attendances.daily-list', ['date' => $nextMonth])  --}}
+                翌月<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
+            </a>
+        </div>
     </div>
     <div class="attendance-table__wrapper">
         <table class="attendance-table">

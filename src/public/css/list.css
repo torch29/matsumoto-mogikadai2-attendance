@@ -10,6 +10,7 @@ body {
     border-left: 5px solid #333;
     padding-left: 8px;
     margin-bottom: 50px;
+    color: #000;
 }
 
 .list__guide-area {
@@ -20,6 +21,17 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: #737373;
+}
+.list__guide-area span {
+    color: #000;
+}
+.list__guide-link {
+    padding: 0 15px;
+}
+.list__guide-link a,
+.list__guide-link a:visited {
+    color: #737373;
 }
 .attendance-table,
 .request-table {
@@ -33,6 +45,7 @@ body {
 .request-table__heading {
     font-weight: normal;
     border-bottom: 3px solid #E1E1E1;
+    color: #737373;
 }
 .attendance-table__heading:first-child,
 .request-table__heading:first-child {
@@ -55,6 +68,11 @@ body {
 .attendance-table__data,
 .request-table__data {
     padding: 3px 8px;
+    color: #000;
+}
+.attendance-table__data--date {
+    color: #737373;
+    font-weight: normal;
 }
 .attendance-table__data:first-child,
 .request-table__data:first-child {
@@ -68,5 +86,21 @@ body {
 
 .table__data--none,
 .table__data--none:visited {
-    color: #999;
+    color: #9b9b9b;
+}
+
+.link__icon {
+    width: 16px;
+    opacity: 0.3;
+    display: inline-block;
+    margin: auto 0;
+    margin-right: 2px;
+}
+.link__icon-next {
+    transform: rotate(180deg);
+    width: 16px;
+    opacity: 0.3;
+    display: inline-block;
+    margin: auto 0;
+    margin-left: 2px;
 }

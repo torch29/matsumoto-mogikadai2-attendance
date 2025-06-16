@@ -12,11 +12,19 @@
     </div>
     ※一般職員（{{ Auth::id() }}：{{ Auth::user()->name }}）でログイン中 {{-- あとで消す --}}
     <div class="list__guide-area">
-        <div class="list__guide-link"><a href="{{ url('/attendance/list?date=' . $previousMonth) }}">←前月</a></div>
+        <div class="list__guide-link">
+            <a href="{{ url('/attendance/list?date=' . $previousMonth) }}">
+                <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前月
+            </a>
+        </div>
         select:{{ $selectDate }}　　
         previous:{{ $previousMonth }}　　
-        当月：{{ $selectDate->isoFormat('Y/MM') }}
-        <div class="list__guide-link"><a href="{{ url('/attendance/list?date=' . $nextMonth) }}">翌月→</a></div>
+        当月：<span>{{ $selectDate->isoFormat('Y/MM') }}</span>
+        <div class="list__guide-link">
+            <a href="{{ url('/attendance/list?date=' . $nextMonth) }}">
+                翌月<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
+            </a>
+        </div>
     </div>
     <div class="attendance-table__wrapper">
         <table class="attendance-table">
@@ -30,7 +38,7 @@
             </tr>
             @foreach( $attendanceRecords as $attendance )
             <tr class="attendance-table__row">
-                <td class="attendance-table__data">{{ $attendance['date'] ?? '' }}</td>
+                <th class="attendance-table__data"><span class="attendance-table__data--date">{{ $attendance['date'] ?? '' }}</span></th>
                 <td class="attendance-table__data">{{ $attendance['clock_in'] ?? '' }}</td>
                 <td class="attendance-table__data">{{ $attendance['clock_out'] ?? ''}}</td>
                 <td class="attendance-table__data">{{ $attendance['total_rest_formatted'] ?? '' }}</td>
