@@ -129,14 +129,19 @@ class AttendanceController extends Controller
     }
 
     //職員自身の勤怠一覧
-    public function showAttendanceList()
+    public function showAttendanceList(Request $request)
     {
         $user = Auth::user();
 
-        //指定が無ければ今日が属する月を、指定があればその月を設定
-        $currentDay = Carbon::today();
-        $firstOfMonth = $currentDay->copy()->firstOfMonth();
-        $endOfMonth = $currentDay->copy()->endOfMonth();
+        //指定が無ければ今月を、指定があればその月を設定
+        $selectDate = $request->date
+            ? Carbon::parse($request->date)->startOfDay()
+            : Carbon::today();
+        $firstOfMonth = $selectDate->copy()->firstOfMonth();
+        $endOfMonth = $selectDate->copy()->endOfMonth();
+
+        $previousMonth = Attendance::getPreviousMonth($selectDate);
+        $nextMonth = Attendance::getNextMonth($selectDate);
 
         //1日～末日までの日付の配列を作成
         $dates = [];
@@ -184,9 +189,10 @@ class AttendanceController extends Controller
             ];
         }
 
-        return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'currentDay'));
+        return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 
+    //勤怠詳細画面の表示
     public function showDetail($id)
     {
         $user = Auth::user();
@@ -204,6 +210,7 @@ class AttendanceController extends Controller
             return view('admin.attendance.detail', compact('attendance'));
         }
 
+        //一般職員用の勤怠詳細画面表示
         return view('staff.attendance.detail', compact('attendance'));
     }
 }

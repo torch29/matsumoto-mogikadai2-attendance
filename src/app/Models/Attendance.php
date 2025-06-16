@@ -128,4 +128,14 @@ class Attendance extends Model
 
         return Carbon::parse($this->clock_out)->format('H:i');
     }
+
+    public static function getPreviousMonth($baseDate)
+    {
+        return Carbon::parse($baseDate)->subMonthNoOverflow()->format('Y-m');
+    }
+
+    public static function getNextMonth($baseDate)
+    {
+        return Carbon::parse($baseDate)->addMonthNoOverflow()->format('Y-m');
+    }
 }
