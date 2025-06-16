@@ -32,7 +32,11 @@
                 <td class="attendance-table__data">{{ $attendance['clock_out'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['total_rest_formatted'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['total_work_formatted'] }}</td>
+                @if( !$attendance['id'])
+                <td class="attendance-table__data"><a href="/attendance/{{ $attendance['id'] }}"><span class="table__data--none">詳細</span></a></td>
+                @else
                 <td class="attendance-table__data"><a href="/attendance/{{ $attendance['id'] }}">詳細</a></td>
+                @endif
             </tr>
             @endforeach
         </table>
