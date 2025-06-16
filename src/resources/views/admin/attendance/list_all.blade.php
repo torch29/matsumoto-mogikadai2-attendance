@@ -12,15 +12,15 @@
     </div>
     <div class="list__guide-area">
         <div class="list__guide-link">
-            <a href="{{ route('admin.attendances.daily-list') }}">
-                {{-- route(''admin.attendances.daily-list', ['date' => $previousMonth]) --}}
+            <a href="{{ route('admin.attendances.list-by-date') }}">
+                {{-- route('admin.attendances.list-by-date', ['date' => $previousMonth]) --}}
                 <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前月
             </a>
         </div>
         {{ $titleDate->isoFormat('Y/MM/DD') }}
         <div class="list__guide-link">
-            <a href="{{ route('admin.attendances.daily-list') }}">
-                {{-- route('admin.attendances.daily-list', ['date' => $nextMonth])  --}}
+            <a href="{{ route('admin.attendances.list-by-date') }}">
+                {{-- route('admin.attendances.list-by-date', ['date' => $nextMonth])  --}}
                 翌月<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
             </a>
         </div>

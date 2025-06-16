@@ -45,11 +45,11 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'adminOnly'])->group(function () {
     Route::prefix('admin')->group(function () {
         //管理者権限で勤怠一覧画面を表示
-        Route::get('/attendance/list', [AdminController::class, 'showAttendanceListAll'])->name('admin.attendances.daily-list');
+        Route::get('/attendance/list', [AdminController::class, 'showAttendanceListAll'])->name('admin.attendances.list-by-date');
         //管理者権限でスタッフ一覧画面を表示
         Route::get('/staff/list', [AdminController::class, 'showStaffList']);
         //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
-        Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff']);
+        Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff'])->name('admin.attendances.list-by-staff');
     });
     /*選択された日付＋選択されたスタッフの勤怠詳細画面表示
     Route::get('attendance/{id}', [AdminController::class, 'showDetail']);*/

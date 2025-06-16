@@ -10,9 +10,18 @@
         <h3>{{ $staff->name }}さんの勤怠</h3>
     </div>
     <div class="list__guide-area">
-        <div class="list__guide-link">←前月</div>
-        {{ $selectDate->isoFormat('Y/MM') }}
-        <div class="list__guide-link">翌月→</div>
+        <div class="list__guide-link">
+            <a href="{{ route('admin.attendances.list-by-staff', ['id' => $staff->id, 'date' => $previousMonth]) }}">
+                <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前月
+                {{-- route('admin.attendances.list-by-date', ['date' => $previousMonth]) --}}
+            </a>
+        </div>
+        <span>{{ $selectDate->isoFormat('Y/MM') }}</span>
+        <div class="list__guide-link">
+            <a href="{{ route('admin.attendances.list-by-staff', ['id' => $staff->id, 'date' => $nextMonth]) }}">
+                翌月<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
+            </a>
+        </div>
     </div>
     {{-- dd($attendanceRecords) --}}
     <div class="attendance-table__wrapper">
