@@ -191,15 +191,15 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         $attendance = Attendance::with('user', 'rests')->find($id);
-
+        //該当の勤怠データがない場合エラーメッセージを表示して返す
         if (!$attendance) {
             return redirect()->back()->with('error', '該当のデータがありません。');
         }
-
+        //一般職員が管理者エリアにアクセスしようとした場合＆一般職員が自分以外の職員の勤怠データにアクセスしようとした場合エラーメッセージを表示して返す
         if (!$user->is_admin && $attendance->user_id !== $user->id) {
             return redirect()->back()->with('error', 'アクセス権限がありません。');
         }
-
+        //管理者の場合は管理者用の勤怠詳細画面を表示
         if ($user->is_admin) {
             return view('admin.attendance.detail', compact('attendance'));
         }
