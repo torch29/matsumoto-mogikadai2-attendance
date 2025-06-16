@@ -7,8 +7,10 @@
 @section('content')
 <div class="detail__content">
     @if (session('error'))
-    <div class="error-message__area">
-        <div class="alert alert-danger">
+    <div class="item__alert">
+        <input type="checkbox" id="alert-close" class="alert-close">
+        <div class="alert-message">
+            <label for="alert-close" class="alert-close__button">×</label>
             {{ session('error') }}
         </div>
     </div>
