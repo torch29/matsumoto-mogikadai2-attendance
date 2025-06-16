@@ -6,6 +6,15 @@
 
 @section('content')
 <div class="list__content">
+    @if (session('error'))
+    <div class="item__alert">
+        <input type="checkbox" id="alert-close" class="alert-close">
+        <div class="alert-message">
+            <label for="alert-close" class="alert-close__button">×</label>
+            {{ session('error') }}
+        </div>
+    </div>
+    @endif
     <div class="list__title">
         <h3>スタッフ一覧</h3>
     </div>

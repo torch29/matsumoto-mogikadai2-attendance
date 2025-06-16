@@ -68,7 +68,14 @@ class AdminController extends Controller
     //選択された１人のスタッフの１ヶ月分の勤怠一覧を表示
     public function showAttendanceListByStaff(Request $request, $id)
     {
-        $staff = User::with('attendances')->findOrFail($id);
+        if (!$id) {
+            return redirect()->back()->with('error', '該当のデータがありません。');
+        }
+        $staff = User::with('attendances')->find($id);
+
+        if (!$staff) {
+            return redirect('/admin/staff/list')->with('error', '該当のデータがありません。');
+        }
 
         //指定が無ければ今月を、指定があればその月を設定
         $selectDate = $request->date
