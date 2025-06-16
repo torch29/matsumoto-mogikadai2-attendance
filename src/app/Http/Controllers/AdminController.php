@@ -100,34 +100,14 @@ class AdminController extends Controller
             $clockInFormatted = optional($attendance)->clock_in_formatted;
             $clockOutFormatted = optional($attendance)->clock_out_formatted;
 
-            //休憩合計時間を計算
+            //休憩合計時間とそのフォーマットをAttendanceモデルから取得
             $rests = optional($attendance)->rests ?? collect();
-            $totalRestMinutes = $rests->sum(
-                function ($rest) {
-                    if ($rest->rest_start && $rest->rest_end) {
-                        return Carbon::parse($rest->rest_end)->diffInMinutes(Carbon::parse($rest->rest_start));
-                    }
-                    return 0;
-                }
-            );
+            $totalRestMinutes = optional($attendance)->total_rest_minutes;
+            $totalRestFormatted = optional($attendance)->total_rest_formatted;
 
-            //休憩合計時間の整形
-            $totalRestFormatted = $totalRestMinutes > 0
-                ? Carbon::createFromTime(0, 0)->addMinutes($totalRestMinutes)->isoFormat('H:mm')
-                : null;
-
-            //(出勤～退勤) - 休憩時刻 により、実労働時間を計算
-            $totalWorkHours = null;
-            $totalWorkFormatted = null;
-            if ($clockIn && $clockOut) {
-                $totalWorkHours = Carbon::parse($attendance->clock_out)->diffInMinutes(Carbon::parse($clockIn)) - $totalRestMinutes;
-                if ($totalWorkHours >= 0) {
-                    $totalWorkFormatted = Carbon::createFromTime(0, 0)->addMinutes($totalWorkHours)->isoFormat('H:mm');
-                } else {
-                    $absolute = abs($totalWorkHours);
-                    $totalWorkFormatted = '-' . Carbon::createFromTime(0, 0)->addMinutes($absolute)->isoFormat('H:mm');
-                }
-            }
+            //実労働時間とそのフォーマットをAttendanceモデルから取得
+            $totalWorkHours = optional($attendance)->total_work_minutes;
+            $totalWorkFormatted = optional($attendance)->total_work_formatted;
 
             $attendanceRecords[] = [
                 'id' => optional($attendance)->id,

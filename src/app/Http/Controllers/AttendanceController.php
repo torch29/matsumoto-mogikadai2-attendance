@@ -163,12 +163,12 @@ class AttendanceController extends Controller
             $clockInFormatted = optional($attendance)->clock_in_formatted;
             $clockOutFormatted = optional($attendance)->clock_out_formatted;
 
-            //休憩合計時間をAttendanceモデルから取得
+            //休憩合計時間とそのフォーマットをAttendanceモデルから取得
             $rests = optional($attendance)->rests ?? collect();
             $totalRestMinutes = optional($attendance)->total_rest_minutes;
             $totalRestFormatted = optional($attendance)->total_rest_formatted;
 
-            //実労働時間をAttendanceモデルから取得
+            //実労働時間とそのフォーマットをAttendanceモデルから取得
             $totalWorkHours = optional($attendance)->total_work_minutes;
             $totalWorkFormatted = optional($attendance)->total_work_formatted;
 
