@@ -39,10 +39,14 @@ class AttendanceCorrectionController extends Controller
 
     public function requestStampCorrection(Request $request)
     {
-        $user = Auth::user();
+        $attendance = Attendance::find($request->attendance_id);
+
+        if (!$attendance || $attendance->user_id !== Auth::id()) {
+            return redirect()->back()->with('error', '');
+        }
 
         AttendanceCorrection::create([
-            'attendance_id' => $request->id,
+            'attendance_id' => $request->attendance_id,
             'corrected_clock_in' => $request->corrected_clock_in,
             'corrected_clock_out' => $request->corrected_clock_out,
             'note' => $request->note,
