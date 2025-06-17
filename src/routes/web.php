@@ -3,9 +3,10 @@
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\CorrectionRequestController;
+use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\AttendanceCorrection;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +37,9 @@ Route::middleware('auth')->group(function () {
         //勤怠詳細画面の表示
         Route::get('/{id}', [AttendanceController::class, 'showDetail']);
     });
+    Route::post('/correction_request', [AttendanceCorrectionController::class, 'requestStampCorrection']);
     //申請一覧の表示
-    Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
+    Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index']);
 });
 
 
@@ -48,11 +50,13 @@ Route::middleware(['auth', 'adminOnly'])->group(function () {
         Route::get('/attendance/list', [AdminController::class, 'showAttendanceListAll'])->name('admin.attendances.list-by-date');
         //管理者権限でスタッフ一覧画面を表示
         Route::get('/staff/list', [AdminController::class, 'showStaffList'])->name('admin.staff-list');
-        //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
+        /*
         Route::get('/attendance/staff', function () {
             return redirect()->route('admin.staff-list')
                 ->with('error', 'スタッフを選択してください。');
         });
+        */
+        //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
         Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff'])->name('admin.attendances.list-by-staff');
     });
 });

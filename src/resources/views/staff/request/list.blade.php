@@ -25,22 +25,16 @@
                 <th class="request-table__heading">申請日時</th>
                 <th class=" request-table__heading">詳細</th>
             </tr>
+            @foreach( $stampCorrectionRecords as $correction )
             <tr class="request-table__row">
-                <td class="request-table__data">承認待ち</td>
-                <td class="request-table__data">サンプル　名前</td>
-                <td class="request-table__data">2025/06/06</td>
-                <td class="request-table__data">遅延のため</td>
-                <td class="request-table__data">2025/06/08</td>
+                <td class="request-table__data">{{ $correction['status'] }}</td>
+                <td class="request-table__data">{{ $correction['name'] }}</td>
+                <td class="request-table__data">{{ $correction['correction_target_date'] }}</td>
+                <td class="request-table__data">{{ $correction['note'] }}</td>
+                <td class="request-table__data">{{ $correction['requested_at'] }}</td>
                 <td class="request-table__data">詳細</td>
             </tr>
-            <tr class="request-table__row">
-                <td class="request-table__data">承認待ち</td>
-                <td class="request-table__data">サンプル　名前</td>
-                <td class="request-table__data">2025/06/07</td>
-                <td class="request-table__data">体調不良のため</td>
-                <td class="request-table__data">2025/06/07</td>
-                <td class="request-table__data">詳細</td>
-            </tr>
+            @endforeach
         </table>
     </div>
 </div>

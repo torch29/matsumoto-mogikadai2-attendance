@@ -15,11 +15,13 @@
         </div>
     </div>
     @endif
+    {{-- 一般職員用の勤怠詳細画面 --}}
     <div class="detail__title">
         <h3>勤怠詳細</h3>
     </div>
     <div class="detail-table__wrapper">
-        <form action="" class="detail-form">
+        <form action="/correction_request" class="detail-form" method="post">
+            @csrf
             <table class="detail-table">
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">名前</th>
@@ -66,11 +68,12 @@
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">備考</th>
                     <td class="detail-table__data" colspan="2">
-                        <textarea name="note" id="" class="detail-table__textarea" placeholder="例：電車遅延のため">{{ old('note') }}</textarea>
+                        <textarea name="note" id="" class="detail-table__textarea" placeholder="必須入力です。入力例：電車遅延のため">{{ old('note') }}</textarea>
                     </td>
                 </tr>
             </table>
             <div class="detail-form__button">
+                <input type="hidden" name="id" value="{{ $attendance->id }}">
                 <button class="detail-form__button-submit">修正</button>
             </div>
         </form>

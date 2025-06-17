@@ -17,6 +17,10 @@ class AttendanceController extends Controller
         Carbon::setLocale('ja');
         $today = Carbon::now()->format("Y-m-d");
 
+        if ($user->is_admin) {
+            return redirect()->back()->with('error', '画面内での操作をお願いします。');
+        }
+
         //当日の勤怠情報がある
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
