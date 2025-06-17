@@ -11,9 +11,17 @@ use App\Models\RestCorrection;
 
 class AttendanceCorrectionController extends Controller
 {
+    //申請一覧画面の表示
     public function index()
     {
+        /* 全員の申請一覧を表示　　管理者に流用できるかも
         $attendanceCorrections = AttendanceCorrection::with('attendance.user')->get();
+        */
+        $attendanceCorrections = AttendanceCorrection::with('attendance.user')
+            ->whereHas('attendance', function ($query) {
+                $query->where('user_id', Auth::id());
+            })->get();
+
         $stampCorrectionRecords = [];
 
         foreach ($attendanceCorrections as $correction) {
@@ -37,12 +45,13 @@ class AttendanceCorrectionController extends Controller
         return view('staff.request.list', compact('stampCorrectionRecords'));
     }
 
+    //一般職員による、自分の勤怠データの修正申請
     public function requestStampCorrection(Request $request)
     {
         $attendance = Attendance::find($request->attendance_id);
 
         if (!$attendance || $attendance->user_id !== Auth::id()) {
-            return redirect()->back()->with('error', '');
+            return redirect()->back()->with('error', '自分以外のデータは修正できません。');
         }
 
         AttendanceCorrection::create([
@@ -51,7 +60,6 @@ class AttendanceCorrectionController extends Controller
             'corrected_clock_out' => $request->corrected_clock_out,
             'note' => $request->note,
         ]);
-
         //$id = $request->id;
 
         return redirect('/stamp_correction_request/list');
