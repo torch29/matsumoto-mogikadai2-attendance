@@ -36,7 +36,7 @@ class AdminController extends Controller
 
             //休憩合計時間をAttendanceモデルから取得
             $rests = optional($attendance)->rests ?? collect();
-            $totalRestMinutes = optional($attendance)->total_rest_minutes;
+            $totalRestSeconds = optional($attendance)->total_rest_seconds;
             $totalRestFormatted = optional($attendance)->total_rest_formatted;
 
             //実労働時間をAttendanceモデルから取得
@@ -49,7 +49,7 @@ class AdminController extends Controller
                 'id' => optional($attendance)->id,
                 'clock_in' => $clockInFormatted,
                 'clock_out' => $clockOutFormatted,
-                'total_rest' => $totalRestMinutes,
+                'total_rest' => $totalRestSeconds,
                 'total_rest_formatted' => $totalRestFormatted,
                 'total_work_hours' => $totalWorkHours,
                 'total_work_formatted' => $totalWorkFormatted,
@@ -115,7 +115,7 @@ class AdminController extends Controller
 
             //休憩合計時間とそのフォーマットをAttendanceモデルから取得
             $rests = optional($attendance)->rests ?? collect();
-            $totalRestMinutes = optional($attendance)->total_rest_minutes;
+            $totalRestSeconds = optional($attendance)->total_rest_seconds;
             $totalRestFormatted = optional($attendance)->total_rest_formatted;
 
             //実労働時間とそのフォーマットをAttendanceモデルから取得
@@ -127,7 +127,7 @@ class AdminController extends Controller
                 'date' => $date->isoFormat('M月D日（ddd）'),
                 'clock_in' => $clockInFormatted,
                 'clock_out' => $clockOutFormatted,
-                'total_rest' => $totalRestMinutes,
+                'total_rest' => $totalRestSeconds,
                 'total_rest_formatted' => $totalRestFormatted,
                 'total_work_hours' => $totalWorkHours,
                 'total_work_formatted' => $totalWorkFormatted,
