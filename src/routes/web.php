@@ -7,6 +7,8 @@ use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\AttendanceCorrection;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +21,22 @@ use App\Models\AttendanceCorrection;
 |
 */
 
+//メール認証実装用のルート
+Route::get('email/verify', function () {
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/attendance');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+//メール確認の再送信
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', '認証用メールを再送信しました。');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 //ユーザ認証を要するルート
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified')->group(function () {
     Route::prefix('attendance')->group(function () {
         //勤怠登録（トップ）画面の表示
         Route::get('/', [AttendanceController::class, 'index']);
@@ -44,7 +60,7 @@ Route::middleware('auth')->group(function () {
 
 
 //管理者権限での認証を要するルート
-Route::middleware(['auth', 'adminOnly'])->group(function () {
+Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
     Route::prefix('admin')->group(function () {
         //管理者権限で勤怠一覧画面を表示
         Route::get('/attendance/list', [AdminController::class, 'showAttendanceListAll'])->name('admin.attendances.list-by-date');

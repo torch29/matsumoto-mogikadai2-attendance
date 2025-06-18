@@ -200,7 +200,7 @@ class AttendanceController extends Controller
     public function showDetail($id)
     {
         $user = Auth::user();
-        $attendance = Attendance::with('user', 'rests')->find($id);
+        $attendance = Attendance::with('user', 'rests', 'attendanceCorrections')->find($id);
         //該当の勤怠データがない場合エラーメッセージを表示して返す
         if (!$attendance) {
             return redirect()->back()->with('error', '該当のデータがありません。');

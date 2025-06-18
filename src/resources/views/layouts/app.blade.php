@@ -18,7 +18,7 @@
                     <img src="{{ asset('img/logo.svg') }}" class="header__title-img" alt="COACHTECHロゴ">
                 </a>
             </h1>
-            @if ( Auth::check() )
+            @if ( Auth::check() && Auth::user()->hasVerifiedEmail() )
             <ul class="header-nav__list">
                 <li class="header-nav__list-item"><a href="/attendance">勤怠</a></li>
                 <li class="header-nav__list-item"><a href="/attendance/list">勤怠一覧</a></li>
