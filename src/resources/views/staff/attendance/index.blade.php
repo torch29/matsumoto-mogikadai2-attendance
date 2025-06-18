@@ -52,7 +52,7 @@
                 </form>
                 <form action="attendance/restStart" method="post">
                     @csrf
-                    <button class="attendance-form__button-submit--right">休憩入</button>
+                    <button class="attendance-form__button-submit--right" onclick="this.disabled = true; this.form.submit();">休憩入</button>
                 </form>
                 @elseif ( $status === '休憩中' )
                 <form action="attendance/restEnd" method="post">
