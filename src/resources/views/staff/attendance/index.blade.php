@@ -13,6 +13,15 @@
     <div class="check">is_admin:<span>{{ $user->is_admin }}</span> （※1=true=admin, 0=false=従業員）</div>
     {{-- 確認用ここまで　あとで消す　後で --}}
     <div class="main__content">
+        @if (session('error'))
+        <div class="item__alert">
+            <input type="checkbox" id="alert-close" class="alert-close">
+            <div class="alert-message">
+                <label for="alert-close" class="alert-close__button">×</label>
+                {{ session('error') }}
+            </div>
+        </div>
+        @endif
         @if( $status === '勤務外' )
         <div class="status-label">勤務外</div>
         @elseif ( $status === '出勤中' )

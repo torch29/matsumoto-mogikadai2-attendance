@@ -117,7 +117,9 @@ class AttendanceController extends Controller
 
         $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
 
-        if ($todayAttendance && !$todayAttendance->clock_out) {
+        if ($lastRest && now()->diffInSeconds($lastRest->rest_start) < 60) {
+            return redirect()->back()->with('error', '間を開けて再操作してください。');
+        } elseif ($todayAttendance && !$todayAttendance->clock_out) {
             if ($lastRest && !$lastRest->rest_end) {
                 $lastRest->update([
                     'rest_end' => $now->toTimeString(),
