@@ -42,7 +42,8 @@
                 <td class="attendance-table__data">{{ $attendance['total_rest_formatted'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['total_work_formatted'] }}</td>
                 @if( !$attendance['id'])
-                <td class="attendance-table__data"><a href="/attendance/{{ $attendance['id'] }}"><span class="table__data--none">詳細</span></a></td>
+                {{-- 勤怠情報がない場合”詳細”を表示しない --}}
+                <td class="attendance-table__data"></td>
                 @else
                 <td class="attendance-table__data"><a href="/attendance/{{ $attendance['id'] }}">詳細</a></td>
                 @endif
