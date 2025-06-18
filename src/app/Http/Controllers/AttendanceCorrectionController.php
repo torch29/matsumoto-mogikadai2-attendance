@@ -54,7 +54,7 @@ class AttendanceCorrectionController extends Controller
             return redirect()->back()->with('error', '自分以外のデータは修正できません。');
         }
 
-        /*
+        /*書きかけ
         if ($attendance->attendanceCorrections->status == 'pending') {
             return redirect();
         }

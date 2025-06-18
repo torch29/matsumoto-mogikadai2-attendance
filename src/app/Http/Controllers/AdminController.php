@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
@@ -134,5 +135,15 @@ class AdminController extends Controller
         }
 
         return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
+    }
+
+    public function showDetailForAdmin($id)
+    {
+        $user = Auth::user();
+        $attendance = Attendance::with('user', 'rests', 'attendanceCorrections')->findOrFail($id);
+
+        if ($user->is_admin) {
+            return view('admin.attendance.detail', compact('attendance'));
+        }
     }
 }

@@ -17,11 +17,6 @@ class AttendanceController extends Controller
         Carbon::setLocale('ja');
         $today = Carbon::now()->format("Y-m-d");
 
-        //文言の変更を考える。リダイレクト先を/admin/attendance/listに固定する。（メール認証後用の
-        if ($user->is_admin) {
-            return redirect()->back()->with('error', '画面内での操作をお願いします。');
-        }
-
         //当日の勤怠情報がある
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
@@ -205,14 +200,10 @@ class AttendanceController extends Controller
             ->where('user_id', $user->id)
             ->with('user', 'rests', 'attendanceCorrections')
             ->first();
+
         //該当の勤怠データがない場合エラーメッセージを表示して返す
         if (!$attendance) {
             return redirect()->back()->with('error', '該当のデータがありません。');
-        }
-
-        //管理者の場合は管理者用の勤怠詳細画面を表示
-        if ($user->is_admin) {
-            return view('admin.attendance.detail', compact('attendance'));
         }
 
         //一般職員用の勤怠詳細画面表示

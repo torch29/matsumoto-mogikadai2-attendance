@@ -66,14 +66,10 @@ Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
         Route::get('/attendance/list', [AdminController::class, 'showAttendanceListAll'])->name('admin.attendances.list-by-date');
         //管理者権限でスタッフ一覧画面を表示
         Route::get('/staff/list', [AdminController::class, 'showStaffList'])->name('admin.staff-list');
-        /*
-        Route::get('/attendance/staff', function () {
-            return redirect()->route('admin.staff-list')
-                ->with('error', 'スタッフを選択してください。');
-        });
-        */
-        //管理者権限でスタッフ別勤怠一覧表示　パスの修正必要（{id}を足す）
+        //管理者権限でスタッフ別勤怠一覧表示
         Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff'])->name('admin.attendances.list-by-staff');
+        //勤怠詳細画面の表示
+        Route::get('/attendance/{id}', [AdminController::class, 'showDetailForAdmin']);
     });
 });
 

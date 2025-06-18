@@ -45,7 +45,7 @@
                 {{-- 勤怠情報がない場合”詳細”を表示しない --}}
                 <td class="attendance-table__data"></td>
                 @else
-                <td class="attendance-table__data"><a href="/attendance/{{ $attendance['id'] }}">詳細</a></td>
+                <td class="attendance-table__data"><a href="/admin/attendance/{{ $attendance['id'] }}">詳細</a></td>
                 @endif
             </tr>
             @endforeach
