@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="list__content">
-    {{-- 管理者でログイン時の表示 --}}
+    {{-- 管理者でログイン時の申請一覧表示 --}}
     <div class="list__title">
         <h3>申請一覧</h3>
     </div>
@@ -25,22 +25,17 @@
                 <th class="request-table__heading">申請日時</th>
                 <th class=" request-table__heading">詳細</th>
             </tr>
+            is_admin == true : {{ Auth::user()->is_admin ? 1 : 0 }}
+            @foreach( $stampCorrectionRecords as $correction )
             <tr class="request-table__row">
-                <td class="request-table__data">承認待ち</td>
-                <td class="request-table__data">サンプル　名前</td>
-                <td class="request-table__data">2025/06/06</td>
-                <td class="request-table__data">遅延のため</td>
-                <td class="request-table__data">2025/06/08</td>
+                <td class="request-table__data">{{ $correction['status'] }}</td>
+                <td class="request-table__data">{{ $correction['name'] }}</td>
+                <td class="request-table__data">{{ $correction['correction_target_date'] }}</td>
+                <td class="request-table__data">{{ $correction['note'] }}</td>
+                <td class="request-table__data">{{ $correction['requested_at'] }}</td>
                 <td class="request-table__data">詳細</td>
             </tr>
-            <tr class="request-table__row">
-                <td class="request-table__data">承認待ち</td>
-                <td class="request-table__data">テスト　名前</td>
-                <td class="request-table__data">2025/06/07</td>
-                <td class="request-table__data">体調不良のため</td>
-                <td class="request-table__data">2025/06/07</td>
-                <td class="request-table__data">詳細</td>
-            </tr>
+            @endforeach
         </table>
     </div>
 </div>

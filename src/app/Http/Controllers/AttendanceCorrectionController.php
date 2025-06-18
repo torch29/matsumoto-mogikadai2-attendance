@@ -14,20 +14,23 @@ class AttendanceCorrectionController extends Controller
     //申請一覧画面の表示
     public function index()
     {
-        /* 全員の申請一覧を表示　　管理者に流用できるかも
-        $attendanceCorrections = AttendanceCorrection::with('attendance.user')->get();
-        */
-        $attendanceCorrections = AttendanceCorrection::with('attendance.user')
-            ->whereHas('attendance', function ($query) {
-                $query->where('user_id', Auth::id());
-            })->get();
+        if (Auth::user()->is_admin) {
+            $attendanceCorrections = AttendanceCorrection::with('attendance.user')->get();
+            $view = 'admin.request.list';
+        } else {
+            $attendanceCorrections = AttendanceCorrection::with('attendance.user')
+                ->whereHas('attendance', function ($query) {
+                    $query->where('user_id', Auth::id());
+                })->get();
+            $view = 'staff.request.list';
+        }
 
         $stampCorrectionRecords = [];
 
         foreach ($attendanceCorrections as $correction) {
             $correctionTargetDateFormatted = $correction->correction_target_date_formatted;
-            $correctionClockInFormatted = $correction->correction_clock_in_formatted;
-            $correctionClockOutFormatted = $correction->correction_clock_out_formatted;
+            //$correctionClockInFormatted = $correction->correction_clock_in_formatted;
+            //$correctionClockOutFormatted = $correction->correction_clock_out_formatted;
             $requestedAtFormatted = $correction->requested_at_formatted;
 
             //viewファイルに渡す配列
@@ -35,14 +38,11 @@ class AttendanceCorrectionController extends Controller
                 'status' => $correction->approvalStatusLabel(),
                 'name' => $correction->attendance->user->name,
                 'correction_target_date' => $correctionTargetDateFormatted,
-                'correction_clock_in' => $correctionClockInFormatted,
-                'correction_clock_out' => $correctionClockOutFormatted,
                 'note' => $correction->note,
                 'requested_at' => $requestedAtFormatted,
             ];
         }
-
-        return view('staff.request.list', compact('stampCorrectionRecords'));
+        return view($view, compact('stampCorrectionRecords'));
     }
 
     //一般職員による、自分の勤怠データの修正申請
