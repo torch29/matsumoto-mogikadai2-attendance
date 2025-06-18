@@ -17,6 +17,7 @@ class AttendanceController extends Controller
         Carbon::setLocale('ja');
         $today = Carbon::now()->format("Y-m-d");
 
+        //文言の変更を考える。リダイレクト先を/admin/attendance/listに固定する。（メール認証後用の
         if ($user->is_admin) {
             return redirect()->back()->with('error', '画面内での操作をお願いします。');
         }

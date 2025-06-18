@@ -23,19 +23,19 @@ use Illuminate\Http\Request;
 
 //メール認証実装用のルート
 Route::get('email/verify', function () {
-    return view('auth.verify');
+    return view('staff.auth.verify');
 })->middleware('auth')->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect('/attendance');
 })->middleware(['auth', 'signed'])->name('verification.verify');
-//メール確認の再送信
+//認証用メールの再送信
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', '認証用メールを再送信しました。');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-//ユーザ認証を要するルート
+//ユーザ認証＋メール認証を要するルート
 Route::middleware('auth', 'verified')->group(function () {
     Route::prefix('attendance')->group(function () {
         //勤怠登録（トップ）画面の表示

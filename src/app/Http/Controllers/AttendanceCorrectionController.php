@@ -48,11 +48,17 @@ class AttendanceCorrectionController extends Controller
     //一般職員による、自分の勤怠データの修正申請
     public function requestStampCorrection(Request $request)
     {
-        $attendance = Attendance::find($request->attendance_id);
+        $attendance = Attendance::with('attendanceCorrections')->find($request->attendance_id);
 
         if (!$attendance || $attendance->user_id !== Auth::id()) {
             return redirect()->back()->with('error', '自分以外のデータは修正できません。');
         }
+
+        /*
+        if ($attendance->attendanceCorrections->status == 'pending') {
+            return redirect();
+        }
+            */
 
         AttendanceCorrection::create([
             'attendance_id' => $request->attendance_id,
