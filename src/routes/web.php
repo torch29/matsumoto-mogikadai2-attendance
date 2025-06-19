@@ -6,7 +6,6 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Models\AttendanceCorrection;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -53,6 +52,7 @@ Route::middleware('auth', 'verified')->group(function () {
         //勤怠詳細画面の表示
         Route::get('/{id}', [AttendanceController::class, 'showDetail']);
     });
+    //詳細画面からボタン押下にて修正の申請をする
     Route::post('/correction_request', [AttendanceCorrectionController::class, 'requestStampCorrection']);
     //申請一覧の表示
     Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index']);
@@ -70,6 +70,8 @@ Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
         Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff'])->name('admin.attendances.list-by-staff');
         //勤怠詳細画面の表示
         Route::get('/attendance/{id}', [AdminController::class, 'showDetailForAdmin']);
+        //申請承認画面の表示
+        Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AttendanceCorrectionController::class, 'showApprove']);
     });
 });
 

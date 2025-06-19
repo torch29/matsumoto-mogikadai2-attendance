@@ -35,6 +35,7 @@ class AttendanceCorrectionController extends Controller
 
             //viewファイルに渡す配列
             $stampCorrectionRecords[] = [
+                'id' => $correction->id,
                 'status' => $correction->approvalStatusLabel(),
                 'name' => $correction->attendance->user->name,
                 'correction_target_date' => $correctionTargetDateFormatted,
@@ -69,5 +70,12 @@ class AttendanceCorrectionController extends Controller
         //$id = $request->id;
 
         return redirect('/stamp_correction_request/list');
+    }
+
+    public function showApprove($id)
+    {
+        $attendanceCorrection = AttendanceCorrection::with('attendance.user')->find($id);
+
+        return view('admin.request.approve', compact('attendanceCorrection'));
     }
 }

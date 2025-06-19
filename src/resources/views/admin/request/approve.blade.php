@@ -14,11 +14,11 @@
             <table class="approve-table">
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">名前</th>
-                    <td class="approve-table__data-left" colspan="2">サンプル　名前</td>
+                    <td class="approve-table__data-left" colspan="2">{{ $attendanceCorrection->attendance->user->name }}</td>
                 </tr>
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">日付</th>
-                    <td class="approve-table__data-left">20XX年</td>
+                    <td class="approve-table__data-left">{{ $attendanceCorrection->attendance->date->isoFormat('Y年') }}</td>
                     <td class="approve-table__data">〇月×日</td>
                 </tr>
                 <tr class="approve-table__row">
