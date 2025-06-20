@@ -23,6 +23,11 @@ class AttendanceCorrection extends Model
         'approve_status',
     ];
 
+    protected $casts = [
+        'corrected_clock_in' => 'datetime',
+        'corrected_clock_out' => 'datetime',
+    ];
+
     public function approvalStatusLabel(): string
     {
         $labels = [

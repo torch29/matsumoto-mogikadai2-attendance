@@ -19,24 +19,24 @@
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">日付</th>
                     <td class="approve-table__data-left">{{ $attendanceCorrection->attendance->date->isoFormat('Y年') }}</td>
-                    <td class="approve-table__data">〇月×日</td>
+                    <td class="approve-table__data">{{ $attendanceCorrection->attendance->date->isoFormat('M月D日') }}</td>
                 </tr>
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">出勤・退勤</th>
                     <td class="approve-table__data-left">
-                        <input type="text" class="approve-table__input" value="出勤時刻">
+                        <input type="text" class="approve-table__input" value="{{ $attendanceCorrection->corrected_clock_in->isoFormat('H:mm') }}">　～
                     </td>
                     <td class="approve-table__data">
-                        ～　　<input type="text" class="approve-table__input" value="退勤時刻">
+                        <input type="text" class="approve-table__input" value="{{ $attendanceCorrection->corrected_clock_out->isoFormat('H:mm') }}">
                     </td>
                 </tr>
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">休憩</th>
                     <td class="approve-table__data-left">
-                        <input type="text" class="approve-table__input" value="休憩入">
+                        <input type="text" class="approve-table__input" value="休憩入時間">　～
                     </td>
                     <td class="approve-table__data">
-                        ～　　<input type="text" class="approve-table__input" value="休憩戻">
+                        <input type="text" class="approve-table__input" value="休憩戻時間">
                     </td>
                 </tr>
                 <tr class="approve-table__row">
@@ -51,7 +51,7 @@
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">備考</th>
                     <td class="approve-table__data" colspan="2">
-                        <textarea name="" id="" class="approve-table__textarea">電車遅延のため</textarea readonly>
+                        <textarea name="" id="" class="approve-table__textarea" readonly>{{ $attendanceCorrection->note }}</textarea readonly>
                     </td>
                 </tr>
             </table>
