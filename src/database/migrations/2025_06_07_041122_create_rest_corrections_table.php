@@ -31,7 +31,7 @@ class CreateRestCorrectionsTable extends Migration
     public function down()
     {
         Schema::table('rest_corrections', function (Blueprint $table) {
-            $table->dropForeign(['rest_id']);
+            $table->dropForeign(['attendance_correction_id']);
         });
 
         Schema::dropIfExists('rest_corrections');

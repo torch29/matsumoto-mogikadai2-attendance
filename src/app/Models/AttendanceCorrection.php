@@ -15,6 +15,11 @@ class AttendanceCorrection extends Model
         return $this->belongsTo(Attendance::class);
     }
 
+    public function restCorrections()
+    {
+        return $this->hasMany(RestCorrection::class);
+    }
+
     protected $fillable = [
         'attendance_id',
         'corrected_clock_in',
