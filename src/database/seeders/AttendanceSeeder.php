@@ -48,11 +48,16 @@ class AttendanceSeeder extends Seeder
             $clockIn = Carbon::parse($attendance->clock_in);
             $clockOut = Carbon::parse($attendance->clock_out);
 
-            $restCount = rand(0, 3); //1勤務あたり0～3回休憩
+            $restCount = rand(0, 2); //1勤務あたり0～3回休憩
+            $canRestStart = Carbon::parse($clockIn); //最初の休憩可能時刻
 
             for ($i = 0; $i < $restCount; $i++) {
-                $restStart = Carbon::instance($faker->dateTimeBetween($clockIn, $clockOut));
-                $restEnd = (clone $restStart)->addMinutes(rand(10, 60));
+                if ($canRestStart >= $clockOut) {
+                    break; //もう休憩はとれない
+                }
+
+                $restStart = Carbon::instance($faker->dateTimeBetween($canRestStart, $clockOut));
+                $restEnd = (clone $restStart)->addMinutes(rand(10, 50));
 
                 if ($restEnd > $clockOut) {
                     $restEnd = clone $clockOut;
@@ -63,6 +68,9 @@ class AttendanceSeeder extends Seeder
                     'rest_start' => $restStart,
                     'rest_end' => $restEnd,
                 ]);
+
+                //次の休憩はこのrest_end以降とれる
+                $canRestStart = (clone $restEnd)->addMinutes(5);
             }
 
             $usedPairs[] = $key;
