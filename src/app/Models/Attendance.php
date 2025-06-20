@@ -77,22 +77,22 @@ class Attendance extends Model
     }
 
     //実労働時間の合計を計算
-    public function getTotalWorkMinutesAttribute()
+    public function getTotalWorkSecondsAttribute()
     {
         if (!$this->clock_in || !$this->clock_out) {
             return null;
         }
 
-        $workMinutes = Carbon::parse($this->clock_out)->diffInMinutes(Carbon::parse($this->clock_in));
-        $restMinutes = $this->total_rest_minutes;
+        $workSeconds = Carbon::parse($this->clock_out)->diffInSeconds(Carbon::parse($this->clock_in));
+        $restSeconds = $this->total_rest_seconds;
 
-        return $workMinutes - $restMinutes;
+        return $workSeconds - $restSeconds;
     }
 
     //実労働時間のフォーマット
     public function getTotalWorkFormattedAttribute()
     {
-        $totalWorkMinutes = $this->total_work_minutes;
+        $totalWorkMinutes = floor($this->total_work_seconds / 60);
         if ($totalWorkMinutes === null) {
             return null;
         }
