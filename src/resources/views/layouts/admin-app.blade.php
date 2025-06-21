@@ -20,7 +20,7 @@
             <ul class="header-nav__list">
                 <li class="header-nav__list-item"><a href="/admin/attendance/list">勤怠一覧</a></li>
                 <li class="header-nav__list-item"><a href="/admin/staff/list">スタッフ一覧</a></li>
-                <li class="header-nav__list-item"><a href="/stamp_correction_request/list">申請一覧</a></li>
+                <li class="header-nav__list-item"><a href="/admin/stamp_correction_request/list">申請一覧</a></li>
                 <li class="header-nav__list-item">
                     <form action="/logout" class="header-nav__form" method="post">
                         @csrf
