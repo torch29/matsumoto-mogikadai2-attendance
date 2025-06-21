@@ -37,7 +37,7 @@ class AttendanceCorrection extends Model
     {
         $labels = [
             'pending' => '承認待ち',
-            'completed' => '承認済み',
+            'approved' => '承認済み',
         ];
         return $labels[$this->approve_status] ?? '不明';
     }

@@ -12,16 +12,28 @@ use App\Models\RestCorrection;
 class AttendanceCorrectionController extends Controller
 {
     //申請一覧画面の表示
-    public function index()
+    public function index(Request $request)
     {
+        //URLからtabパラメータの取得、デフォルトはpending
+        $tab = $request->query('tab', 'pending');
+
         if (Auth::user()->is_admin) {
             $attendanceCorrections = AttendanceCorrection::with('attendance.user')->get();
             $view = 'admin.request.list';
         } else {
-            $attendanceCorrections = AttendanceCorrection::with('attendance.user')
-                ->whereHas('attendance', function ($query) {
-                    $query->where('user_id', Auth::id());
-                })->get();
+            $userId = Auth::id();
+            $attendanceCorrectionsQuery = AttendanceCorrection::with('attendance.user')
+                ->whereHas('attendance', function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                });
+
+            if ($tab === 'approved') {
+                $attendanceCorrectionsQuery->where('approve_status', 'approved');
+            } else {
+                $attendanceCorrectionsQuery->where('approve_status', 'pending');
+            }
+            $attendanceCorrections = $attendanceCorrectionsQuery->get();
+
             $view = 'staff.request.list';
         }
 
@@ -29,8 +41,6 @@ class AttendanceCorrectionController extends Controller
 
         foreach ($attendanceCorrections as $attendanceCorrection) {
             $correctionTargetDateFormatted = $attendanceCorrection->correction_target_date_formatted;
-            //$correctionClockInFormatted = $correction->correction_clock_in_formatted;
-            //$correctionClockOutFormatted = $correction->correction_clock_out_formatted;
             $requestedAtFormatted = $attendanceCorrection->requested_at_formatted;
 
             //viewファイルに渡す配列
@@ -44,7 +54,7 @@ class AttendanceCorrectionController extends Controller
                 'requested_at' => $requestedAtFormatted,
             ];
         }
-        return view($view, compact('stampCorrectionRecords'));
+        return view($view, compact('stampCorrectionRecords', 'tab'));
     }
 
     //一般職員による、自分の勤怠データの修正申請
@@ -85,8 +95,6 @@ class AttendanceCorrectionController extends Controller
                 'corrected_rest_end' => $restCorrection['corrected_rest_end'],
             ]);
         }
-
-        //$id = $request->id;
 
         return redirect('/stamp_correction_request/list');
     }

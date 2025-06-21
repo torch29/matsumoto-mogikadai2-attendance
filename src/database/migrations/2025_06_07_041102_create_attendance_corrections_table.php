@@ -19,7 +19,7 @@ class CreateAttendanceCorrectionsTable extends Migration
             $table->time('corrected_clock_in');
             $table->time('corrected_clock_out');
             $table->string('note');
-            $table->string('approve_status')->comment('pending or completed')->default('pending'); //pending or completed
+            $table->string('approve_status')->comment('pending or approved')->default('pending'); //pending or approved
             $table->timestamps();
         });
     }

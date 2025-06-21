@@ -11,8 +11,14 @@
         <h3>申請一覧</h3>
     </div>
     <div class="request-list__tab">
-        承認待ち
-        承認済み
+        <ul class="tab-menu">
+            <li class="{{ $tab === 'pending' ? 'active' : '' }}">
+                <a href="{{ route('correction_requests.list',['tab' => 'pending']) }}">承認待ち</a>
+            </li>
+            <li class="{{ $tab === 'approved' ? 'active' : '' }}">
+                <a href="{{ route('correction_requests.list',['tab' => 'approved']) }}">承認済み</a>
+            </li>
+        </ul>
     </div>
     一般職員：自分だけ　{{-- あとで消す --}}
     <div class="request-table__wrapper">

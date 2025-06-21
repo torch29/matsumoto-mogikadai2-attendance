@@ -55,7 +55,7 @@ Route::middleware('auth', 'verified')->group(function () {
     //詳細画面からボタン押下にて修正の申請をする
     Route::post('/correction_request', [AttendanceCorrectionController::class, 'requestStampCorrection']);
     //申請一覧の表示
-    Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index']);
+    Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index'])->name('correction_requests.list');
 });
 
 
