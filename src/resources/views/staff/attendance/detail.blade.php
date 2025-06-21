@@ -25,7 +25,7 @@
             <table class="detail-table">
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">名前</th>
-                    <td class="detail-table__data-left" colspan="2">{{ $attendance->user->name }}</td>
+                    <td class="detail-table__data-left" colspan="2"><span>{{ $attendance->user->name }}</span></td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">日付</th>
