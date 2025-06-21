@@ -27,19 +27,20 @@ class AttendanceCorrectionController extends Controller
 
         $stampCorrectionRecords = [];
 
-        foreach ($attendanceCorrections as $correction) {
-            $correctionTargetDateFormatted = $correction->correction_target_date_formatted;
+        foreach ($attendanceCorrections as $attendanceCorrection) {
+            $correctionTargetDateFormatted = $attendanceCorrection->correction_target_date_formatted;
             //$correctionClockInFormatted = $correction->correction_clock_in_formatted;
             //$correctionClockOutFormatted = $correction->correction_clock_out_formatted;
-            $requestedAtFormatted = $correction->requested_at_formatted;
+            $requestedAtFormatted = $attendanceCorrection->requested_at_formatted;
 
             //viewファイルに渡す配列
             $stampCorrectionRecords[] = [
-                'id' => $correction->id,
-                'status' => $correction->approvalStatusLabel(),
-                'name' => $correction->attendance->user->name,
+                'id' => $attendanceCorrection->id,
+                'attendance_id' => $attendanceCorrection->attendance->id,
+                'status' => $attendanceCorrection->approvalStatusLabel(),
+                'name' => $attendanceCorrection->attendance->user->name,
                 'correction_target_date' => $correctionTargetDateFormatted,
-                'note' => $correction->note,
+                'note' => $attendanceCorrection->note,
                 'requested_at' => $requestedAtFormatted,
             ];
         }
@@ -72,11 +73,12 @@ class AttendanceCorrectionController extends Controller
         $restCorrections = $request->all();
 
         foreach ($restCorrections['rest_corrections'] as $restCorrection) {
-            /*「new」行など、空の行をスキップする（オプション）
+            //「new（空）」の行をスキップする
             if (empty($restCorrection['corrected_rest_start']) && empty($restCorrection['corrected_rest_end'])) {
                 continue;
-            }*/
-            //dd($restCorrections['rest_corrections']);
+            }
+            //dd($restCorrection);
+            //dd($restCorrection['corrected_rest_start']);
             RestCorrection::create([
                 'attendance_correction_id' => $attendanceCorrection->id,
                 'corrected_rest_start' => $restCorrection['corrected_rest_start'],

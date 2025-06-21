@@ -32,7 +32,7 @@
                 <td class="request-table__data">{{ $correction['correction_target_date'] }}</td>
                 <td class="request-table__data">{{ $correction['note'] }}</td>
                 <td class="request-table__data">{{ $correction['requested_at'] }}</td>
-                <td class="request-table__data">詳細</td>
+                <td class="request-table__data"><a href="/attendance/{{ $correction['attendance_id'] }}">詳細</a></td>
             </tr>
             @endforeach
         </table>
