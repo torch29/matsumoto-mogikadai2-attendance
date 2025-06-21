@@ -16,27 +16,29 @@ class AttendanceCorrectionController extends Controller
     {
         //URLからtabパラメータの取得、デフォルトはpending
         $tab = $request->query('tab', 'pending');
+        $attendanceCorrectionsQuery = AttendanceCorrection::with('attendance.user');
 
-        if (Auth::user()->is_admin) {
-            $attendanceCorrections = AttendanceCorrection::with('attendance.user')->get();
-            $view = 'admin.request.list';
-        } else {
+        if (!Auth::user()->is_admin) {
+            //条件追加し一般職員は自分の勤怠のみ取得
             $userId = Auth::id();
-            $attendanceCorrectionsQuery = AttendanceCorrection::with('attendance.user')
-                ->whereHas('attendance', function ($query) use ($userId) {
-                    $query->where('user_id', $userId);
-                });
-
-            if ($tab === 'approved') {
-                $attendanceCorrectionsQuery->where('approve_status', 'approved');
-            } else {
-                $attendanceCorrectionsQuery->where('approve_status', 'pending');
-            }
-            $attendanceCorrections = $attendanceCorrectionsQuery->get();
-
+            $attendanceCorrectionsQuery->whereHas('attendance', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            });
             $view = 'staff.request.list';
+        } else {
+            //管理者は全員分のデータ
+            $view = 'admin.request.list';
         }
 
+        //tabのステータスによる絞り込み
+        if ($tab === 'approved') {
+            $attendanceCorrectionsQuery->where('approve_status', 'approved');
+        } else {
+            $attendanceCorrectionsQuery->where('approve_status', 'pending');
+        }
+        $attendanceCorrections = $attendanceCorrectionsQuery->get();
+
+        //viewファイルに渡すためのフォーマット
         $stampCorrectionRecords = [];
 
         foreach ($attendanceCorrections as $attendanceCorrection) {
