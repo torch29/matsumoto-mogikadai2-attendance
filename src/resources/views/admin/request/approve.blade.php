@@ -24,28 +24,28 @@
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">出勤・退勤</th>
                     <td class="approve-table__data-left">
-                        <input type="text" class="approve-table__input" value="{{ $attendanceCorrection->corrected_clock_in->isoFormat('H:mm') }}">　～
+                        <input type="text" class="approve-table__input" value="{{ $attendanceCorrection->corrected_clock_in->isoFormat('H:mm') }}" readonly>　～
                     </td>
                     <td class="approve-table__data">
-                        <input type="text" class="approve-table__input" value="{{ $attendanceCorrection->corrected_clock_out->isoFormat('H:mm') }}">
+                        <input type="text" class="approve-table__input" value="{{ $attendanceCorrection->corrected_clock_out->isoFormat('H:mm') }}" readonly>
                     </td>
                 </tr>
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">休憩</th>
                     <td class="approve-table__data-left">
-                        <input type="text" class="approve-table__input" value="休憩入時間">　～
+                        <input type="text" class="approve-table__input" value="休憩入時間" readonly>　～
                     </td>
                     <td class="approve-table__data">
-                        <input type="text" class="approve-table__input" value="休憩戻時間">
+                        <input type="text" class="approve-table__input" value="休憩戻時間" readonly>
                     </td>
                 </tr>
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">休憩2</th>
                     <td class="approve-table__data-left">
-                        <input type="text" class="approve-table__input" value="休憩入">
+                        <input type="text" class="approve-table__input" value="休憩入" readonly>
                     </td>
                     <td class="approve-table__data">
-                        <input type="text" class="approve-table__input" value="休憩戻">
+                        <input type="text" class="approve-table__input" value="休憩戻" readonly>
                     </td>
                 </tr>
                 <tr class="approve-table__row">
