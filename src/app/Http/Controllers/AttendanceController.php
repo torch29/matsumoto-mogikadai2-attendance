@@ -200,7 +200,7 @@ class AttendanceController extends Controller
         $user = Auth::user();
         $attendance = Attendance::where('id', $id)
             ->where('user_id', $user->id)
-            ->with('user', 'rests', 'attendanceCorrections')
+            ->with('user', 'rests', 'attendanceCorrections.restCorrections')
             ->first();
 
         //該当の勤怠データがない場合エラーメッセージを表示して返す
@@ -208,7 +208,30 @@ class AttendanceController extends Controller
             return redirect()->back()->with('error', '該当のデータがありません。');
         }
 
+        $latestCorrection = $attendance->attendanceCorrections->sortByDesc('created_at')->first();
+
+        $displayClockIn = optional($latestCorrection)->corrected_clock_in ?? $attendance->clock_in;
+        $displayClockOut = optional($latestCorrection)->corrected_clock_out ?? $attendance->clock_out;
+        $displayNote = optional($latestCorrection)->note ?? null;
+
+        $restRecords = $latestCorrection
+            ? $latestCorrection->restCorrections->map(function ($rest) {
+                return (object)[
+                    'rest_start' => $rest->corrected_rest_start,
+                    'rest_end' => $rest->corrected_rest_end,
+                ];
+            })
+            : $attendance->rests;
+
+        /*
+        $displayRecords[] = [
+            'displayClockIn' => optional($latestCorrection)->corrected_clock_in ?? $attendance->clock_in,
+            'displayClockOut' => optional($latestCorrection)->corrected_clock_out ?? $attendance->clock_out,
+            'displayNote' => optional($latestCorrection)->note ?? null,
+        ];
+        */
+
         //一般職員用の勤怠詳細画面表示
-        return view('staff.attendance.detail', compact('attendance'));
+        return view('staff.attendance.detail', compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords'));
     }
 }

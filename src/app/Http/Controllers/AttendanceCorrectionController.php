@@ -36,7 +36,7 @@ class AttendanceCorrectionController extends Controller
             //viewファイルに渡す配列
             $stampCorrectionRecords[] = [
                 'id' => $attendanceCorrection->id,
-                'attendance_id' => $attendanceCorrection->attendance->id,
+                'attendance_id' => $attendanceCorrection->attendance_id,
                 'status' => $attendanceCorrection->approvalStatusLabel(),
                 'name' => $attendanceCorrection->attendance->user->name,
                 'correction_target_date' => $correctionTargetDateFormatted,

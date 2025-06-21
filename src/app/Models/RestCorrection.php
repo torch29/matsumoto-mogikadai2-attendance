@@ -20,4 +20,10 @@ class RestCorrection extends Model
         'corrected_rest_end',
         'note',
     ];
+
+    protected $casts = [
+        'corrected_rest_start' => 'datetime',
+        'corrected_rest_end' => 'datetime',
+    ];
+
 }
