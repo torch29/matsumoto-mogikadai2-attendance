@@ -104,3 +104,26 @@ body {
     margin: auto 0;
     margin-left: 2px;
 }
+
+/* タブの設定 */
+.request-list__tab {
+    border-bottom: #000 1px solid;
+    margin-bottom: 30px;
+}
+.tab-menu {
+    display: flex;
+    margin: 5px 0;
+    gap: 0 30px; /*子要素（li）の間隔*/
+}
+.tab-menu li,
+.tab-menu li a,
+.tab-menu li a:visited {
+    color: #555;
+    cursor: pointer;
+}
+.tab-menu li.active,
+.tab-menu li.active a,
+.tab-menu li.active a:visited {
+    font-weight: bold;
+    color: #000;
+}
