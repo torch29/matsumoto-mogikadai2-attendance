@@ -113,7 +113,7 @@ body {
 .tab-menu {
     display: flex;
     margin: 5px 0;
-    gap: 0 30px; /*子要素（li）の間隔*/
+    gap: 0 40px; /*子要素（li）の間隔*/
 }
 .tab-menu li,
 .tab-menu li a,

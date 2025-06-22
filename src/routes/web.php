@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceStampController;
 use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -38,17 +39,17 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::middleware('auth', 'verified')->group(function () {
     Route::prefix('attendance')->group(function () {
         //勤怠登録（トップ）画面の表示
-        Route::get('/', [AttendanceController::class, 'index']);
+        Route::get('/', [AttendanceStampController::class, 'index']);
         //勤怠一覧の表示
         Route::get('/list', [AttendanceController::class, 'showAttendanceList']);
         //勤怠打刻
-        Route::post('clockIn', [AttendanceController::class, 'clockIn']);
+        Route::post('clockIn', [AttendanceStampController::class, 'clockIn']);
         //退勤打刻
-        Route::post('clockOut', [AttendanceController::class, 'clockOut']);
+        Route::post('clockOut', [AttendanceStampController::class, 'clockOut']);
         //休憩入打刻
-        Route::post('restStart', [AttendanceController::class, 'restStart']);
+        Route::post('restStart', [AttendanceStampController::class, 'restStart']);
         //休憩戻打刻
-        Route::post('restEnd', [AttendanceController::class, 'restEnd']);
+        Route::post('restEnd', [AttendanceStampController::class, 'restEnd']);
         //勤怠詳細画面の表示
         Route::get('/{id}', [AttendanceController::class, 'showDetail']);
     });
