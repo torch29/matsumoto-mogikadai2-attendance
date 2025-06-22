@@ -71,7 +71,7 @@ Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
         //勤怠詳細画面の表示
         Route::get('/attendance/{id}', [AdminController::class, 'showDetailForAdmin']);
         //申請一覧の表示
-        Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index'])->name('correction_requests.list');
+        Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index'])->name('admin.correction_requests.list');
         //申請承認画面の表示
         Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AttendanceCorrectionController::class, 'showApprove']);
     });

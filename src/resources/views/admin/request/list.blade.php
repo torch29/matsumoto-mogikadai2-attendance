@@ -13,10 +13,10 @@
     <div class="request-list__tab">
         <ul class="tab-menu">
             <li class="{{ $tab === 'pending' ? 'active' : '' }}">
-                <a href="{{ route('correction_requests.list',['tab' => 'pending']) }}">承認待ち</a>
+                <a href="{{ route('admin.correction_requests.list',['tab' => 'pending']) }}">承認待ち</a>
             </li>
             <li class="{{ $tab === 'approved' ? 'active' : '' }}">
-                <a href="{{ route('correction_requests.list',['tab' => 'approved']) }}">承認済み</a>
+                <a href="{{ route('admin.correction_requests.list',['tab' => 'approved']) }}">承認済み</a>
             </li>
         </ul>
     </div>
