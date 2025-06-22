@@ -79,10 +79,20 @@ class AttendanceController extends Controller
     public function showDetail($id)
     {
         $user = Auth::user();
+
+        $attendances = Attendance::with('user', 'rests', 'attendanceCorrections.restCorrections')->where('id', $id);
+
+        if (!$user->is_admin) {
+            $attendances->where('user_id', $user->id);
+        }
+        $attendance = $attendances->firstOrFail();
+
+        /* もともとの職員用のコード　あとで消す
         $attendance = Attendance::where('id', $id)
             ->where('user_id', $user->id)
             ->with('user', 'rests', 'attendanceCorrections.restCorrections')
-            ->first();
+            ->firstOrFail();
+            */
 
         //該当の勤怠データがない場合エラーメッセージを表示して返す
         if (!$attendance) {
@@ -96,7 +106,7 @@ class AttendanceController extends Controller
         $displayClockOut = optional($latestCorrection)->corrected_clock_out ?? $attendance->clock_out;
         $displayNote = optional($latestCorrection)->note ?? null;
 
-        //表示する休憩データの設定、修正申請があればrest_correctionsを、なければrestsのデータを表示
+        //修正申請があればrest_correctionsを、なければrestsのデータを表示
         $restRecords = $latestCorrection
             ? $latestCorrection->restCorrections->map(function ($rest) {
                 return (object)[
@@ -114,7 +124,11 @@ class AttendanceController extends Controller
         ];
         */
 
+        $view = $user->is_admin
+            ? 'admin.attendance.detail'
+            : 'staff.attendance.detail';
+
         //一般職員用の勤怠詳細画面表示
-        return view('staff.attendance.detail', compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords'));
+        return view($view, compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords'));
     }
 }

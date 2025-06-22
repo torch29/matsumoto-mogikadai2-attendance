@@ -137,13 +137,15 @@ class AdminController extends Controller
         return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 
+    /* もともとの管理者用詳細画面表示　あとで消す
     public function showDetailForAdmin($id)
     {
         $user = Auth::user();
-        $attendance = Attendance::with('user', 'rests', 'attendanceCorrections')->findOrFail($id);
+        $attendance = Attendance::with('user', 'rests', 'attendanceCorrections.restCorrections')->findOrFail($id);
 
         if ($user->is_admin) {
             return view('admin.attendance.detail', compact('attendance'));
         }
     }
+        */
 }

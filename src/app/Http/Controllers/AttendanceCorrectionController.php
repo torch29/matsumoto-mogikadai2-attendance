@@ -19,7 +19,7 @@ class AttendanceCorrectionController extends Controller
         $attendanceCorrectionsQuery = AttendanceCorrection::with('attendance.user');
 
         if (!Auth::user()->is_admin) {
-            //条件追加し一般職員は自分の勤怠のみ取得
+            //一般職員は自分の勤怠のみ取得
             $userId = Auth::id();
             $attendanceCorrectionsQuery->whereHas('attendance', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
