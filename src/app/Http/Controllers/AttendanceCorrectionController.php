@@ -107,4 +107,9 @@ class AttendanceCorrectionController extends Controller
 
         return view('admin.request.approve', compact('attendanceCorrection'));
     }
+
+    public function approve(Request $request)
+    {
+        AttendanceCorrection::with('attendance.user', 'attendance.rests', 'restCorrections')->find($request->id);
+    }
 }
