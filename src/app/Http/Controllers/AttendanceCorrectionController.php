@@ -103,7 +103,7 @@ class AttendanceCorrectionController extends Controller
 
     public function showApprove($id)
     {
-        $attendanceCorrection = AttendanceCorrection::with('attendance.user', 'restCorrections')->find($id);
+        $attendanceCorrection = AttendanceCorrection::with('attendance.user', 'attendance.rests', 'restCorrections')->find($id);
 
         return view('admin.request.approve', compact('attendanceCorrection'));
     }

@@ -30,24 +30,17 @@
                         <input type="text" class="approve-table__input" value="{{ $attendanceCorrection->corrected_clock_out->isoFormat('H:mm') }}" readonly>
                     </td>
                 </tr>
+                @foreach( $attendanceCorrection->restCorrections as $i => $rest )
                 <tr class="approve-table__row">
-                    <th class="approve-table__heading">休憩</th>
+                    <th class="approve-table__heading">{{ $i === 0 ? '休憩' : '休憩' . ($i + 1) }}</th>
                     <td class="approve-table__data-left">
-                        <input type="text" class="approve-table__input" value="休憩入時間" readonly>　～
+                        <input type="text" class="approve-table__input" value="{{ $rest->corrected_rest_start->isoFormat('H:mm') }}" readonly>　～
                     </td>
                     <td class="approve-table__data">
-                        <input type="text" class="approve-table__input" value="休憩戻時間" readonly>
+                        <input type="text" class="approve-table__input" value="{{ $rest->corrected_rest_end->isoFormat('H:mm') }}" readonly>
                     </td>
                 </tr>
-                <tr class="approve-table__row">
-                    <th class="approve-table__heading">休憩2</th>
-                    <td class="approve-table__data-left">
-                        <input type="text" class="approve-table__input" value="休憩入" readonly>
-                    </td>
-                    <td class="approve-table__data">
-                        <input type="text" class="approve-table__input" value="休憩戻" readonly>
-                    </td>
-                </tr>
+                @endforeach
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">備考</th>
                     <td class="approve-table__data" colspan="2">

@@ -82,6 +82,7 @@ class AttendanceController extends Controller
 
         $attendances = Attendance::with('user', 'rests', 'attendanceCorrections.restCorrections')->where('id', $id);
 
+        //一般職員は自分のデータのみ取得
         if (!$user->is_admin) {
             $attendances->where('user_id', $user->id);
         }
