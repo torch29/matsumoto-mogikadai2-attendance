@@ -72,10 +72,15 @@
                     </td>
                 </tr>
             </table>
+            {{ $latestCorrection ? $latestCorrection->approve_status : 'なし' }}
+            @if ( $latestCorrection && $latestCorrection->approve_status === 'pending' )
+            <div>*承認待ちのため現在修正はできません。</div>
+            @else
             <div class="detail-form__button">
                 <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
                 <button class="detail-form__button-submit">修正</button>
             </div>
+            @endif
         </form>
     </div>
 </div>
