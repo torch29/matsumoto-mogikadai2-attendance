@@ -130,6 +130,6 @@ class AttendanceController extends Controller
             : 'staff.attendance.detail';
 
         //一般職員用の勤怠詳細画面表示
-        return view($view, compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords'));
+        return view($view, compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords', 'latestCorrection'));
     }
 }

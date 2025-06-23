@@ -59,22 +59,24 @@ class AttendanceCorrectionController extends Controller
         return view($view, compact('stampCorrectionRecords', 'tab'));
     }
 
-    //一般職員による、自分の勤怠データの修正申請
-    public function requestStampCorrection(Request $request)
+    //勤怠データの修正申請
+    public function store(Request $request)
     {
         $attendance = Attendance::with('attendanceCorrections')->find($request->attendance_id);
 
         //データがない or 管理者ではない＆自分自身のデータでもない
-        if (!$attendance || (!Auth::user()->is_admin && $attendance->user_id !== Auth::id())) {
+        if (!$attendance) {
+            return redirect()->back()->with('error', 'データが見つかりません。');
+        }
+        if (!Auth::user()->is_admin && $attendance->user_id !== Auth::id()) {
             return redirect()->back()->with('error', '自分以外のデータは修正できません。');
         }
 
-        /*書きかけ 申請の承認待ち中は、編集できない
-        if ($attendance->attendanceCorrections->status == 'pending') {
-            return redirect();
+        $latestCorrection = $attendance->attendanceCorrections->sortByDesc('created_at')->first();
+
+        if ($latestCorrection && $latestCorrection->approve_status == 'pending') {
+            return redirect()->back()->with('error', '承認待ちのため現在修正はできません。');
         }
-            */
-        //dd($request);
 
         $attendanceCorrection = AttendanceCorrection::create([
             'attendance_id' => $request->attendance_id,
@@ -83,9 +85,9 @@ class AttendanceCorrectionController extends Controller
             'note' => $request->note,
         ]);
 
-        $restCorrections = $request->all();
+        $restCorrections = $request->input('rest_corrections', []);
 
-        foreach ($restCorrections['rest_corrections'] as $restCorrection) {
+        foreach ($restCorrections as $restCorrection) {
             //「new（空）」の行をスキップする
             if (empty($restCorrection['corrected_rest_start']) && empty($restCorrection['corrected_rest_end'])) {
                 continue;

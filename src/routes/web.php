@@ -54,7 +54,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::get('/{id}', [AttendanceController::class, 'showDetail']);
     });
     //詳細画面からボタン押下にて修正の申請をする
-    Route::post('/correction_request', [AttendanceCorrectionController::class, 'requestStampCorrection']);
+    Route::post('/correction_request', [AttendanceCorrectionController::class, 'store']);
     //申請一覧の表示
     Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index'])->name('correction_requests.list');
 });
@@ -76,7 +76,7 @@ Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
         //申請承認画面の表示
         Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AttendanceCorrectionController::class, 'showApprove']);
         //詳細画面からボタン押下にて修正の申請をする
-        Route::post('/correction_request', [AttendanceCorrectionController::class, 'requestStampCorrection']);
+        Route::post('/correction_request', [AttendanceCorrectionController::class, 'store']);
     });
 });
 
