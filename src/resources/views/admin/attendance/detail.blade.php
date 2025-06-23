@@ -19,7 +19,8 @@
         <h3>勤怠詳細</h3>
     </div>
     <div class="detail-table__wrapper">
-        <form action="" class="detail-form">
+        <form action="/correction_request" class="detail-form" method="post">
+            @csrf
             <table class="detail-table">
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">名前</th>
@@ -71,6 +72,7 @@
                 </tr>
             </table>
             <div class="detail-form__button">
+                <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
                 <button class="detail-form__button-submit">修正</button>
             </div>
         </form>

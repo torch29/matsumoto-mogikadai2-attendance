@@ -64,7 +64,8 @@ class AttendanceCorrectionController extends Controller
     {
         $attendance = Attendance::with('attendanceCorrections')->find($request->attendance_id);
 
-        if (!$attendance || $attendance->user_id !== Auth::id()) {
+        //データがない or 管理者ではない＆自分自身のデータでもない
+        if (!$attendance || (!Auth::user()->is_admin && $attendance->user_id !== Auth::id())) {
             return redirect()->back()->with('error', '自分以外のデータは修正できません。');
         }
 
@@ -98,7 +99,11 @@ class AttendanceCorrectionController extends Controller
             ]);
         }
 
-        return redirect('/stamp_correction_request/list');
+        $view = Auth::user()->is_admin
+            ? '/admin/stamp_correction_request/list'
+            : '/stamp_correction_request/list';
+
+        return redirect($view);
     }
 
     public function showApprove($id)
