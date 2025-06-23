@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrection;
 use App\Models\RestCorrection;
@@ -72,33 +73,42 @@ class AttendanceCorrectionController extends Controller
             return redirect()->back()->with('error', '自分以外のデータは修正できません。');
         }
 
+        //最新の修正申請を取得、承認待ちの場合は修正申請できない
         $latestCorrection = $attendance->attendanceCorrections->sortByDesc('created_at')->first();
 
         if ($latestCorrection && $latestCorrection->approve_status == 'pending') {
             return redirect()->back()->with('error', '承認待ちのため現在修正はできません。');
         }
 
-        $attendanceCorrection = AttendanceCorrection::create([
-            'attendance_id' => $request->attendance_id,
-            'corrected_clock_in' => $request->corrected_clock_in,
-            'corrected_clock_out' => $request->corrected_clock_out,
-            'note' => $request->note,
-        ]);
-
-        $restCorrections = $request->input('rest_corrections', []);
-
-        foreach ($restCorrections as $restCorrection) {
-            //「new（空）」の行をスキップする
-            if (empty($restCorrection['corrected_rest_start']) && empty($restCorrection['corrected_rest_end'])) {
-                continue;
-            }
-            //dd($restCorrection);
-            //dd($restCorrection['corrected_rest_start']);
-            RestCorrection::create([
-                'attendance_correction_id' => $attendanceCorrection->id,
-                'corrected_rest_start' => $restCorrection['corrected_rest_start'],
-                'corrected_rest_end' => $restCorrection['corrected_rest_end'],
+        //データベースへ保存
+        try {
+            DB::beginTransaction();
+            $attendanceCorrection = AttendanceCorrection::create([
+                'attendance_id' => $request->attendance_id,
+                'corrected_clock_in' => $request->corrected_clock_in,
+                'corrected_clock_out' => $request->corrected_clock_out,
+                'note' => $request->note,
             ]);
+
+            //休憩の修正は配列でくる
+            $restCorrections = $request->input('rest_corrections', []);
+
+            foreach ($restCorrections as $restCorrection) {
+                //「new（空）」の行をスキップする
+                if (empty($restCorrection['corrected_rest_start']) && empty($restCorrection['corrected_rest_end'])) {
+                    continue;
+                }
+
+                RestCorrection::create([
+                    'attendance_correction_id' => $attendanceCorrection->id,
+                    'corrected_rest_start' => $restCorrection['corrected_rest_start'],
+                    'corrected_rest_end' => $restCorrection['corrected_rest_end'],
+                ]);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
 
         $view = Auth::user()->is_admin
