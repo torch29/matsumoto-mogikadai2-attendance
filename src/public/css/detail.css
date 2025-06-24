@@ -75,15 +75,24 @@ body {
     border-radius: 5px;
 }
 
-.detail-form__button {
+.detail-form__button,
+.approve-form__button {
     margin-top: 30px;
     text-align: right;
 }
-.detail-form__button-submit {
+.detail-form__button-submit,
+.approve-form__button-submit {
     background-color: #000;
     color: #fff;
     padding: 3px 25px;
     border: #000 1px solid;
     border-radius: 3px;
     cursor: pointer;
+}
+.approve-form__button-completed {
+    display: inline-block;
+    background-color: #696969;
+    color: #fff;
+    padding: 3px 20px;
+    border-radius: 3px;
 }

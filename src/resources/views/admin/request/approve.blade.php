@@ -59,7 +59,9 @@
                 </tr>
         </table>
         @if( $attendanceCorrection->approve_status === 'approved' )
-        <p>承認済み</p>
+        <div class="approve-form__button">
+            <p class="approve-form__button-completed">承認済み</p>
+        </div>
         @else
         <div class="approve-form__button">
             <input type="hidden" name="correctionId" value="{{ $attendanceCorrection->id }}">
