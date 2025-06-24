@@ -34,9 +34,11 @@ class AttendanceCorrectionController extends Controller
 
         //tabのステータスによる絞り込み
         if ($tab === 'approved') {
-            $attendanceCorrectionsQuery->where('approve_status', 'approved');
+            $attendanceCorrectionsQuery->where('approve_status', 'approved')
+                ->orderBy('created_at', 'desc');
         } else {
-            $attendanceCorrectionsQuery->where('approve_status', 'pending');
+            $attendanceCorrectionsQuery->where('approve_status', 'pending')
+                ->orderBy('created_at', 'asc');
         }
         $attendanceCorrections = $attendanceCorrectionsQuery->get();
 
