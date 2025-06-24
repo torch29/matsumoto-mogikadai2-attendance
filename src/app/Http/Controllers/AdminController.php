@@ -27,6 +27,7 @@ class AdminController extends Controller
             ->with(['user', 'rests'])
             ->get();
 
+        //前日と翌日を取得
         $previousDay = Carbon::parse($targetDate)->subDay()->toDateString();
         $nextDay = Carbon::parse($targetDate)->addDay()->toDateString();
 
