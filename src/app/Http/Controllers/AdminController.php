@@ -17,14 +17,18 @@ class AdminController extends Controller
     }
 
     //「選ばれたある特定の一日」の全員の勤怠情報
-    public function showAttendanceListAll()
+    public function showAttendanceListAll(Request $request)
     {
         //日付のリクエストがあったらその日、なければ当日を表示
-        $date = Carbon::today();
-        $titleDate = Carbon::today();
-        $attendances = Attendance::whereDate('date', $date)
+        $targetDate = $request->date
+            ? Carbon::parse($request->date)->startOfDay()
+            : Carbon::today();
+        $attendances = Attendance::whereDate('date', $targetDate)
             ->with(['user', 'rests'])
             ->get();
+
+        $previousDay = Carbon::parse($targetDate)->subDay()->toDateString();
+        $nextDay = Carbon::parse($targetDate)->addDay()->toDateString();
 
         $attendanceRecords = [];
 
@@ -56,7 +60,7 @@ class AdminController extends Controller
             ];
         }
 
-        return view('admin.attendance.list_all', compact('attendanceRecords', 'titleDate'));
+        return view('admin.attendance.list_all', compact('attendanceRecords', 'targetDate', 'previousDay', 'nextDay'));
     }
 
     public function showStaffList()

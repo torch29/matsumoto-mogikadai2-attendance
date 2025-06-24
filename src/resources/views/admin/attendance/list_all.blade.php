@@ -8,20 +8,20 @@
 <div class="list__content">
     {{-- 特定の一日の全職員の勤怠一覧 --}}
     <div class="list__title">
-        <h3>{{ $titleDate->isoFormat('Y年M月D日') }}の勤怠</h3>
+        <h3>{{ $targetDate->isoFormat('Y年M月D日') }}の勤怠</h3>
     </div>
     <div class="list__guide-area">
         <div class="list__guide-link">
-            <a href="{{ route('admin.attendances.list-by-date') }}">
+            <a href="{{ route('admin.attendances.list-by-date', ['date' => $previousDay]) }}">
                 {{-- route('admin.attendances.list-by-date', ['date' => $previousMonth]) --}}
-                <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前月
+                <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前日
             </a>
         </div>
-        {{ $titleDate->isoFormat('Y/MM/DD') }}
+        {{ $targetDate->isoFormat('Y/MM/DD') }}
         <div class="list__guide-link">
-            <a href="{{ route('admin.attendances.list-by-date') }}">
+            <a href="{{ route('admin.attendances.list-by-date', ['date' => $nextDay]) }}">
                 {{-- route('admin.attendances.list-by-date', ['date' => $nextMonth])  --}}
-                翌月<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
+                翌日<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
             </a>
         </div>
     </div>
