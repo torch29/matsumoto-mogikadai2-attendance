@@ -6,11 +6,20 @@
 
 @section('content')
 <div class="approve__content">
+    @if (session('error'))
+    <div class="item__alert">
+        <input type="checkbox" id="alert-close" class="alert-close">
+        <div class="alert-message">
+            <label for="alert-close" class="alert-close__button">×</label>
+            {{ session('error') }}
+        </div>
+    </div>
+    @endif
     <div class="approve__title">
         <h3>勤怠詳細</h3>
     </div>
     <div class="approve-table__wrapper">
-        <form action="" class="approve-form">
+        <form action="/admin/approve" class="approve-form" method="post">
             <table class="approve-table">
                 <tr class="approve-table__row">
                     <th class="approve-table__heading">名前</th>
@@ -46,12 +55,12 @@
                     <tr class="approve-table__row">
                         <th class="approve-table__heading">備考</th>
                         <td class="approve-table__data" colspan="2">
-                            <textarea name="" id="" class="approve-table__textarea" readonly>{{ $attendanceCorrection->note }}</textarea readonly>
+                            <textarea name="" id="" class="approve-table__textarea" readonly>{{ $attendanceCorrection->note }}</textarea>
                         </td>
                     </tr>
             </table>
             <div class="approve-form__button">
-                <input type="hidden" name="id" value="attendanceCorrection->id">
+                <input type="hidden" name="correctionId" value="{{ $attendanceCorrection->id }}">
                 <button class="approve-form__button-submit">承認</button>
         </form>
     </div>

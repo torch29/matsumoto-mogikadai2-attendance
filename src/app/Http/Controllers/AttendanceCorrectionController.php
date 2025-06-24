@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Attendance;
+use App\Models\Rest;
 use App\Models\AttendanceCorrection;
 use App\Models\RestCorrection;
 
@@ -127,6 +128,32 @@ class AttendanceCorrectionController extends Controller
 
     public function approve(Request $request)
     {
-        AttendanceCorrection::with('attendance.user', 'attendance.rests', 'restCorrections')->find($request->id);
+        $correction = AttendanceCorrection::with('attendance', 'restCorrections')->find($request->correctionId);
+
+        if ($correction->approve_status === 'approved') {
+            return redirect()->back()->with('error', '承認済みのデータです。');
+        };
+
+        DB::transaction(function () use ($correction) {
+            $correction->attendance->update([
+                'clock_in' => $correction->corrected_clock_in,
+                'clock_out' => $correction->corrected_clock_out,
+            ]);
+
+            $correction->attendance->rests()->delete();
+
+            foreach ($correction->restCorrections as $restCorrection) {
+                Rest::create([
+                    'attendance_id' => $correction->attendance->id,
+                    'rest_start' => $restCorrection->corrected_rest_start,
+                    'rest_end' => $restCorrection->corrected_rest_end,
+                ]);
+            }
+
+            $correction->update([
+                'approve_status' => 'approved',
+            ]);
+        });
+        return redirect();
     }
 }

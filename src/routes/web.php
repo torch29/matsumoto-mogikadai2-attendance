@@ -7,6 +7,7 @@ use App\Http\Controllers\AttendanceStampController;
 use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\AttendanceCorrection;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -77,6 +78,8 @@ Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
         Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AttendanceCorrectionController::class, 'showApprove']);
         //詳細画面からボタン押下にて修正の申請をする
         Route::post('/correction_request', [AttendanceCorrectionController::class, 'store']);
+        //承認する
+        Route::post('/approve', [AttendanceCorrectionController::class, 'approve']);
     });
 });
 
