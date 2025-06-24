@@ -119,6 +119,7 @@ class AttendanceCorrectionController extends Controller
         return redirect($view);
     }
 
+    //承認画面の表示
     public function showApprove($id)
     {
         $attendanceCorrection = AttendanceCorrection::with('attendance.user', 'attendance.rests', 'restCorrections')->find($id);
@@ -126,6 +127,7 @@ class AttendanceCorrectionController extends Controller
         return view('admin.request.approve', compact('attendanceCorrection'));
     }
 
+    //管理者による修正申請の承認
     public function approve(Request $request)
     {
         $correction = AttendanceCorrection::with('attendance', 'restCorrections')->find($request->correctionId);
@@ -154,6 +156,6 @@ class AttendanceCorrectionController extends Controller
                 'approve_status' => 'approved',
             ]);
         });
-        return redirect();
+        return redirect()->route('admin.showApprove', $correction->id);
     }
 }
