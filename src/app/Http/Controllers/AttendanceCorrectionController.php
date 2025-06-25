@@ -10,6 +10,7 @@ use App\Models\Attendance;
 use App\Models\Rest;
 use App\Models\AttendanceCorrection;
 use App\Models\RestCorrection;
+use App\Http\Requests\AttendanceCorrectionRequest;
 
 class AttendanceCorrectionController extends Controller
 {
@@ -64,7 +65,7 @@ class AttendanceCorrectionController extends Controller
     }
 
     //勤怠データの修正申請
-    public function store(Request $request)
+    public function store(AttendanceCorrectionRequest $request)
     {
         $attendance = Attendance::with('attendanceCorrections')->find($request->attendance_id);
 

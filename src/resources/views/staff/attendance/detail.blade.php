@@ -40,6 +40,18 @@
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="corrected_clock_out" value="{{ old("corrected_clock_out", optional($displayClockOut)->isoFormat('H:mm')) }}">
                     </td>
+                    <td>
+                        <p>
+                            @error('corrected_clock_in')
+                            {{ $message }}
+                            @enderror
+                        </p>
+                        <p>
+                            @error('corrected_clock_out')
+                            {{ $message }}
+                            @enderror
+                        </p>
+                    </td>
                 </tr>
                 @foreach( $restRecords as $i => $rest )
                 <tr class="detail-table__row">
@@ -51,6 +63,11 @@
                     </td>
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_end]" value="{{ old("rest_corrections.$i.corrected_rest_end", optional($rest->rest_end)->isoFormat('H:mm')) }}">
+                    </td>
+                    <td>
+                        @error('rest_corrections*')
+                        {{ $message }}
+                        @enderror
                     </td>
                 </tr>
                 @endforeach
@@ -70,8 +87,22 @@
                     <td class="detail-table__data" colspan="2">
                         <textarea name="note" id="" class="detail-table__textarea" placeholder="必須入力です。入力例：電車遅延のため">{{ old('note', $displayNote) }}</textarea>
                     </td>
+                    <td>
+                        @error('note')
+                        {{ $message }}
+                        @enderror
+                    </td>
                 </tr>
             </table>
+            @if ($errors->any())
+            <div class="error__message">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             {{ $latestCorrection ? $latestCorrection->approve_status : 'なし' }}
             @if ( $latestCorrection && $latestCorrection->approve_status === 'pending' )
             <div>*承認待ちのため現在修正はできません。</div>
