@@ -65,9 +65,11 @@
                         <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_end]" value="{{ old("rest_corrections.$i.corrected_rest_end", optional($rest->rest_end)->isoFormat('H:mm')) }}">
                     </td>
                     <td>
-                        @error('rest_corrections*')
-                        {{ $message }}
-                        @enderror
+                        <p>
+                            @error('rest_corrections.$i.corrected_rest_start')
+                            {{ $message }}
+                            @enderror
+                        </p>
                     </td>
                 </tr>
                 @endforeach
