@@ -39,7 +39,7 @@
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="corrected_clock_out" value="{{ old("corrected_clock_out", optional($displayClockOut)->isoFormat('H:mm')) }}">
                     </td>
-                    <td>
+                    <td class="form__error">
                         <p>
                             @error('corrected_clock_in')
                             {{ $message }}
@@ -63,7 +63,7 @@
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_end]" value="{{ old("rest_corrections.$i.corrected_rest_end", optional($rest->rest_end)->isoFormat('H:mm')) }}">
                     </td>
-                    <td>
+                    <td class="form__error">
                         <p>
                             @error("rest_corrections.$i.corrected_rest_start")
                             {{ $message }}
@@ -87,7 +87,7 @@
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="rest_corrections[new][corrected_rest_end]" value="{{ old("rest_corrections.new.corrected_rest_end") }}">
                     </td>
-                    <td>
+                    <td class="form__error">
                         <p>
                             @error("rest_corrections.new.corrected_rest_start")
                             {{ $message }}
@@ -108,7 +108,7 @@
                 </tr>
             </table>
             @if ($errors->any())
-            <div class="error__message">
+            <div class="form__error">
                 <ul>
                     @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>

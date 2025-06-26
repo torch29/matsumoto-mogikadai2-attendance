@@ -21,6 +21,14 @@ a:visited {
 .form__error {
     color: #CB0000;
 }
+.error__message {
+    margin: 5px 0;
+    color: #CB0000;
+}
+.table__data--error {
+    width: 30%;
+}
+
 
 /*ナビゲーションバー*/
 .header-nav {

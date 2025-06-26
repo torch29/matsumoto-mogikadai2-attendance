@@ -34,6 +34,7 @@ body {
 .approve-table__row.detail-table__row:not(:last-child) {
     border-bottom: 2px solid #E1E1E1;
 }
+
 .detail-table__heading,
 .approve-table__heading {
     text-align: left;
@@ -68,7 +69,7 @@ body {
 
 .detail-table__textarea,
 .approve-table__textarea {
-    width: 70%;
+    width: 90%;
     height: 50px;
     margin: 10px 0;
     border: #E1E1E1 solid 1px;
