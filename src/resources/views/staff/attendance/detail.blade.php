@@ -66,7 +66,10 @@
                     </td>
                     <td>
                         <p>
-                            @error('rest_corrections.$i.corrected_rest_start')
+                            @error("rest_corrections.$i.corrected_rest_start")
+                            {{ $message }}
+                            @enderror
+                            @error("rest_corrections.$i.corrected_rest_end")
                             {{ $message }}
                             @enderror
                         </p>
@@ -82,6 +85,18 @@
                     </td>
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="rest_corrections[new][corrected_rest_end]" value="{{ old("rest_corrections.new.corrected_rest_end") }}">
+                    </td>
+                    <td>
+                        <p>
+                            @error("rest_corrections.new.corrected_rest_start")
+                            {{ $message }}
+                            @enderror
+                        </p>
+                        <p>
+                            @error("rest_corrections.new.corrected_rest_end")
+                            {{ $message }}
+                            @enderror
+                        </p>
                     </td>
                 </tr>
                 <tr class="detail-table__row">

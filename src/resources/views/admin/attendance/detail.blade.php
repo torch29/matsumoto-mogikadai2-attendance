@@ -64,18 +64,16 @@
                         <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_end]" value="{{ old("rest_corrections.$i.corrected_rest_end", optional($rest->rest_end)->isoFormat('H:mm')) }}">
                     </td>
                     <td>
-                        @foreach ($errors->get('rest_corrections') as $index => $restError)
-                        @if ($errors->has("rest_corrections.$index.corrected_rest_start"))
-                        <div class="error-message">
-                            {{ $errors->first("rest_corrections.$index.corrected_rest_start") }}
-                        </div>
-                        @endif
-                        @if ($errors->has("rest_corrections.$index.corrected_rest_end"))
-                        <div class="error-message">
-                            {{ $errors->first("rest_corrections.$index.corrected_rest_end") }}
-                        </div>
-                        @endif
-                        @endforeach
+                        <p>
+                            @error("rest_corrections.$i.corrected_rest_start")
+                            {{ $message }}
+                            @enderror
+                        </p>
+                        <p>
+                            @error("rest_corrections.$i.corrected_rest_end")
+                            {{ $message }}
+                            @enderror
+                        </p>
                     </td>
                 </tr>
                 @endforeach
@@ -89,16 +87,23 @@
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="rest_corrections[new][corrected_rest_end]" value="{{ old("rest_corrections.new.corrected_rest_end") }}">
                     </td>
+                    <td>
+                        <p>
+                            @error("rest_corrections.new.corrected_rest_start")
+                            {{ $message }}
+                            @enderror
+                        </p>
+                        <p>
+                            @error("rest_corrections.new.corrected_rest_end")
+                            {{ $message }}
+                            @enderror
+                        </p>
+                    </td>
                 </tr>
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">備考</th>
                     <td class="detail-table__data" colspan="2">
                         <textarea name="note" id="" class="detail-table__textarea" placeholder="例：電車遅延のため">{{ old('note', $displayNote) }}</textarea>
-                    </td>
-                    <td>
-                        @error('note')
-                        {{ $message }}
-                        @enderror
                     </td>
                 </tr>
             </table>
