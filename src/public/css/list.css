@@ -33,6 +33,16 @@ body {
 .list__guide-link a:visited {
     color: #737373;
 }
+
+.date-selector {
+    border: none;
+    outline: none;
+    color: #737373;
+    cursor: pointer;
+    font-size: 1.1em;
+    text-align: center;
+}
+
 .attendance-table,
 .request-table {
     background-color: #fff;
