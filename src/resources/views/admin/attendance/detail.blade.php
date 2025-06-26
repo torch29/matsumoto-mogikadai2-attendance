@@ -39,13 +39,13 @@
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="corrected_clock_out" value="{{ old("corrected_clock_out", optional($displayClockOut)->isoFormat('H:mm')) }}">
                     </td>
-                    <td class="form__error">
-                        <p>
+                    <td class="table__data--error">
+                        <p class="error__message">
                             @error('corrected_clock_in')
                             {{ $message }}
                             @enderror
                         </p>
-                        <p>
+                        <p class="error__message">
                             @error('corrected_clock_out')
                             {{ $message }}
                             @enderror
@@ -63,13 +63,13 @@
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_end]" value="{{ old("rest_corrections.$i.corrected_rest_end", optional($rest->rest_end)->isoFormat('H:mm')) }}">
                     </td>
-                    <td class="form__error">
-                        <p>
+                    <td class="table__data--error">
+                        <p class="error__message">
                             @error("rest_corrections.$i.corrected_rest_start")
                             {{ $message }}
                             @enderror
                         </p>
-                        <p>
+                        <p class="error__message">
                             @error("rest_corrections.$i.corrected_rest_end")
                             {{ $message }}
                             @enderror
@@ -87,13 +87,13 @@
                     <td class="detail-table__data">
                         <input type="text" class="detail-table__input" name="rest_corrections[new][corrected_rest_end]" value="{{ old("rest_corrections.new.corrected_rest_end") }}">
                     </td>
-                    <td class="form__error">
-                        <p>
+                    <td class="table__data--error">
+                        <p class="error__message">
                             @error("rest_corrections.new.corrected_rest_start")
                             {{ $message }}
                             @enderror
                         </p>
-                        <p>
+                        <p class="error__message">
                             @error("rest_corrections.new.corrected_rest_end")
                             {{ $message }}
                             @enderror
@@ -104,6 +104,13 @@
                     <th class="detail-table__heading">備考</th>
                     <td class="detail-table__data" colspan="2">
                         <textarea name="note" id="" class="detail-table__textarea" placeholder="例：電車遅延のため">{{ old('note', $displayNote) }}</textarea>
+                    </td>
+                    <td>
+                        <p class="error__message">
+                            @error('note')
+                            {{ $message }}
+                            @enderror
+                        </p>
                     </td>
                 </tr>
             </table>
