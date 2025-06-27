@@ -24,7 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 navigateToDate(dateStr);
             }
         },
+    });
+});
 
+    /*
         // カレンダーを閉じたときの処理
         onClose: function (selectedDates, dateStr, instance) {
             // 日付が変更されていれば遷移する
@@ -49,3 +52,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+*/

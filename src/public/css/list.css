@@ -34,7 +34,8 @@ body {
     color: #737373;
 }
 
-.date-selector {
+.date-selector,
+.month-selector {
     border: none;
     outline: none;
     color: #737373;

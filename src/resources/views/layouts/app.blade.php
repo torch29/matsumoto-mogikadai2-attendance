@@ -14,6 +14,9 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- 日本語にする -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+    <!-- 年月のみ表示用month-picker-pluginの読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 </head>
 
 <body>

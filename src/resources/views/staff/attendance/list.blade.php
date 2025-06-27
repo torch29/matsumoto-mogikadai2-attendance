@@ -17,10 +17,10 @@
                 <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前月
             </a>
         </div>
-        select:{{ $selectDate }}　　
-        previous:{{ $previousMonth }}　　
-        当月：<span>{{ $selectDate->isoFormat('Y/MM') }}</span>
-        <div class="list__guide-link">
+        <span><input type="text" id="monthPicker" class="month-selector" value="{{ $selectDate->format('Y/m') }}">
+            {{-- value="{{ \Carbon\Carbon::parse(request('date') ?? now())->format('Y/m') }}" --}}
+        </span>
+        <div class=" list__guide-link">
             <a href="{{ url('/attendance/list?date=' . $nextMonth) }}">
                 翌月<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
             </a>
@@ -53,5 +53,6 @@
             @endforeach
         </table>
     </div>
+    <script src="{{ asset('js/monthpicker.js') }}"></script>
 </div>
 @endsection
