@@ -45,3 +45,48 @@
 .guide-link a:visited {
     color: #0073CC;
 }
+
+/* メール認証画面用 verify.blade.php */
+.verify__content{
+    width: 50%;
+    margin: auto;
+    height: 100vh;
+}
+.verify__content-inner {
+    margin-top: 90px;
+}
+.verify__content--info p {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+.verify-link__button {
+    text-align: center;
+    margin: 30px 0;
+}
+.verify-link__button-submit {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: #000 solid 1px;
+    background-color: #d9d9d9;
+    color: #000;
+}
+.verify-link__button-submit:visited {
+    color: #000;
+}
+.verify-form__button {
+    margin: 0 auto;
+    text-align: center;
+}
+.verify-form__button-submit {
+    background-color: #fff;
+    color: #0073CC;
+    border: none;
+    cursor: pointer;
+}
+.verify__alert-success{
+    margin-top: 30px;
+    text-align: center;
+    color: #CB0000;
+}
