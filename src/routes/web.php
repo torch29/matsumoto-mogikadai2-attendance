@@ -80,6 +80,7 @@ Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
         Route::post('/correction_request', [AttendanceCorrectionController::class, 'store']);
         //承認する
         Route::post('/approve', [AttendanceCorrectionController::class, 'approve']);
+        Route::post('/export/{id}', [AdminController::class, 'exportCsv']);
     });
 });
 

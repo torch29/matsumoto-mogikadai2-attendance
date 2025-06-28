@@ -153,4 +153,46 @@ class AdminController extends Controller
         }
     }
         */
+
+    public function exportCsv(Request $request, $id)
+    {
+        $selectDate = $request->date
+            ? Carbon::parse($request->date)->startOfDay()
+            : Carbon::today();
+        $firstOfMonth = $selectDate->copy()->firstOfMonth();
+        $endOfMonth = $selectDate->copy()->endOfMonth();
+
+        //今月分の勤怠を取得（休憩を含む）。日付でキー指定する
+        $attendances = Attendance::where('user_id', $id)
+            ->whereBetween('date', [$firstOfMonth, $endOfMonth])
+            ->with('rests')
+            ->orderBy('date')
+            ->get();
+
+        $staff = User::findOrFail($id);
+        $filename = $staff->name . $selectDate->format('Y_m') . '.csv';
+        $header = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ];
+
+        $callback = function () use ($attendances) {
+            $stream = fopen('php://output', 'w');
+            fputs($stream, "\xEF\xBB\xBF");
+            fputcsv($stream, ['日付', '出勤', '退勤', '休憩', '合計']);
+
+            foreach ($attendances as $attendance) {
+                fputcsv($stream, [
+                    $attendance->date->format('Y/m/d'),
+                    optional($attendance->clock_in)->format('H:i'),
+                    optional($attendance->clock_out)->format('H:i'),
+                    $attendance->total_rest_formatted,
+                    $attendance->total_work_formatted,
+                ]);
+            }
+
+            fclose($stream);
+        };
+        return response()->stream($callback, 200, $header);
+    }
 }

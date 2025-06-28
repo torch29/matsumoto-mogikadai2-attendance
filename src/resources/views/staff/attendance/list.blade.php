@@ -34,7 +34,7 @@
                 <th class="attendance-table__heading">退勤</th>
                 <th class="attendance-table__heading">休憩</th>
                 <th class="attendance-table__heading">合計</th>
-                <th class=" attendance-table__heading">詳細</th>
+                <th class="attendance-table__heading">詳細</th>
             </tr>
             @foreach( $attendanceRecords as $attendance )
             <tr class="attendance-table__row">

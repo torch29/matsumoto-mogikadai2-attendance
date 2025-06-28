@@ -52,6 +52,10 @@
             </tr>
             @endforeach
         </table>
+        <form action="/admin/export/{{ $staff->id }}" method="post">
+            @csrf
+            <button>CSV出力</button>
+        </form>
     </div>
     <script src="{{ asset('js/monthpicker.js') }}"></script>
 </div>
