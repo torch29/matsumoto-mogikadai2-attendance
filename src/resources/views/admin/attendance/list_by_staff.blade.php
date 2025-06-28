@@ -54,7 +54,9 @@
         </table>
         <form action="/admin/export/{{ $staff->id }}" method="post">
             @csrf
-            <button>CSV出力</button>
+            <div class="export-button">
+                <button class="export-button--submit">CSV出力</button>
+            </div>
         </form>
     </div>
     <script src="{{ asset('js/monthpicker.js') }}"></script>
