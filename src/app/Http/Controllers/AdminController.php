@@ -170,7 +170,8 @@ class AdminController extends Controller
             ->get();
 
         $staff = User::findOrFail($id);
-        $filename = $staff->name . $selectDate->format('Y_m') . '.csv';
+        $staffName = str_replace(array(' ', '　'), '', $staff->name);
+        $filename = $staffName . '_' . $selectDate->format('Y_m') . '.csv';
         $header = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$filename\"",
