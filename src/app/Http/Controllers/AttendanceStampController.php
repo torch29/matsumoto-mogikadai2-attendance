@@ -68,6 +68,12 @@ class AttendanceStampController extends Controller
         $now = Carbon::now();
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
+        $minIntervalResult = $this->checkInterval(optional($todayAttendance)->clock_in);
+
+        if ($minIntervalResult) {
+            return $minIntervalResult;
+        }
+
         //退勤打刻
         //出勤時刻データが存在し、退勤時刻データが無い
         if ($todayAttendance && !$todayAttendance->clock_out) {
