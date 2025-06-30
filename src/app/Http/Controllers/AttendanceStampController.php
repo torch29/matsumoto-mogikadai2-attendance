@@ -69,7 +69,6 @@ class AttendanceStampController extends Controller
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
         $minIntervalResult = $this->checkInterval(optional($todayAttendance)->clock_in);
-
         if ($minIntervalResult) {
             return $minIntervalResult;
         }
@@ -98,10 +97,21 @@ class AttendanceStampController extends Controller
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
         $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
-        //まだ休憩に入っていないか、前の休憩が終了している場合、新しく休憩に入ることができる
+        //まだ一度も休憩に入っていないか、前の休憩が終了している場合、新しく休憩に入ることができる
         $canStartRest = !$lastRest || $lastRest->rest_end;
 
-        //出勤中で、新しく休憩に入ることができる状態
+        $minIntervalResult = $this->checkInterval(optional($todayAttendance)->clock_in);
+        if ($minIntervalResult) {
+            return $minIntervalResult;
+        }
+        if ($lastRest && $lastRest->rest_end) {
+            $minIntervalResult = $this->checkInterval($lastRest->rest_end);
+            if ($minIntervalResult) {
+                return $minIntervalResult;
+            }
+        }
+
+        //出勤中で、新しく休憩に入ることができる状態なら、休憩入打刻できる
         if ($todayAttendance && !$todayAttendance->clock_out && $canStartRest) {
             Rest::create([
                 'attendance_id' => $todayAttendance->id,
@@ -122,10 +132,11 @@ class AttendanceStampController extends Controller
 
         $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
         $minIntervalResult = $this->checkInterval(optional($lastRest)->rest_start);
-
         if ($minIntervalResult) {
             return $minIntervalResult;
         }
+
+        //休憩中である場合、休憩戻が打刻できる
         if ($todayAttendance && !$todayAttendance->clock_out) {
             if ($lastRest && !$lastRest->rest_end) {
                 $lastRest->update([
@@ -140,7 +151,7 @@ class AttendanceStampController extends Controller
     //前回の打刻から指定した秒数経過していなければ打刻できない設定
     private function checkInterval(?Carbon $lastStampTime)
     {
-        $minTime = 15; //秒数の設定
+        $minTime = 10; //秒数の設定
 
         //前回打刻がない or 指定した秒数以上経過していればnullを返す（次の処理に進む）
         if (!$lastStampTime || now()->diffInSeconds($lastStampTime) >= $minTime) {
