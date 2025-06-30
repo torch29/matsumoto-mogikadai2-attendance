@@ -140,5 +140,4 @@ class Attendance extends Model
     {
         return Carbon::parse($baseDate)->addMonthNoOverflow()->format('Y-m');
     }
-
 }

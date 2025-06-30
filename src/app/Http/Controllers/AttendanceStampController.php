@@ -115,11 +115,12 @@ class AttendanceStampController extends Controller
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
         $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
+        $minIntervalResult = $this->checkInterval(optional($lastRest)->rest_start);
 
-        $minTime = 15; //休憩入を押してから休憩戻を押せる最低間隔の時間（秒）設定
-        if ($lastRest && now()->diffInSeconds($lastRest->rest_start) < $minTime) {
-            return redirect()->back()->with('error', $minTime . '秒以上間を開けて再操作してください。');
-        } elseif ($todayAttendance && !$todayAttendance->clock_out) {
+        if ($minIntervalResult) {
+            return $minIntervalResult;
+        }
+        if ($todayAttendance && !$todayAttendance->clock_out) {
             if ($lastRest && !$lastRest->rest_end) {
                 $lastRest->update([
                     'rest_end' => $now->toTimeString(),
@@ -128,5 +129,17 @@ class AttendanceStampController extends Controller
         }
 
         return redirect('attendance');
+    }
+
+    //前回の打刻から指定した秒数経過していなければ打刻できない設定
+    private function checkInterval(?Carbon $lastStampTime)
+    {
+        $minTime = 15; //秒数の設定
+
+        //前回打刻がない or 指定した秒数以上経過していればnullを返す（次の処理に進む）
+        if (!$lastStampTime || now()->diffInSeconds($lastStampTime) >= $minTime) {
+            return null;
+        }
+        return redirect()->back()->with('error', $minTime . '秒以上間を開けて再操作してください。');
     }
 }
