@@ -19,7 +19,7 @@
         <h3>勤怠詳細</h3>
     </div>
     <div class="detail-table__wrapper">
-        <form action="/correction_request" class="detail-form" method="post">
+        <form action="/admin/correction" class="detail-form" method="post">
             @csrf
             <table class="detail-table">
                 <tr class="detail-table__row">

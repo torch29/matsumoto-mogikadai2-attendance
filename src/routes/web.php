@@ -71,15 +71,15 @@ Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
         //管理者権限でスタッフ別勤怠一覧表示
         Route::get('/attendance/staff/{id}', [AdminController::class, 'showAttendanceListByStaff'])->name('admin.attendances.list-by-staff');
         //勤怠詳細画面の表示
-        Route::get('/attendance/{id}', [AttendanceController::class, 'showDetail']);
+        Route::get('/attendance/{id}', [AttendanceController::class, 'showDetail'])->name('admin.attendance.detail');
         //申請一覧の表示
         Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index'])->name('admin.correction_requests.list');
         //申請承認画面の表示
-        Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AttendanceCorrectionController::class, 'showApprove'])->name('admin.showApprove');
+        Route::get('/stamp_correction_request/approve/{id}', [AttendanceCorrectionController::class, 'showApprove'])->name('admin.showApprove');
         //詳細画面からボタン押下にて修正の申請をする
-        Route::post('/correction_request', [AttendanceCorrectionController::class, 'store']);
-        //承認する
+        Route::post('/correction', [AttendanceCorrectionController::class, 'adminCorrection']);
         Route::post('/approve', [AttendanceCorrectionController::class, 'approve']);
+        //CSV出力
         Route::post('/export/{id}', [AdminController::class, 'exportCsv']);
     });
 });
