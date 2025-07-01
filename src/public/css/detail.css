@@ -102,3 +102,10 @@ body {
     color: #F87779;
     text-align: right;
 }
+
+.approve__status-message {
+    background-color: #D0E7DE;
+    color: #1C6046;
+    margin: 0 2px 10px;
+    padding: 3px 10px;
+}
