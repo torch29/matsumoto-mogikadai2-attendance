@@ -125,7 +125,7 @@
             @endif
             {{ $latestCorrection ? $latestCorrection->approve_status : 'なし' }}
             @if ( $latestCorrection && $latestCorrection->approve_status === 'pending' )
-            <div>*承認待ちのため現在修正はできません。</div>
+            <div>*承認待ちのため修正はできません。</div>
             @else
             <div class="detail-form__button">
                 <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
