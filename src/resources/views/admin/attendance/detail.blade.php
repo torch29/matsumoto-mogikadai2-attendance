@@ -34,10 +34,10 @@
                 <tr class="detail-table__row">
                     <th class="detail-table__heading">出勤・退勤</th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" name="corrected_clock_in" value="{{ old("corrected_clock_in", $displayClockIn->isoFormat('H:mm')) }}">　～
+                        <input type="time" class="detail-table__input" name="corrected_clock_in" value="{{ old("corrected_clock_in", optional($displayClockIn)->format('H:i')) }}">　～
                     </td>
                     <td class="detail-table__data">
-                        <input type="text" class="detail-table__input" name="corrected_clock_out" value="{{ old("corrected_clock_out", optional($displayClockOut)->isoFormat('H:mm')) }}">
+                        <input type="time" class="detail-table__input" name="corrected_clock_out" value="{{ old("corrected_clock_out", optional($displayClockOut)->format('H:i')) }}">
                     </td>
                     <td class="table__data--error">
                         <p class="error__message">
@@ -58,10 +58,10 @@
                         {{ $i === 0 ? '休憩' : '休憩' . ($i + 1) }}
                     </th>
                     <td class=" detail-table__data-left">
-                        <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_start]" value="{{ old("rest_corrections.$i.corrected_rest_start", optional($rest->rest_start)->isoFormat('H:mm')) }}">　～
+                        <input type="time" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_start]" value="{{ old("rest_corrections.$i.corrected_rest_start", optional($rest->rest_start)->format('H:i')) }}">　～
                     </td>
                     <td class="detail-table__data">
-                        <input type="text" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_end]" value="{{ old("rest_corrections.$i.corrected_rest_end", optional($rest->rest_end)->isoFormat('H:mm')) }}">
+                        <input type="time" class="detail-table__input" name="rest_corrections[{{ $i }}][corrected_rest_end]" value="{{ old("rest_corrections.$i.corrected_rest_end", optional($rest->rest_end)->format('H:i')) }}">
                     </td>
                     <td class="table__data--error">
                         <p class="error__message">
@@ -82,10 +82,10 @@
                         {{ count($restRecords) === 0 ? '休憩' : '休憩' . (count($restRecords) + 1) }}
                     </th>
                     <td class="detail-table__data-left">
-                        <input type="text" class="detail-table__input" name="rest_corrections[new][corrected_rest_start]" value="{{ old("rest_corrections.new.corrected_rest_start") }}">　～
+                        <input type="time" class="detail-table__input" name="rest_corrections[new][corrected_rest_start]" value="{{ old("rest_corrections.new.corrected_rest_start") }}">　～
                     </td>
                     <td class="detail-table__data">
-                        <input type="text" class="detail-table__input" name="rest_corrections[new][corrected_rest_end]" value="{{ old("rest_corrections.new.corrected_rest_end") }}">
+                        <input type="time" class="detail-table__input" name="rest_corrections[new][corrected_rest_end]" value="{{ old("rest_corrections.new.corrected_rest_end") }}">
                     </td>
                     <td class="table__data--error">
                         <p class="error__message">
