@@ -64,7 +64,7 @@ class AttendanceCorrectionController extends Controller
         return view($view, compact('stampCorrectionRecords', 'tab'));
     }
 
-    //勤怠データの修正申請
+    //一般職員による勤怠データの修正申請
     public function store(AttendanceCorrectionRequest $request)
     {
         $attendance = Attendance::with('attendanceCorrections')->find($request->attendance_id);
@@ -159,6 +159,54 @@ class AttendanceCorrectionController extends Controller
                 'approve_status' => 'approved',
             ]);
         });
-        return redirect()->route('admin.showApprove', $correction->id);
+        return redirect()->route('admin.showApprove',  ['id' => $correction->id]);
+    }
+
+    //管理者による勤怠の修正～承認
+    public function adminCorrection(AttendanceCorrectionRequest $request)
+    {
+        $attendanceCorrection = null;
+
+        DB::transaction(function () use ($request, &$attendanceCorrection) {
+            $attendance = Attendance::findOrFail($request->attendance_id);
+
+            $attendanceCorrection = AttendanceCorrection::create([
+                'attendance_id' => $attendance->id,
+                'corrected_clock_in' => $request->corrected_clock_in,
+                'corrected_clock_out' => $request->corrected_clock_out,
+                'note' => $request->note,
+                'approve_status' => 'approved',
+            ]);
+
+            $restCorrections = $request->input('rest_corrections', []);
+            foreach ($restCorrections as $restCorrection) {
+                if (empty($restCorrection['corrected_rest_start']) && empty($restCorrection['corrected_rest_end'])) {
+                    continue;
+                }
+
+                RestCorrection::create([
+                    'attendance_correction_id' => $attendanceCorrection->id,
+                    'corrected_rest_start' => $restCorrection['corrected_rest_start'],
+                    'corrected_rest_end' => $restCorrection['corrected_rest_end'],
+                ]);
+            }
+
+            $attendance->update([
+                'clock_in' => $attendanceCorrection->corrected_clock_in,
+                'clock_out' => $attendanceCorrection->corrected_clock_out,
+            ]);
+
+            $attendance->rests()->delete();
+
+            foreach ($attendanceCorrection->restCorrections as $restCorrection) {
+                Rest::create([
+                    'attendance_id' => $attendance->id,
+                    'rest_start' => $restCorrection->corrected_rest_start,
+                    'rest_end' => $restCorrection->corrected_rest_end,
+                ]);
+            }
+        });
+
+        return redirect()->route('admin.showApprove', ['id' => $attendanceCorrection->id]);
     }
 }
