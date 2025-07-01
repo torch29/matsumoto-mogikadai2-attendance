@@ -19,6 +19,9 @@
     <div class="detail__title">
         <h3>勤怠詳細</h3>
     </div>
+    @if ( $latestCorrection && $latestCorrection->approve_status === 'pending' )
+    <div class="approve__status-message">下記のデータにて申請しました。承認をお待ちください。</div>
+    @endif
     <div class="detail-table__wrapper">
         <form action="/correction_request" class="detail-form" method="post">
             @csrf
