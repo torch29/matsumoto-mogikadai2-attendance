@@ -43,7 +43,7 @@ class AttendanceCorrectionRequest extends FormRequest
             'corrected_clock_out.required' => '退勤時間を入力してください',
             'corrected_clock_in.date_format' => '半角数字で XX:XX 形式で入力してください',
             'corrected_clock_out.date_format' => '半角数字で XX:XX 形式で入力してください',
-            'corrected_clock_out.after' => '出勤時間もしくは退勤時間が不適切な値です',
+            'corrected_clock_out.after_or_equal' => '出勤時間もしくは退勤時間が不適切な値です',
             'note.required' => '備考を記入してください',
 
             'rest_corrections.*.corrected_rest_start.required_with' => '休憩開始時刻と終了時刻はセットで入力してください',

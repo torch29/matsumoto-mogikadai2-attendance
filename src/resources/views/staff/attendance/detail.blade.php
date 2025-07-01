@@ -38,7 +38,7 @@
                         <input type="time" class="detail-table__input" name="corrected_clock_in" value="{{ old("corrected_clock_in", optional($displayClockIn)->format('H:i')) }}">　～
                     </td>
                     <td class="detail-table__data">
-                        <input type="time" class="detail-table__input" name="corrected_clock_out" value="{{ old("corrected_clock_out", optional($displayClockOut)->format('H:i')) }}">
+                        <input type="time" class="detail-table__input" name="corrected_clock_out" max="23:59" value="{{ old("corrected_clock_out", optional($displayClockOut)->format('H:i')) }}">
                     </td>
                     <td class="table__data--error">
                         <p class="error__message">
