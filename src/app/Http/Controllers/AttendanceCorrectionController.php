@@ -115,11 +115,7 @@ class AttendanceCorrectionController extends Controller
             throw $e;
         }
 
-        $view = Auth::user()->is_admin
-            ? '/admin/stamp_correction_request/list'
-            : '/stamp_correction_request/list';
-
-        return redirect($view);
+        return redirect('/attendance/' . $request->attendance_id);
     }
 
     //承認画面の表示

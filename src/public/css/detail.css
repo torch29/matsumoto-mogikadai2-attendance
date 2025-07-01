@@ -97,3 +97,8 @@ body {
     padding: 3px 20px;
     border-radius: 3px;
 }
+
+.detail__status-message {
+    color: #F87779;
+    text-align: right;
+}
