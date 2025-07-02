@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
 
 class UserAuthTest extends TestCase
 {
@@ -104,6 +105,55 @@ class UserAuthTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'Test User',
             'email' => 'dummy@example.com',
+            'is_admin' => 0,
         ]);
+    }
+
+    public function test_show_message_user_login_without_email()
+    {
+        $user = User::factory()->create();
+        $this->assertGuest();
+
+        $response = $this->get('/login');
+        $response = $this->post('/login', [
+            'email' => '',
+            'password' => 'password',
+        ]);
+        $response->assertSessionHasErrors([
+            'email' => 'メールアドレスを入力してください'
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_show_message_user_login_without_password()
+    {
+        $user = User::factory()->create();
+        $this->assertGuest();
+
+        $response = $this->get('/login');
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => '',
+        ]);
+        $response->assertSessionHasErrors([
+            'password' => 'パスワードを入力してください'
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_show_message_user_login_with_wrong_data()
+    {
+        $user = User::factory()->create();
+        $this->assertGuest();
+
+        $response = $this->get('/login');
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'wrongpassword',
+        ]);
+        $response->assertSessionHasErrors([
+            'email' => trans('auth.failed')
+        ]);
+        $this->assertGuest();
     }
 }
