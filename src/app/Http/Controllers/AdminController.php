@@ -154,6 +154,7 @@ class AdminController extends Controller
     }
         */
 
+    //勤怠一覧画面からCSV出力
     public function exportCsv(Request $request, $id)
     {
         $selectDate = $request->date
@@ -177,9 +178,10 @@ class AdminController extends Controller
             'Content-Disposition' => "attachment; filename=\"$filename\"",
         ];
 
-        $callback = function () use ($attendances) {
+        $callback = function () use ($attendances, $staffName) {
             $stream = fopen('php://output', 'w');
             fputs($stream, "\xEF\xBB\xBF");
+            fputcsv($stream, ['職員名：' . $staffName]);
             fputcsv($stream, ['日付', '出勤', '退勤', '休憩', '合計']);
 
             foreach ($attendances as $attendance) {

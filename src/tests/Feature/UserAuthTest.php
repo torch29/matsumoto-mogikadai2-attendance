@@ -13,10 +13,20 @@ class UserAuthTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    use RefreshDatabase;
+
+    public function test_show_message_user_register_without_name()
     {
         $response = $this->get('/register');
-
-        $response->assertSee('会員登録');
+        $response = $this->post('/register', [
+            'name' => '',
+            'email' => 'dummy@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+        $response->assertSessionHasErrors([
+            'name' => 'お名前を入力してください'
+        ]);
+        $this->assertGuest();
     }
 }
