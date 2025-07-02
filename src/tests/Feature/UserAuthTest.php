@@ -29,4 +29,81 @@ class UserAuthTest extends TestCase
         ]);
         $this->assertGuest();
     }
+
+    public function test_show_message_user_register_without_email()
+    {
+        $response = $this->get('/register');
+        $response = $this->post('/register', [
+            'name' => 'Dummy User',
+            'email' => '',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+        $response->assertSessionHasErrors([
+            'email' => 'メールアドレスを入力してください'
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_show_message_user_register_with_8characters_less_password()
+    {
+        $response = $this->get('/register');
+        $response = $this->post('/register', [
+            'name' => 'Dummy User',
+            'email' => 'dummy@example.com',
+            'password' => 'pass123',
+            'password_confirmation' => 'pass123',
+        ]);
+        $response->assertSessionHasErrors([
+            'password' => 'パスワードは8文字以上で入力してください'
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_show_message_user_register_with_mismatch_password()
+    {
+        $response = $this->get('/register');
+        $response = $this->post('/register', [
+            'name' => 'Dummy User',
+            'email' => 'dummy@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'pass1234',
+        ]);
+        $response->assertSessionHasErrors([
+            'password' => 'パスワードと一致しません'
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_show_message_user_register_without_password()
+    {
+        $response = $this->get('/register');
+        $response = $this->post('/register', [
+            'name' => 'Dummy User',
+            'email' => 'dummy@example.com',
+            'password' => '',
+            'password_confirmation' => 'password',
+        ]);
+        $response->assertSessionHasErrors([
+            'password' => 'パスワードを入力してください'
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_user_can_register_success()
+    {
+        $response = $this->get('/register');
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'dummy@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $this->assertDatabaseHas('users', [
+            'name' => 'Test User',
+            'email' => 'dummy@example.com',
+        ]);
+    }
 }
