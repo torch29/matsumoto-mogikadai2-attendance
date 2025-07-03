@@ -8,7 +8,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Attendance;
 
 
 class AttendanceDisplayTest extends TestCase
@@ -83,7 +82,7 @@ class AttendanceDisplayTest extends TestCase
         $response->assertSee('休憩中');
     }
 
-    //出勤中の場合、ステータスに[出勤中]と表示される
+    //退勤済みの場合、ステータスに[退勤済]と表示される
     public function test_attendance_page_displays_already_clocked_out_status()
     {
         $user = User::factory()->create();
