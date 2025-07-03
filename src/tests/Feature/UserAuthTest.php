@@ -156,4 +156,21 @@ class UserAuthTest extends TestCase
         ]);
         $this->assertGuest();
     }
+
+    public function test_user_can_login_successfully()
+    {
+        $user = User::factory()->create([
+            'password' => bcrypt('password')
+        ]);
+        $this->assertGuest();
+
+        $response = $this->get('/login');
+        $response->assertViewIs('staff.auth.login');
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+        $this->assertAuthenticatedAs($user);
+        $response->assertRedirect('/attendance');
+    }
 }
