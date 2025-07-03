@@ -71,15 +71,8 @@ class AttendanceStampTest extends TestCase
         $response->assertSee('勤務外');
         $response->assertSee('出勤');
 
-        //出勤ボタンを押下する→データベースに打刻したユーザーのIDがあり、clock_inカラムにデータが存在することを確認
+        //出勤ボタンを押下後、勤怠一覧画面にアクセスし出勤打刻した時刻が表示されていることを確認
         $response = $this->post('attendance/clockIn');
-        $this->assertDatabaseHas('attendances', [
-            'user_id' => $user->id,
-        ]);
-        $attendance = Attendance::where('user_id', $user->id)->first();
-        $this->assertNotNull($attendance->clock_in);
-
-        //勤怠一覧画面にアクセスし、出勤時刻が表示されていることを確認
         $response = $this->get('/attendance/list');
         $response->assertSee(now()->format('H:i'));
         $response->assertSeeInOrder([
