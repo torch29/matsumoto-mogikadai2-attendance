@@ -130,6 +130,7 @@ class RestStampTest extends TestCase
     //休憩時間が勤怠一覧画面で確認できる
     public function test_show_rest_time_at_attendance_list()
     {
+        //勤務中のユーザーにログイン
         $user = User::factory()->create();
         $user->attendances()->create([
             'user_id' => $user->id,
