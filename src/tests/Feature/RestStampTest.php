@@ -131,23 +131,28 @@ class RestStampTest extends TestCase
     public function test_show_rest_time_at_attendance_list()
     {
         $user = User::factory()->create();
+        $user->attendances()->create([
+            'user_id' => $user->id,
+            'date' => Carbon::now()->toDateString(),
+            'clock_in' => Carbon::parse('08:00'),
+        ]);
         $this->actingAs($user);
 
         //[休憩入]～[休憩戻]を打刻後、再度[休憩入]を打刻
         $response = $this->get('/attendance');
         $response = $this->post('attendance/restStart');
+        $this->travel(10)->minutes(); //10分間の休憩を取得
         $response = $this->get('/attendance');
-        $this->travelForStamp();
         $response = $this->post('/attendance/restEnd');
 
         //休憩入・休憩戻を押下後、勤怠一覧画面にアクセスし日付を確認する
-        $response = $this->post('attendance/clockIn');
         $response = $this->get('/attendance/list');
         $response->assertSeeInOrder(
             [
                 now()->isoFormat('M月D日'),
-                ('0:00'), //休憩合計時間は15秒のため0:00表記となる
+                ('0:10'), //休憩合計時間10分間のため0:10と表記される
             ]
         );
+        $this->travelBack();
     }
 }

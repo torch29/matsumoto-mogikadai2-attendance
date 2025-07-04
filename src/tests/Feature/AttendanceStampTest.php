@@ -113,7 +113,7 @@ class AttendanceStampTest extends TestCase
         $this->assertNotNull($attendance->clock_out);
     }
 
-    //
+    //退勤時刻が勤怠一覧画面で確認できる
     public function test_show_clock_out_time_at_attendance_list()
     {
         $user = User::factory()->create();
