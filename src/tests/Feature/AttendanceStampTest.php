@@ -87,4 +87,53 @@ class AttendanceStampTest extends TestCase
         ]);
     }
 
+    //退勤ボタンが機能する
+    public function test_user_can_stamp_clock_out()
+    {
+        //ステータスが出勤中のユーザーにログイン
+        $user = User::factory()->create();
+        $attendance = $user->attendances()->create([
+            'user_id' => $user->id,
+            'date' => Carbon::now()->toDateString(),
+            'clock_in' => Carbon::parse('08:00'),
+        ]);
+        $this->actingAs($user);
+
+        //ステータスが[出勤中]であり、[退勤]ボタンが表示されていることを確認
+        $response = $this->get('/attendance');
+        $response->assertSee('出勤中');
+        $response->assertSee('退勤');
+
+        //退勤ボタンを押下するとステータスが退勤済に変わる。データベースに打刻したユーザーのIDがあり、clock_outカラムにデータが存在することを確認
+        $response = $this->post('attendance/clockOut');
+        $response = $this->get('/attendance');
+        $response->assertSee('退勤済');
+        $response->assertDontSee('出勤');
+        $attendance = Attendance::where('user_id', $user->id)->first();
+        $this->assertNotNull($attendance->clock_out);
+    }
+
+    //
+    public function test_show_clock_out_time_at_attendance_list()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        //勤務外のステータスのユーザーが打刻画面にアクセス、出勤ボタンがあることを確認
+        $response = $this->get('/attendance');
+        $response->assertSee('勤務外');
+        $response->assertSee('出勤');
+
+        //出勤及び退勤ボタン押下後、勤怠一覧画面にアクセスし退勤打刻した時刻が表示されていることを確認
+        $response = $this->post('attendance/clockIn');
+        $response = $this->get('/attendance');
+        $this->travelForStamp();
+        $response = $this->post('/attendance/clockOut');
+        $response = $this->get('/attendance/list');
+        $response->assertSeeInOrder([
+            now()->isoFormat('M月D日'),
+            now()->format('H:i'),
+        ]);
+        $this->travelBack();
+    }
 }
