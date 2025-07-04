@@ -120,7 +120,7 @@ class StaffAttendanceListTest extends TestCase
         $response->assertDontSee([
             $attendance->clock_in->format('H:i'),
             $attendance->clock_out->format('H:i'),
-            $attendance->total_rest_formatted, //Attendanceモデルから呼び出し
+            $attendance->total_rest_formatted,
             $attendance->total_work_formatted,
         ]);
     }
@@ -146,6 +146,9 @@ class StaffAttendanceListTest extends TestCase
         $response = $this->get('/attendance/list');
         $response = $this->get('/attendance/' . $attendance->id);
         $response->assertViewIs('staff.attendance.detail');
-        $response->assertSee('勤怠詳細');
+        $response->assertSeeInOrder([
+            '勤怠詳細',
+            Carbon::parse(now())->isoFormat('M月D日'),
+        ]);
     }
 }

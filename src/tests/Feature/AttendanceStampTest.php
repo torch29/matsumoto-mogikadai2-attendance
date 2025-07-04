@@ -45,6 +45,17 @@ class AttendanceStampTest extends TestCase
         ]);
         $attendance = Attendance::where('user_id', $user->id)->first();
         $this->assertNotNull($attendance->clock_in);
+
+        //詳細画面でも打刻した時刻が表示されている
+        $response = $this->get('/attendance/' . $attendance->id);
+        $response->assertSeeInOrder(
+            [
+                $user->name,
+                $attendance->date->isoFormat('M月D日'),
+                '出勤・退勤',
+                $attendance->clock_in->format('H:i'),
+            ]
+        );
     }
 
     //出勤は一日一回のみできる（退勤済みの場合、出勤できない）
@@ -111,6 +122,17 @@ class AttendanceStampTest extends TestCase
         $response->assertDontSee('出勤');
         $attendance = Attendance::where('user_id', $user->id)->first();
         $this->assertNotNull($attendance->clock_out);
+
+        //詳細画面でも打刻した時刻が表示されている
+        $response = $this->get('/attendance/' . $attendance->id);
+        $response->assertSeeInOrder(
+            [
+                $user->name,
+                $attendance->date->isoFormat('M月D日'),
+                '出勤・退勤',
+                $attendance->clock_out->format('H:i'),
+            ]
+        );
     }
 
     //退勤時刻が勤怠一覧画面で確認できる

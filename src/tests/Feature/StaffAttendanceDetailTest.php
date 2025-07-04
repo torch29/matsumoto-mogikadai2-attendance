@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Rest;
 
 class StaffAttendanceDetailTest extends TestCase
 {
@@ -69,6 +70,7 @@ class StaffAttendanceDetailTest extends TestCase
         );
     }
 
+    //「出勤・退勤」欄に表示されている時間がログインユーザーの情報と一致している
     public function test_show_clock_in_and_clock_out_time_at_attendance_detail_page()
     {
         //当日に勤怠情報があるユーザーにログイン
@@ -85,7 +87,7 @@ class StaffAttendanceDetailTest extends TestCase
         ]);
         $this->actingAs($user);
 
-        //勤怠一覧画面から当日の詳細画面へ遷移し、登録された日付が表示されていることを確認
+        //勤怠一覧画面から当日の詳細画面へ遷移し、登録された出勤・退勤時刻が表示されていることを確認
         $response = $this->get('/attendance/list');
         $response = $this->get('/attendance/' . $attendance->id);
         $response->assertSeeInOrder(
@@ -95,6 +97,38 @@ class StaffAttendanceDetailTest extends TestCase
                 '出勤・退勤',
                 $attendance->clock_in->format('H:i'),
                 $attendance->clock_out->format('H:i'),
+            ]
+        );
+    }
+
+    //「休憩」欄に表示されている時間がログインユーザーの情報と一致する
+    public function test_show_rest_time_at_attendance_detail_page()
+    {
+        //当日に勤怠情報があるユーザーにログイン
+        $user = User::factory()->create();
+        $attendance = $user->attendances()->create([
+            'user_id' => $user->id,
+            'date' => Carbon::now()->toDateString(),
+            'clock_in' => Carbon::parse('08:00'),
+            'clock_out' => Carbon::parse('18:00'),
+        ]);
+        $attendance->rests()->create([
+            'rest_start' => Carbon::parse('11:30'),
+            'rest_end' => Carbon::parse('12:20'),
+        ]);
+        $this->actingAs($user);
+
+        //勤怠一覧画面から当日の詳細画面へ遷移し、登録された休憩自国が表示されていることを確認
+        $response = $this->get('/attendance/list');
+        $response = $this->get('/attendance/' . $attendance->id);
+        $rest = Rest::where('attendance_id', $attendance->id)->first();
+        $response->assertSeeInOrder(
+            [
+                $user->name,
+                $attendance->date->isoFormat('M月D日'),
+                '休憩',
+                $rest->rest_start->format('H:i'),
+                $rest->rest_end->format('H:i'),
             ]
         );
     }

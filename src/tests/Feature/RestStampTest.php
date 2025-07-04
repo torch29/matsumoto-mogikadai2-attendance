@@ -25,7 +25,7 @@ class RestStampTest extends TestCase
         $this->travel(15)->seconds();
     }
 
-    //休憩ボタンが機能する
+    //休憩入ボタンが機能する
     public function test_user_can_stamp_rest_start()
     {
         //ステータスが出勤中のユーザーにログイン
@@ -33,7 +33,7 @@ class RestStampTest extends TestCase
         $attendance = $user->attendances()->create([
             'user_id' => $user->id,
             'date' => Carbon::now()->toDateString(),
-            'clock_in' => Carbon::parse('08:00'),
+            'clock_in' => Carbon::parse('07:00'),
         ]);
         $this->actingAs($user);
 
@@ -48,6 +48,17 @@ class RestStampTest extends TestCase
         $response->assertSee('休憩中');
         $rest = Rest::where('attendance_id', $attendance->id)->first();
         $this->assertNotNull($rest->rest_start);
+
+        //詳細画面でも打刻した時刻が表示されている
+        $response = $this->get('/attendance/' . $attendance->id);
+        $response->assertSeeInOrder(
+            [
+                $user->name,
+                $attendance->date->isoFormat('M月D日'),
+                '休憩',
+                $rest->rest_start->format('H:i'),
+            ]
+        );
     }
 
     //休憩は一日に何回もできる
@@ -57,7 +68,7 @@ class RestStampTest extends TestCase
         $user->attendances()->create([
             'user_id' => $user->id,
             'date' => Carbon::now()->toDateString(),
-            'clock_in' => Carbon::parse('08:00'),
+            'clock_in' => Carbon::parse('07:00'),
         ]);
         $this->actingAs($user);
 
@@ -81,7 +92,7 @@ class RestStampTest extends TestCase
         $attendance = $user->attendances()->create([
             'user_id' => $user->id,
             'date' => Carbon::now()->toDateString(),
-            'clock_in' => Carbon::parse('08:00'),
+            'clock_in' => Carbon::parse('07:00'),
         ]);
         $this->actingAs($user);
 
@@ -98,6 +109,17 @@ class RestStampTest extends TestCase
         $this->travelBack();
         $rest = Rest::where('attendance_id', $attendance->id)->first();
         $this->assertNotNull($rest->rest_end);
+
+        //詳細画面でも打刻した時刻が表示されている
+        $response = $this->get('/attendance/' . $attendance->id);
+        $response->assertSeeInOrder(
+            [
+                $user->name,
+                $attendance->date->isoFormat('M月D日'),
+                '休憩',
+                $rest->rest_end->format('H:i'),
+            ]
+        );
     }
 
     //休憩戻は一日に何回でも可能
@@ -107,7 +129,7 @@ class RestStampTest extends TestCase
         $user->attendances()->create([
             'user_id' => $user->id,
             'date' => Carbon::now()->toDateString(),
-            'clock_in' => Carbon::parse('08:00'),
+            'clock_in' => Carbon::parse('07:00'),
         ]);
         $this->actingAs($user);
 
@@ -132,10 +154,10 @@ class RestStampTest extends TestCase
     {
         //勤務中のユーザーにログイン
         $user = User::factory()->create();
-        $user->attendances()->create([
+        $attendance = $user->attendances()->create([
             'user_id' => $user->id,
             'date' => Carbon::now()->toDateString(),
-            'clock_in' => Carbon::parse('08:00'),
+            'clock_in' => Carbon::parse('07:00'),
         ]);
         $this->actingAs($user);
 
@@ -154,6 +176,15 @@ class RestStampTest extends TestCase
                 ('0:10'), //休憩合計時間10分間のため0:10と表記される
             ]
         );
+
+        $rests = $attendance->rests()->get();
+        //詳細画面でも打刻した時刻が表示されている
+        $response = $this->get('/attendance/' . $attendance->id);
+        foreach ($rests as $rest) {
+            if ($rest->rest_start) {
+                $response->assertSee($rest->rest_start->format('H:i'));
+            }
+        }
         $this->travelBack();
     }
 }
