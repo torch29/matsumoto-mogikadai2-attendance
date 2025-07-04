@@ -19,6 +19,12 @@ class AttendanceStampTest extends TestCase
 
     use RefreshDatabase;
 
+    private function travelForStamp(): void
+    {
+        //アプリで打刻間隔に10秒以上必要としているため、15秒進める
+        $this->travel(15)->seconds();
+    }
+
     //出勤ボタンが機能する
     public function test_user_can_stamp_clock_in()
     {
@@ -80,4 +86,5 @@ class AttendanceStampTest extends TestCase
             now()->format('H:i'),
         ]);
     }
+
 }
