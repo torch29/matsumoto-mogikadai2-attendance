@@ -18,7 +18,7 @@ class AttendanceSeeder extends Seeder
      */
     public function run()
     {
-        //[2, 3, 4, 5, 6]
+        //user.id [2～6]
         $users = User::whereBetween('id', [2, 6])->pluck('id')->toArray();
         //直近15日程度
         $dates = collect(range(0, 14))
@@ -26,7 +26,7 @@ class AttendanceSeeder extends Seeder
             ->shuffle();
         $faker = Faker::create('ja_JP');
 
-        //使用されたdate+user_idの組み合わせ
+        //使用されたdate+user_idの組み合わせ、後で重複をスキップするために定義
         $usedPairs = [];
         $count = 0;
         $max = 30; //ダミーデータの作成件数
@@ -44,11 +44,11 @@ class AttendanceSeeder extends Seeder
                 'date' => $date,
             ]);
 
-            //休憩データの追加
+            //ここから休憩データの追加
             $clockIn = Carbon::parse($attendance->clock_in);
             $clockOut = Carbon::parse($attendance->clock_out);
 
-            $restCount = rand(0, 2); //1勤務あたり0～2回休憩
+            $restCount = rand(0, 2); //1勤務あたり0～2回休憩取得
             $canRestStart = Carbon::parse($clockIn); //最初の休憩可能時刻
 
             for ($i = 0; $i < $restCount; $i++) {
