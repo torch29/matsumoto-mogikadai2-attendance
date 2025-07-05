@@ -19,7 +19,7 @@ class StaffAttendanceDetailTest extends TestCase
 
     use RefreshDatabase;
 
-    //勤怠詳細画面の「名前」がログインユーzぁの氏名になっている
+    //勤怠詳細画面の「名前」がログインユーザの氏名になっている
     public function test_show_users_own_name_at_attendance_detail_page()
     {
         //当日に勤怠情報があるユーザーにログイン
