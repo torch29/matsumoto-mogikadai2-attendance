@@ -91,10 +91,11 @@ class AttendanceStampTest extends TestCase
         //出勤ボタンを押下後、勤怠一覧画面にアクセスし出勤打刻した時刻が表示されていることを確認
         $response = $this->post('attendance/clockIn');
         $response = $this->get('/attendance/list');
+        $attendance = Attendance::where('user_id', $user->id)->first();
         $response->assertSee(now()->format('H:i'));
         $response->assertSeeInOrder([
-            now()->isoFormat('M月D日'),
-            now()->format('H:i'),
+            $attendance->date->isoFormat('M月D日'),
+            $attendance->clock_in->format('H:i'),
         ]);
     }
 
@@ -152,9 +153,10 @@ class AttendanceStampTest extends TestCase
         $this->travelForStamp();
         $response = $this->post('/attendance/clockOut');
         $response = $this->get('/attendance/list');
+        $attendance = Attendance::where('user_id', $user->id)->first();
         $response->assertSeeInOrder([
-            now()->isoFormat('M月D日'),
-            now()->format('H:i'),
+            $attendance->date->isoFormat('M月D日'),
+            $attendance->clock_out->format('H:i'),
         ]);
         $this->travelBack();
     }

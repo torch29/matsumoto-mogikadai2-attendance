@@ -30,7 +30,6 @@ class AttendanceDisplayTest extends TestCase
         $now = Carbon::now();
 
         $response->assertSee($now->isoFormat('Y年 M月D日（ddd）'));
-        //$response->assertSee($now->format('H:i'));
     }
 
     //勤務外の場合、ステータスに[勤務外]と表示される
