@@ -72,4 +72,83 @@ class StaffInformationListTest extends TestCase
             $attendance->total_work_formatted,
         ]);
     }
+
+    //「前月」を押下したときに前月の情報が表示される
+    public function test_show_previous_month_when_click_previous_month_link_at_attendance_list_for_admin()
+    {
+        //前月に勤怠情報のある職員を作成
+        $staff = User::factory()->create();
+        $previousMonth = Carbon::now()->subMonthNoOverflow(1)->toDateString();
+        $attendance = $staff->attendances()->create([
+            'user_id' => $staff->id,
+            'date' => $previousMonth,
+            'clock_in' => '08:00',
+            'clock_out' => '18:00',
+        ]);
+
+        //管理者としてログイン
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $this->actingAs($admin);
+
+        //スタッフ別勤怠一覧画面にアクセスし、前月の日付と前月に登録された勤怠情報が表示されていることを確認
+        $response = $this->get('/admin/staff/list');
+        $response = $this->get(route('admin.attendances.list-by-staff', ['id' => $staff->id, 'date' => $previousMonth]));
+        $response->assertSeeInOrder([
+            $staff->name . 'さんの勤怠',
+            Carbon::parse($previousMonth)->isoFormat('M月D日（ddd）'),
+            $attendance->clock_in->format('H:i'),
+            $attendance->clock_out->format('H:i'),
+            $attendance->total_work_formatted,
+        ]);
+    }
+
+    //「翌月」を押下したときに、翌月の情報が表示される
+    public function test_show_next_month_when_click_next_month_link_at_attendance_list_for_admin()
+    {
+        //勤怠情報のある職員を作成
+        $staff = User::factory()->create();
+        $attendance = $this->createAttendanceData($staff);
+        $nextMonth = Carbon::now()->addMonthNoOverflow(1)->toDateString();
+
+        //管理者としてログイン
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $this->actingAs($admin);
+
+        //スタッフ別勤怠一覧画面にアクセスし、勤怠データが表示されていないことと、翌月のの日付が表示されていることを確認
+        $response = $this->get('/admin/staff/list');
+        $response = $this->get(route('admin.attendances.list-by-staff', ['id' => $staff->id, 'date' => $nextMonth]));
+        $response->assertSeeInOrder([
+            $staff->name . 'さんの勤怠',
+            Carbon::parse($nextMonth)->isoFormat('M月D日（ddd）'),
+        ]);
+        $response->assertDontSee([
+            $attendance->clock_in->format('H:i'),
+            $attendance->clock_out->format('H:i'),
+            $attendance->total_work_formatted,
+        ]);
+    }
+
+    //スタッフ別勤怠一覧画面から「詳細」を押下すると、該当の勤怠詳細画面に遷移する
+    public function test_admin_can_transition_detail_page_when_click_detail_link_at_attendance_list()
+    {
+        //勤怠情報のある職員を作成
+        $staff = User::factory()->create();
+        $attendance = $this->createAttendanceData($staff);
+
+        //管理者としてログイン
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $this->actingAs($admin);
+
+        //スタッフ別勤怠一覧画面から詳細画面へ遷移し、勤怠情報が表示されていることを確認
+        $response = $this->get('/admin/staff/list');
+        $response = $this->get('/admin/attendance/' . $attendance->id);
+        $response->assertViewIs('admin.attendance.detail');
+        $response->assertSeeInOrder([
+            $staff->name,
+            $attendance->date->isoFormat('Y年'),
+            $attendance->date->isoFormat('M月D日'),
+            $attendance->clock_in->format('H:i'),
+            $attendance->clock_out->format('H:i'),
+        ]);
+    }
 }
