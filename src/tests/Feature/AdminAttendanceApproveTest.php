@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Attendance;
 
 class AdminAttendanceApproveTest extends TestCase
 {
@@ -29,10 +30,10 @@ class AdminAttendanceApproveTest extends TestCase
         ]);
     }
 
-    //職員が修正したいデータを送信して申請する際の、デフォルトデータの設定
-    private function postCorrectionRequest(array $overrides = [])
+    //職員の修正申請データを作成
+    private function createAttendanceCorrectionData(Attendance $attendance)
     {
-        $defaultData = [
+        return $attendance->attendanceCorrections()->create([
             'corrected_clock_in' => '08:15',
             'corrected_clock_out' => '18:00',
             'rest_corrections' => [
@@ -42,29 +43,37 @@ class AdminAttendanceApproveTest extends TestCase
                 ],
             ],
             'note' => '申請のテスト',
-        ];
-
-        $requestData = array_replace_recursive($defaultData, $overrides);
-        return $this->post('correction_request', $requestData);
+        ]);
     }
 
-    //管理者は、スタッフ一覧画面にて全職員の氏名とメールアドレスを確認できる
+    //管理者用 修正申請一覧の承認待ち欄に、承認待ちのデータが表示されている
     public function test_admin_can_check_all_staffs_information()
     {
-        //職員を3人作成
+        //職員と修正申請データをそれぞれ3人分作成
         $staffMembers = User::factory()->count(3)->create();
+        $corrections = [];
+        foreach ($staffMembers as $staff) {
+            $attendance = $this->createAttendanceData($staff);
+            $attendanceCorrection = $this->createAttendanceCorrectionData($attendance);
+            $corrections[] = ['staff' => $staff, 'correction' => $attendanceCorrection];
+        }
 
         //管理者としてログイン
         $admin = User::factory()->create(['is_admin' => 1]);
         $this->actingAs($admin);
 
-        //スタッフ一覧ページにアクセスし、全職員の氏名とメールアドレスが表示されていることを確認
-        $response = $this->get('/admin/staff/list');
-        $response->assertViewIs('admin.staff.list');
-        $response->assertSee('スタッフ一覧');
-        foreach ($staffMembers as $staff) {
-            $response->assertSee($staff->name);
-            $response->assertSee($staff->email);
+        //修正申請一覧ページにアクセスし、職員の名前と申請理由が[承認待ち]欄に表示されていることを確認
+        $response = $this->get('/admin/stamp_correction_request/list');
+        $response->assertViewIs('admin.request.list');
+        foreach ($corrections as $correction) {
+            $response->assertSee($correction['staff']->name);
+            $response->assertSee($correction['correction']->note);
         }
+        $response->assertSeeInOrder([
+            '状態',
+            '承認待ち',
+            $corrections[0]['staff']->name,
+            $corrections[1]['staff']->name,
+        ]);
     }
 }
