@@ -127,7 +127,7 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
         $attendance = $this->createAttendanceData($user);
         $this->actingAs($user);
 
-        //勤怠詳細画面にアクセスし、休憩開始時間を退勤時間より後の時刻に設定して修正申請すると、指定のバリデーションメッセージが表示される
+        //勤怠詳細画面にアクセスし、休憩終了時間を退勤時間より後の時刻に設定して修正申請すると、指定のバリデーションメッセージが表示される
         $response = $this->get('/attendance/' . $attendance->id);
         $response = $this->postCorrectionRequest([
             'attendance_id' => $attendance->id,
@@ -160,6 +160,4 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
             'note' => '備考を記入してください',
         ]);
     }
-
-
 }
