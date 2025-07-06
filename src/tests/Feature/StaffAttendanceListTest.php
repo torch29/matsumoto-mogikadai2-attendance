@@ -126,7 +126,7 @@ class StaffAttendanceListTest extends TestCase
     }
 
     //「詳細」を押下すると、その日の勤怠詳細画面に遷移する
-    public function test_move_detail_page_when_click_detail_link_at_attendance_list()
+    public function test_transition_detail_page_when_click_detail_link_at_attendance_list()
     {
         //当日に勤怠情報があるユーザーにログイン
         $user = User::factory()->create();
