@@ -13,6 +13,7 @@ services:
 
   php:
     build: ./docker/php
+    user: "1000:1000"
     volumes:
       - ./src:/var/www/
 
@@ -48,3 +49,11 @@ services:
       - "1025:1025"
     environment:
         MH_STORAGE: memory
+
+  chromedriver:
+    image: seleniarm/standalone-chromium:latest
+    ports:
+      - "4444:4444"
+    shm_size: '2gb'
+    depends_on:
+      - nginx
