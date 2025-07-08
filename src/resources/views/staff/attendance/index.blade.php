@@ -6,12 +6,6 @@
 
 @section('content')
 <div class="main__content-wrapper">
-    {{-- 確認用　あとで消す　後で--}}
-    <div class="check">ログイン中のID：<span>{{ Auth::id() }}</span>
-    </div>
-    <div class="check"><span>{{ Auth::user()->name }}</span>　さん</div>
-    <div class="check">is_admin:<span>{{ $user->is_admin }}</span> （※1=true=admin, 0=false=従業員）</div>
-    {{-- 確認用ここまで　あとで消す　後で --}}
     <div class="main__content">
         @if (session('error'))
         <div class="item__alert">

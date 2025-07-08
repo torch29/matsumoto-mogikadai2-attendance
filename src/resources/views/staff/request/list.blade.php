@@ -20,7 +20,6 @@
             </li>
         </ul>
     </div>
-    一般職員：自分だけ　{{-- あとで消す --}}
     <div class="request-table__wrapper">
         <table class="request-table">
             <tr class="request-table__row">

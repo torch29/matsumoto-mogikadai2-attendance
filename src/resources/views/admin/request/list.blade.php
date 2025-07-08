@@ -20,7 +20,6 @@
             </li>
         </ul>
     </div>
-    管理者：全職員の申請　{{-- あとで消す --}}
     <div class="request-table__wrapper">
         <table class="request-table">
             <tr class="request-table__row">
@@ -31,7 +30,6 @@
                 <th class="request-table__heading">申請日時</th>
                 <th class=" request-table__heading">詳細</th>
             </tr>
-            is_admin == true : {{ Auth::user()->is_admin ? 1 : 0 }}
             @foreach( $stampCorrectionRecords as $correction )
             <tr class="request-table__row">
                 <td class="request-table__data">{{ $correction['status'] }}</td>
