@@ -40,7 +40,7 @@
                 <td class="attendance-table__data">{{ $attendance['clock_in'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['clock_out'] }}</td>
                 <td class="attendance-table__data">{{ $attendance['total_rest_formatted'] }}</td>
-                <td class="attendance-table__data">{{ $attendance['total_work_formatted'] }}</td>
+                <td class="attendance-table__data {{ $attendance['total_work_formatted'] >= '9:00' ? 'overtime' : '' }}">{{ $attendance['total_work_formatted'] }}</td>
                 <td class="attendance-table__data"><a href="/admin/attendance/{{ $attendance['id'] }}">詳細</a></td>
             </tr>
             @endforeach
