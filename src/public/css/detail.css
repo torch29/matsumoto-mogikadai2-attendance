@@ -61,11 +61,6 @@ body {
     border-radius: 5px;
     padding-left: 5px;
 }
-.approve-table__input,
-.approve-table__textarea {
-    border: none;
-    outline: none;
-}
 
 .detail-table__textarea,
 .approve-table__textarea {
@@ -74,6 +69,15 @@ body {
     margin: 10px 0;
     border: #E1E1E1 solid 1px;
     border-radius: 5px;
+}
+
+.approve-table__input,
+.approve-table__textarea {
+    border: none;
+    outline: none;
+}
+.approve-table__textarea {
+    resize: none;
 }
 
 .detail-form__button,
