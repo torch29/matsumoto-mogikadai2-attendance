@@ -76,11 +76,12 @@ Route::middleware(['auth', 'verified', 'adminOnly'])->group(function () {
         Route::get('/stamp_correction_request/list', [AttendanceCorrectionController::class, 'index'])->name('admin.correction_requests.list');
         //申請承認画面の表示
         Route::get('/stamp_correction_request/approve/{id}', [AttendanceCorrectionController::class, 'showApprove'])->name('admin.showApprove');
-        //詳細画面からボタン押下にて修正の申請をする
+        //詳細画面からボタン押下にて直接修正する
         Route::post('/correction', [AttendanceCorrectionController::class, 'adminCorrection']);
+        //職員の申請を承認する
         Route::post('/approve', [AttendanceCorrectionController::class, 'approve']);
         //CSV出力
-        Route::post('/export/{id}', [AdminController::class, 'exportCsv']);
+        Route::get('/export/{id}', [AdminController::class, 'exportCsv']);
     });
 });
 

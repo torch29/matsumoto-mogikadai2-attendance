@@ -23,8 +23,22 @@ class AdminController extends Controller
         $targetDate = $request->date
             ? Carbon::parse($request->date)->startOfDay()
             : Carbon::today();
+        /*
         $attendances = Attendance::whereDate('date', $targetDate)
             ->with(['user', 'rests'])
+            ->get();
+        */
+
+        $staffMembers = User::with(['attendances' => function ($query) use ($targetDate) {
+            $query->where('date', $targetDate);
+        }])
+            ->where('is_admin', 0) //管理者を除外する
+            ->leftJoin('attendances', function ($join) use ($targetDate) {
+                $join->on('users.id', '=', 'attendances.user_id')
+                    ->where('attendances.date', '=', $targetDate);
+            })
+            ->orderByRaw('attendances.clock_in IS NULL') //打刻がない人は後に
+            ->select('users.*') //Userのカラムのみ取得する
             ->get();
 
         //前日と翌日を取得
@@ -33,7 +47,9 @@ class AdminController extends Controller
 
         $attendanceRecords = [];
 
-        foreach ($attendances as $attendance) {
+        foreach ($staffMembers as $staff) {
+            $attendance = $staff->attendances->first();
+
             $clockIn = optional($attendance)->clock_in;
             $clockOut = optional($attendance)->clock_out;
             $clockInFormatted = optional($attendance)->clock_in_formatted;
@@ -50,7 +66,7 @@ class AdminController extends Controller
 
             //viewファイルに渡すための設定
             $attendanceRecords[] = [
-                'name' => $attendance->user->name,
+                'name' => $staff->name,
                 'id' => optional($attendance)->id,
                 'clock_in' => $clockInFormatted,
                 'clock_out' => $clockOutFormatted,
@@ -142,18 +158,6 @@ class AdminController extends Controller
         return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 
-    /* もともとの管理者用詳細画面表示　あとで消す
-    public function showDetailForAdmin($id)
-    {
-        $user = Auth::user();
-        $attendance = Attendance::with('user', 'rests', 'attendanceCorrections.restCorrections')->findOrFail($id);
-
-        if ($user->is_admin) {
-            return view('admin.attendance.detail', compact('attendance'));
-        }
-    }
-        */
-
     //勤怠一覧画面からCSV出力
     public function exportCsv(Request $request, $id)
     {
@@ -181,11 +185,11 @@ class AdminController extends Controller
         $callback = function () use ($attendances, $staffName) {
             $stream = fopen('php://output', 'w');
             fputs($stream, "\xEF\xBB\xBF");
-            fputcsv($stream, ['職員名：' . $staffName]);
-            fputcsv($stream, ['日付', '出勤', '退勤', '休憩', '合計']);
-
+            fputcsv($stream, ['職員名', '日付', '出勤', '退勤', '休憩', '合計']);
+            fputcsv($stream, [$staffName]);
             foreach ($attendances as $attendance) {
                 fputcsv($stream, [
+                    '',
                     $attendance->date->format('Y/m/d'),
                     optional($attendance->clock_in)->format('H:i'),
                     optional($attendance->clock_out)->format('H:i'),

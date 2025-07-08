@@ -52,7 +52,7 @@
             </tr>
             @endforeach
         </table>
-        <form action="/admin/export/{{ $staff->id }}" method="post">
+        <form action="/admin/export/{{ $staff->id }}" method="get">
             @csrf
             <div class="export-button">
                 <button class="export-button--submit">CSV出力</button>
