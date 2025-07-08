@@ -93,6 +93,9 @@ body {
     font-weight: bold;
     padding: 3px 30px 3px 0px;
 }
+.overtime {
+    color: #C12020;
+}
 
 .table__data--none,
 .table__data--none:visited {
