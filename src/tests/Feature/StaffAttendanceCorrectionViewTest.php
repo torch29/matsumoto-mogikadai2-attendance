@@ -177,8 +177,10 @@ class StaffAttendanceCorrectionViewTest extends TestCase
         $response->assertViewIs('staff.attendance.detail');
         $response->assertSeeInOrder([
             $user->name,
-            $attendance->corrected_clock_in,
-            $attendance->corrected_clock_out,
+            $correction->corrected_clock_in->isoFormat('H:mm'),
+            $correction->corrected_clock_out->isoFormat('H:mm'),
+            $correction->restCorrections->first()->corrected_rest_start->isoFormat('H:mm'),
+            $correction->restCorrections->first()->corrected_rest_end->isoFormat('H:mm'),
             '*承認待ちのため修正はできません。',
         ]);
     }
