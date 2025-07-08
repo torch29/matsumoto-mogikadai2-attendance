@@ -6,11 +6,11 @@
 
 @section('content')
 <div class="list__content">
-    {{-- 従業員でログイン時。自分のみ --}}
+    {{-- 従業員でログイン時。自分のデータのみを月次表示する --}}
     <div class="list__title">
         <h3>勤怠一覧</h3>
     </div>
-    ※一般職員（{{ Auth::id() }}：{{ Auth::user()->name }}）でログイン中 {{-- あとで消す --}}
+
     <div class="list__guide-area">
         <div class="list__guide-link">
             <a href="{{ url('/attendance/list?date=' . $previousMonth) }}">

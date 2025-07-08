@@ -118,16 +118,7 @@
                     </td>
                 </tr>
             </table>
-            @if ($errors->any())
-            <div class="error__message">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-            {{ $latestCorrection ? $latestCorrection->approve_status : 'なし' }}
+
             @if ( $latestCorrection && $latestCorrection->approve_status === 'pending' )
             <div class="detail__status-message">*承認待ちのため修正はできません。</div>
             @else
