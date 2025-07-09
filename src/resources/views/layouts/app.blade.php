@@ -17,6 +17,8 @@
     <!-- 年月のみ表示用month-picker-pluginの読み込み -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+    <!-- fontawesome読み込み -->
+    <script src="https://kit.fontawesome.com/29c005e54d.js" crossorigin="anonymous"></script>
 </head>
 
 <body>

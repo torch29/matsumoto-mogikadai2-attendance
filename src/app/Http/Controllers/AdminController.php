@@ -186,16 +186,19 @@ class AdminController extends Controller
             $stream = fopen('php://output', 'w');
             fputs($stream, "\xEF\xBB\xBF");
             fputcsv($stream, ['職員名', '日付', '出勤', '退勤', '休憩', '合計']);
-            fputcsv($stream, [$staffName]);
+
+            $isFirst = true;
+
             foreach ($attendances as $attendance) {
                 fputcsv($stream, [
-                    '',
+                    $isFirst ? $staffName : '', //最初の1回だけ名前を表示する
                     $attendance->date->format('Y/m/d'),
                     optional($attendance->clock_in)->format('H:i'),
                     optional($attendance->clock_out)->format('H:i'),
                     $attendance->total_rest_formatted,
                     $attendance->total_work_formatted,
                 ]);
+                $isFirst = false;
             }
 
             fclose($stream);
