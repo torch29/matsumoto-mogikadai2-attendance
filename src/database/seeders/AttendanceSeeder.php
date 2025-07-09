@@ -20,8 +20,27 @@ class AttendanceSeeder extends Seeder
     {
         //user.id [2～6]
         $users = User::whereBetween('id', [2, 6])->pluck('id')->toArray();
-        //直近15日程度
-        $dates = collect(range(0, 14))
+
+        $todayAttendance1 = Attendance::factory()->create([
+            'user_id' => 4,
+            'date' => today(),
+            'clock_in' => '07:50',
+            'clock_out' => '18:00',
+        ]);
+        $rest1 = Rest::factory()->create([
+            'attendance_id' => $todayAttendance1->id,
+            'rest_start' => '11:30',
+            'rest_end' => '12:20',
+        ]);
+        $todayAttendance2 = Attendance::factory()->create([
+            'user_id' => 5,
+            'date' => today(),
+            'clock_in' => '10:00',
+        ]);
+
+
+        //直近20日程度
+        $dates = collect(range(1, 20))
             ->map(fn($i) => Carbon::today()->subDays($i))
             ->shuffle();
         $faker = Faker::create('ja_JP');
@@ -29,7 +48,7 @@ class AttendanceSeeder extends Seeder
         //使用されたdate+user_idの組み合わせ、後で重複をスキップするために定義
         $usedPairs = [];
         $count = 0;
-        $max = 30; //ダミーデータの作成件数
+        $max = 40; //ダミーデータの作成件数
 
         while ($count < $max) {
             $date = $dates->random();
