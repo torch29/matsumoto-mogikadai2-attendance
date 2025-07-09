@@ -18,7 +18,7 @@ class AttendanceSeeder extends Seeder
      */
     public function run()
     {
-        //user.id [2～6]
+        //user.id [2～6] ※管理者以外の5名を指定
         $users = User::whereBetween('id', [2, 6])->pluck('id')->toArray();
 
         $todayAttendance1 = Attendance::factory()->create([
@@ -36,6 +36,12 @@ class AttendanceSeeder extends Seeder
             'user_id' => 5,
             'date' => today(),
             'clock_in' => '10:00',
+        ]);
+        $subMonthAttendance = Attendance::factory()->create([
+            'user_id' => 2,
+            'date' => today()->subMonth(),
+            'clock_in' => '9:00',
+            'clock_out' => '17:30',
         ]);
 
 
