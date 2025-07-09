@@ -16,9 +16,12 @@
                 {{-- route('admin.attendances.list-by-date', ['date' => $previousMonth]) --}}
             </a>
         </div>
-        <span><input type="text" id="monthPicker" class="month-selector" value="{{ $selectDate->format('Y/m') }}">
-            {{-- value="{{ \Carbon\Carbon::parse(request('date') ?? now())->format('Y/m') }}" --}}
-        </span>
+        <div class="list__current-date">
+            <i for="datepicker" class="fa-solid fa-calendar-days"></i>
+            <span><input type="text" id="monthPicker" class="month-selector" value="{{ $selectDate->format('Y/m') }}">
+                {{-- value="{{ \Carbon\Carbon::parse(request('date') ?? now())->format('Y/m') }}" --}}
+            </span>
+        </div>
         <div class="list__guide-link">
             <a href="{{ route('admin.attendances.list-by-staff', ['id' => $staff->id, 'date' => $nextMonth]) }}">
                 翌月<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">

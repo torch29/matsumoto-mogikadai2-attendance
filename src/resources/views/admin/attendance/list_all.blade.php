@@ -16,8 +16,11 @@
                 <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前日
             </a>
         </div>
-        <input type="text" id="datepicker" name="date" value="{{ $targetDate->isoFormat('Y/MM/DD') }}" class="date-selector">
-        {{-- $targetDate->isoFormat('Y/MM/DD') --}}
+        <div class="list__current-date">
+            <i for="datepicker" class="fa-solid fa-calendar-days"></i>
+            <input type="text" id="datepicker" name="date" value="{{ $targetDate->isoFormat('Y/MM/DD') }}" class="date-selector">
+            {{-- $targetDate->isoFormat('Y/MM/DD') --}}
+        </div>
         <div class="list__guide-link">
             <a href="{{ route('admin.attendances.list-by-date', ['date' => $nextDay]) }}">
                 翌日<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
