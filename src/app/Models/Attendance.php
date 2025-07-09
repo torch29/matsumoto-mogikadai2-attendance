@@ -140,4 +140,12 @@ class Attendance extends Model
     {
         return Carbon::parse($baseDate)->addMonthNoOverflow()->format('Y-m');
     }
+
+    public function getTotalWorkMinutesAttribute()
+    {
+        if ($this->total_work_seconds === null) {
+            return null;
+        }
+        return intdiv($this->total_work_seconds, 60);
+    }
 }

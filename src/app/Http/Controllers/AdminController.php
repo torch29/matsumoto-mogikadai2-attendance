@@ -140,9 +140,9 @@ class AdminController extends Controller
             $totalRestSeconds = optional($attendance)->total_rest_seconds;
             $totalRestFormatted = optional($attendance)->total_rest_formatted;
 
-            //実労働時間とそのフォーマットをAttendanceモデルから取得
-            $totalWorkHours = optional($attendance)->total_work_minutes;
+            //実労働時間のフォーマットをAttendanceモデルから取得
             $totalWorkFormatted = optional($attendance)->total_work_formatted;
+            $totalWorkHours = optional($attendance)->total_work_minutes;
 
             $attendanceRecords[] = [
                 'id' => optional($attendance)->id,
