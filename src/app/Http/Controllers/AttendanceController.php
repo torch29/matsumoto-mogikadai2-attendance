@@ -88,13 +88,6 @@ class AttendanceController extends Controller
         }
         $attendance = $attendances->firstOrFail();
 
-        /* もともとの職員用のコード　あとで消す
-        $attendance = Attendance::where('id', $id)
-            ->where('user_id', $user->id)
-            ->with('user', 'rests', 'attendanceCorrections.restCorrections')
-            ->firstOrFail();
-            */
-
         //該当の勤怠データがない場合エラーメッセージを表示して返す
         if (!$attendance) {
             return redirect()->back()->with('error', '該当のデータがありません。');
@@ -116,14 +109,6 @@ class AttendanceController extends Controller
                 ];
             })
             : $attendance->rests;
-
-        /*
-        $displayRecords[] = [
-            'displayClockIn' => optional($latestCorrection)->corrected_clock_in ?? $attendance->clock_in,
-            'displayClockOut' => optional($latestCorrection)->corrected_clock_out ?? $attendance->clock_out,
-            'displayNote' => optional($latestCorrection)->note ?? null,
-        ];
-        */
 
         $view = $user->is_admin
             ? 'admin.attendance.detail'
