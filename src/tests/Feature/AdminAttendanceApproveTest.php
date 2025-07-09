@@ -143,4 +143,53 @@ class AdminAttendanceApproveTest extends TestCase
             '承認',
         ]);
     }
+
+    //管理者による申請の承認処理が正しく行われる
+    public function test_admin_can_approve_data_requested_for_correction()
+    {
+        //職員と修正申請データを作成
+        $staff = User::factory()->create();
+        $attendance = $this->createAttendanceData($staff);
+        $attendanceCorrection = $this->createAttendanceCorrectionData($attendance);
+
+        //管理者としてログイン
+        $admin = User::factory()->create(['is_admin' => 1]);
+        $this->actingAs($admin);
+
+        //修正申請承認画面にアクセスし、申請されたデータを承認する
+        $response = $this->get('/admin/stamp_correction_request/approve/' . $attendanceCorrection->id);
+        $response = $this->post('/admin/approve', [
+            'correctionId' => $attendanceCorrection->id,
+            'approve_clock_in' => $attendanceCorrection->corrected_clock_in->format('H:i'),
+            'approve_clock_out' => $attendanceCorrection->corrected_clock_out,
+            'approve_rest_Start' =>
+            $attendanceCorrection->restCorrections->first()->corrected_rest_start,
+            'approve_rest_end' => $attendanceCorrection->restCorrections->first()->corrected_rest_end,
+        ]);
+        $response->assertRedirect('/admin/stamp_correction_request/approve/' . $attendanceCorrection->id);
+
+        //申請一覧画面にアクセスし、承認済み欄に承認したデータが表示されていることを確認
+        $response = $this->get('/admin/stamp_correction_request/list?tab=approved');
+        $response->assertViewIs('admin.request.list');
+        $response->assertSeeInOrder([
+            '状態',
+            '承認済み',
+            $staff->name,
+            $attendanceCorrection->note,
+        ]);
+        //各データベースにデータが保存されていることと、approve_statusがapprovedになっていることを確認
+        $this->assertDatabaseHas('attendances', [
+            'clock_in' => $attendanceCorrection->corrected_clock_in->format('H:i:s'),
+            'clock_out' => $attendanceCorrection->corrected_clock_out->format('H:i:s')
+        ]);
+        $this->assertDatabaseHas('rests', [
+            'attendance_id' => $attendance->id,
+            'rest_start' => $attendanceCorrection->restCorrections->first()->corrected_rest_start->format('H:i:s'),
+            'rest_end' => $attendanceCorrection->restCorrections->first()->corrected_rest_end->format('H:i:s'),
+        ]);
+        $this->assertDatabaseHas('attendance_corrections', [
+            'attendance_id' => $attendance->id,
+            'approve_status' => 'approved',
+        ]);
+    }
 }
