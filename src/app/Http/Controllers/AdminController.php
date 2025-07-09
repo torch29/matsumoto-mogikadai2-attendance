@@ -80,6 +80,7 @@ class AdminController extends Controller
         return view('admin.attendance.list_all', compact('attendanceRecords', 'targetDate', 'previousDay', 'nextDay'));
     }
 
+    //スタッフ一覧の表示
     public function showStaffList()
     {
         $staffLists = User::with('attendances')->get();
@@ -87,7 +88,7 @@ class AdminController extends Controller
         return view('admin.staff.list', compact('staffLists'));
     }
 
-    //選択された１人のスタッフの１ヶ月分の勤怠一覧を表示
+    //選択された１人のスタッフの１ヶ月分の勤怠一覧（スタッフ別勤怠一覧画面）を表示
     public function showAttendanceListByStaff(Request $request, $id)
     {
         if (!$id) {

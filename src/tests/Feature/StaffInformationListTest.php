@@ -42,6 +42,18 @@ class StaffInformationListTest extends TestCase
         //スタッフ一覧ページにアクセスし、全職員の氏名とメールアドレスが表示されていることを確認
         $response = $this->get('/admin/staff/list');
         $response->assertViewIs('admin.staff.list');
+        $response->assertViewHas('staffLists', function ($records) use ($staffMembers) {
+            foreach ($staffMembers as $i => $staff) {
+                if (
+                    $records[$i]->name !== $staff->name ||
+                    $records[$i]->email !== $staff->email
+                ) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        $response->assertViewHas('staffLists', fn($records) => count($staffMembers) === 3);
         $response->assertSee('スタッフ一覧');
         foreach ($staffMembers as $staff) {
             $response->assertSee($staff->name);
@@ -64,6 +76,12 @@ class StaffInformationListTest extends TestCase
         $response = $this->get('/admin/staff/list');
         $response = $this->get(route('admin.attendances.list-by-staff', ['id' => $staff->id]));
         $response->assertViewIs('admin.attendance.list_by_staff');
+        $response->assertViewHas('staff', function ($records) use ($staff) {
+            return $records->name === $staff->name
+                && $records->clock_in === $staff->clock_in
+                && $records->clock_out === $staff->clock_out
+                && $records->total_work_formatted === $staff->total_work_formatted;
+        });
         $response->assertSeeInOrder([
             $staff->name . 'さんの勤怠',
             now()->isoFormat('M月D日（ddd）'),
