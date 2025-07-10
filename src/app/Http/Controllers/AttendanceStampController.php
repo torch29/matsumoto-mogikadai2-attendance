@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Attendance;
@@ -37,7 +36,7 @@ class AttendanceStampController extends Controller
         return view('staff.attendance.index', compact('todayAttendance', 'today', 'user', 'status'));
     }
 
-    //出勤打刻
+    /* 出勤打刻 */
     public function clockIn()
     {
         $user = Auth::user();
@@ -60,7 +59,7 @@ class AttendanceStampController extends Controller
         return redirect('attendance');
     }
 
-    //退勤打刻
+    /* 退勤打刻 */
     public function clockOut()
     {
         $user = Auth::user();
@@ -88,7 +87,7 @@ class AttendanceStampController extends Controller
         return redirect('attendance');
     }
 
-    //休憩入打刻
+    /* 休憩入打刻 */
     public function restStart()
     {
         $user = Auth::user();
@@ -122,7 +121,7 @@ class AttendanceStampController extends Controller
         return redirect('attendance');
     }
 
-    //休憩戻打刻
+    /* 休憩戻打刻 */
     public function restEnd()
     {
         $user = Auth::user();
@@ -148,7 +147,7 @@ class AttendanceStampController extends Controller
         return redirect('attendance');
     }
 
-    //前回の打刻から指定した秒数経過していなければ打刻できない設定
+    /* 前回の打刻から指定した秒数経過していなければ打刻できない設定 */
     private function checkInterval(?Carbon $lastStampTime)
     {
         $minTime = 10; //秒数の設定
