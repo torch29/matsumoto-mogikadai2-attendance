@@ -8,6 +8,7 @@ use App\Models\Attendance;
 use App\Models\User;
 use App\Models\Rest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceSeeder extends Seeder
 {
@@ -21,17 +22,19 @@ class AttendanceSeeder extends Seeder
         //user.id [2～6] ※管理者以外の5名を指定
         $users = User::whereBetween('id', [2, 6])->pluck('id')->toArray();
 
-        $todayAttendance1 = Attendance::factory()->create([
-            'user_id' => 4,
-            'date' => today(),
-            'clock_in' => '07:50',
-            'clock_out' => '18:00',
-        ]);
-        $rest1 = Rest::factory()->create([
-            'attendance_id' => $todayAttendance1->id,
-            'rest_start' => '11:30',
-            'rest_end' => '12:20',
-        ]);
+        DB::transaction(function () {
+            $todayAttendance1 = Attendance::factory()->create([
+                'user_id' => 4,
+                'date' => today(),
+                'clock_in' => '07:50',
+                'clock_out' => '18:00',
+            ]);
+            $rest1 = Rest::factory()->create([
+                'attendance_id' => $todayAttendance1->id,
+                'rest_start' => '11:30',
+                'rest_end' => '12:20',
+            ]);
+        });
         $todayAttendance2 = Attendance::factory()->create([
             'user_id' => 5,
             'date' => today(),
