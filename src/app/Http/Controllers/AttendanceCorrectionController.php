@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Attendance;
@@ -14,7 +13,7 @@ use App\Http\Requests\AttendanceCorrectionRequest;
 
 class AttendanceCorrectionController extends Controller
 {
-    //申請一覧画面の表示
+    /* 申請一覧画面の表示 */
     public function index(Request $request)
     {
         //URLからtabパラメータの取得、デフォルトはpending
@@ -64,7 +63,7 @@ class AttendanceCorrectionController extends Controller
         return view($view, compact('stampCorrectionRecords', 'tab'));
     }
 
-    //一般職員による勤怠データの修正申請
+    /* 一般職員による勤怠データの修正申請 */
     public function store(AttendanceCorrectionRequest $request)
     {
         $attendance = Attendance::with('attendanceCorrections')->find($request->attendance_id);
@@ -96,7 +95,6 @@ class AttendanceCorrectionController extends Controller
 
             //休憩の修正は配列でくる
             $restCorrections = $request->input('rest_corrections', []);
-
             foreach ($restCorrections as $restCorrection) {
                 //「new（空）」の行をスキップする
                 if (empty($restCorrection['corrected_rest_start']) && empty($restCorrection['corrected_rest_end'])) {
@@ -118,7 +116,7 @@ class AttendanceCorrectionController extends Controller
         return redirect('/attendance/' . $request->attendance_id);
     }
 
-    //承認画面の表示
+    /* 承認画面の表示 */
     public function showApprove($id)
     {
         $attendanceCorrection = AttendanceCorrection::with('attendance.user', 'attendance.rests', 'restCorrections')->find($id);
@@ -126,7 +124,7 @@ class AttendanceCorrectionController extends Controller
         return view('admin.request.approve', compact('attendanceCorrection'));
     }
 
-    //管理者による修正申請の承認
+    /* 管理者による修正申請の承認 */
     public function approve(Request $request)
     {
         $correction = AttendanceCorrection::with('attendance', 'restCorrections')->find($request->correctionId);
@@ -142,7 +140,6 @@ class AttendanceCorrectionController extends Controller
             ]);
 
             $correction->attendance->rests()->delete();
-
             foreach ($correction->restCorrections as $restCorrection) {
                 Rest::create([
                     'attendance_id' => $correction->attendance->id,
@@ -158,11 +155,10 @@ class AttendanceCorrectionController extends Controller
         return redirect()->route('admin.showApprove',  ['id' => $correction->id]);
     }
 
-    //管理者による勤怠の修正～承認
+    /* 管理者による勤怠の修正～承認 */
     public function adminCorrection(AttendanceCorrectionRequest $request)
     {
         $attendanceCorrection = null;
-
         DB::transaction(function () use ($request, &$attendanceCorrection) {
             $attendance = Attendance::findOrFail($request->attendance_id);
 
@@ -193,7 +189,6 @@ class AttendanceCorrectionController extends Controller
             ]);
 
             $attendance->rests()->delete();
-
             foreach ($attendanceCorrection->restCorrections as $restCorrection) {
                 Rest::create([
                     'attendance_id' => $attendance->id,

@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use App\Models\Attendance;
-use App\Models\Rest;
 
 class AttendanceController extends Controller
 {
-    //職員自身の勤怠一覧表示
+    /* 職員自身の勤怠一覧表示 */
     public function showAttendanceList(Request $request)
     {
         $user = Auth::user();
@@ -75,7 +73,7 @@ class AttendanceController extends Controller
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 
-    //勤怠詳細画面の表示
+    /* 勤怠詳細画面の表示 */
     public function showDetail($id)
     {
         $user = Auth::user();

@@ -3,31 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-    //管理者ログイン画面表示
+    /*/ 管理者ログイン画面表示 */
     public function login()
     {
         return view('admin.auth.login');
     }
 
-    //「選ばれたある特定の一日」の全員の勤怠情報
+    /*「選ばれたある特定の一日」の全員の勤怠情報 */
     public function showAttendanceListAll(Request $request)
     {
         //日付のリクエストがあったらその日、なければ当日を表示
         $targetDate = $request->date
             ? Carbon::parse($request->date)->startOfDay()
             : Carbon::today();
-        /*
-        $attendances = Attendance::whereDate('date', $targetDate)
-            ->with(['user', 'rests'])
-            ->get();
-        */
 
         $staffMembers = User::with(['attendances' => function ($query) use ($targetDate) {
             $query->where('date', $targetDate);
@@ -80,7 +74,7 @@ class AdminController extends Controller
         return view('admin.attendance.list_all', compact('attendanceRecords', 'targetDate', 'previousDay', 'nextDay'));
     }
 
-    //スタッフ一覧の表示
+    /* スタッフ一覧の表示 */
     public function showStaffList()
     {
         $staffLists = User::with('attendances')->get();
@@ -88,7 +82,7 @@ class AdminController extends Controller
         return view('admin.staff.list', compact('staffLists'));
     }
 
-    //選択された１人のスタッフの１ヶ月分の勤怠一覧（スタッフ別勤怠一覧画面）を表示
+    /* 選択された１人のスタッフの１ヶ月分の勤怠一覧（スタッフ別勤怠一覧画面）を表示 */
     public function showAttendanceListByStaff(Request $request, $id)
     {
         if (!$id) {
@@ -159,7 +153,7 @@ class AdminController extends Controller
         return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 
-    //勤怠一覧画面からCSV出力
+    /* 勤怠一覧画面からCSV出力 */
     public function exportCsv(Request $request, $id)
     {
         $selectDate = $request->date

@@ -3,12 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
 use App\Models\Attendance;
-use App\Models\User;
-use App\Models\Rest;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Models\AttendanceCorrection;
 
 class AttendanceCorrectionListSeeder extends Seeder
@@ -20,7 +15,6 @@ class AttendanceCorrectionListSeeder extends Seeder
      */
     public function run()
     {
-
         $pendingCorrection = AttendanceCorrection::create([
             'attendance_id' => 10,
             'corrected_clock_in' => '09:15',
@@ -30,7 +24,6 @@ class AttendanceCorrectionListSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
         $approvedCorrection = AttendanceCorrection::create([
             'attendance_id' => 11,
             'corrected_clock_in' => '08:45',
