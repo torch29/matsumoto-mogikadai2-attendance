@@ -17,7 +17,7 @@ class CurrentDateTimeTest extends DuskTestCase
 
     use DatabaseMigrations;
 
-    //打刻画面にて現在の日時が表示されている
+    /* 打刻画面にて現在の日時が表示されている */
     public function testDisplayCurrentDateTime()
     {
         $staff = User::factory()->create();

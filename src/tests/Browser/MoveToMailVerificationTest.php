@@ -17,7 +17,7 @@ class MoveToMailVerificationTest extends DuskTestCase
 
     use DatabaseMigrations;
 
-    //「認証はこちらから」リンクをクリックすると、メール認証サイトに遷移する
+    /*「認証はこちらから」リンクをクリックすると、メール認証サイトに遷移する */
     public function testCanMoveEmailAuthenticationSiteWhenClickTheLink()
     {
         $this->browse(function (Browser $browser) {
