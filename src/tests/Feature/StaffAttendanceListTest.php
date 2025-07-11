@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -18,7 +17,7 @@ class StaffAttendanceListTest extends TestCase
 
     use RefreshDatabase;
 
-    //自分が行った勤怠情報が全て表示されている
+    /* 自分が行った勤怠情報が勤怠一覧画面に表示されている */
     public function test_show_own_attendance_data()
     {
         //勤怠情報が登録されたユーザーにログイン
@@ -37,18 +36,18 @@ class StaffAttendanceListTest extends TestCase
 
         //勤怠一覧画面にて、登録されている情報が順番通りに表示されている
         $response = $this->get('/attendance/list');
-        $totalWorkFormatted = optional($attendance)->total_work_formatted;
         $response->assertSeeInOrder(
             [
                 now()->isoFormat('M月D日'),
-                $attendance->clock_in->format('H:i'),
-                $attendance->clock_out->format('H:i'),
+                $attendance->clock_in_formatted,
+                $attendance->clock_out_formatted,
                 $attendance->total_rest_formatted, //Attendanceモデルから呼び出し
                 $attendance->total_work_formatted,
             ]
         );
     }
 
+    /* 勤怠一覧画面に遷移した際に当月が表示される */
     public function test_show_current_month_at_attendance_list()
     {
         //ユーザーにログイン
@@ -59,7 +58,7 @@ class StaffAttendanceListTest extends TestCase
         $response->assertSee(now()->isoFormat('M月'));
     }
 
-    //「前月」を押下したときに表示月の前月の情報が表示される
+    /*「前月」を押下したときに表示月の前月の情報が表示される */
     public function test_show_previous_month_when_click_previous_month_link_at_attendance_list()
     {
         //前月に勤怠情報が登録されたユーザーにログイン
@@ -91,7 +90,7 @@ class StaffAttendanceListTest extends TestCase
         );
     }
 
-    //「翌月」を押下したときに表示付きの翌月の情報が表示される
+    /*「翌月」を押下したときに表示付きの翌月の情報が表示される */
     public function test_show_next_month_when_click_next_month_link_at_attendance_list()
     {
         //当日に勤怠情報があるユーザーにログイン
@@ -125,7 +124,7 @@ class StaffAttendanceListTest extends TestCase
         ]);
     }
 
-    //「詳細」を押下すると、その日の勤怠詳細画面に遷移する
+    /*「詳細」を押下すると、その日の勤怠詳細画面に遷移する */
     public function test_transition_detail_page_when_click_detail_link_at_attendance_list()
     {
         //当日に勤怠情報があるユーザーにログイン

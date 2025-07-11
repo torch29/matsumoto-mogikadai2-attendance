@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -20,7 +19,7 @@ class AdminAttendanceApproveTest extends TestCase
     use RefreshDatabase;
 
     /* 下準備  */
-    //職員の勤怠情報を作成
+    /* 職員の勤怠情報を作成 */
     private function createAttendanceData(User $user)
     {
         return $user->attendances()->create([
@@ -31,7 +30,7 @@ class AdminAttendanceApproveTest extends TestCase
         ]);
     }
 
-    //職員の修正申請データを作成
+    /* 職員の修正申請データを作成 */
     private function createAttendanceCorrectionData(Attendance $attendance)
     {
         $correction = $attendance->attendanceCorrections()->create([
@@ -50,7 +49,7 @@ class AdminAttendanceApproveTest extends TestCase
     }
 
     /*  テストここから  */
-    //管理者用 修正申請一覧の承認待ち欄に、承認待ちのデータが表示されている
+    /* 管理者用 修正申請一覧の承認待ち欄に、承認待ちのデータが表示されている */
     public function test_admin_can_check_all_list_of_pending_correction_requests()
     {
         //職員と修正申請データをそれぞれ3人分作成
@@ -82,7 +81,7 @@ class AdminAttendanceApproveTest extends TestCase
         ]);
     }
 
-    //管理者用 修正申請一覧の承認済み欄に、承認済みの修正申請が表示されている
+    /* 管理者用 修正申請一覧の承認済み欄に、承認済みの修正申請が表示されている */
     public function test_admin_can_check_all_list_of_approved_correction_requests()
     {
         //職員と修正申請データをそれぞれ3人分作成
@@ -115,7 +114,7 @@ class AdminAttendanceApproveTest extends TestCase
         ]);
     }
 
-    //管理者用 修正申請承認画面において修正申請の内容が表示されている
+    /* 管理者用 修正申請承認画面において修正申請の内容が表示されている */
     public function test_show_correction_request_data_in_detail_page_for_admin()
     {
         //職員と修正申請データを作成
@@ -144,7 +143,7 @@ class AdminAttendanceApproveTest extends TestCase
         ]);
     }
 
-    //管理者による申請の承認処理が正しく行われる
+    /* 管理者による申請の承認処理が正しく行われる */
     public function test_admin_can_approve_data_requested_for_correction()
     {
         //職員と修正申請データを作成

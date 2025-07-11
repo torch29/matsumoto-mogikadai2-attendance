@@ -7,10 +7,7 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use App\Models\User;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Hash;
 
 class EmailVerifyTest extends TestCase
 {
@@ -22,7 +19,7 @@ class EmailVerifyTest extends TestCase
 
     use RefreshDatabase;
 
-    //ユーザーが会員登録した際、認証用のメールが送信される
+    /* ユーザーが会員登録した際、認証用のメールが送信される */
     public function test_user_receives_verification_email_after_register()
     {
         Notification::fake();
@@ -59,7 +56,7 @@ class EmailVerifyTest extends TestCase
         $response->assertSee('http://localhost:8025');
     }
 
-    //認証用メールのURLをクリックしてメール認証を完了すると、勤怠打刻画面に遷移する
+    /* 認証用メールのURLをクリックしてメール認証を完了すると、勤怠打刻画面に遷移する */
     public function test_user_is_authenticated_by_click_that_verification_email()
     {
         //メール認証されていないユーザーを作成

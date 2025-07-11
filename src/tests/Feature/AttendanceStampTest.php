@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -25,7 +24,7 @@ class AttendanceStampTest extends TestCase
         $this->travel(15)->seconds();
     }
 
-    //出勤ボタンが機能する
+    /* 出勤ボタンが機能する */
     public function test_user_can_stamp_clock_in()
     {
         $user = User::factory()->create();
@@ -40,14 +39,17 @@ class AttendanceStampTest extends TestCase
         $response = $this->post('attendance/clockIn');
         $response = $this->get('/attendance');
         $response->assertSee('出勤中');
+        $attendance = Attendance::where('user_id', $user->id)->first();
         $this->assertDatabaseHas('attendances', [
             'user_id' => $user->id,
+            'clock_in' => $attendance->clock_in->format('H:i:s'),
         ]);
-        $attendance = Attendance::where('user_id', $user->id)->first();
-        $this->assertNotNull($attendance->clock_in);
 
         //詳細画面でも打刻した時刻が表示されている
         $response = $this->get('/attendance/' . $attendance->id);
+        $response->assertViewHas('attendance', function ($records) use ($attendance) {
+            return $records->clock_in->format('H:i') === $attendance->clock_in->format('H:i');
+        });
         $response->assertSeeInOrder(
             [
                 $user->name,
@@ -58,7 +60,7 @@ class AttendanceStampTest extends TestCase
         );
     }
 
-    //出勤は一日一回のみできる（退勤済みの場合、出勤できない）
+    /* 出勤は一日一回のみできる（退勤済みの場合、出勤できない） */
     public function test_user_can_stamp_clock_in_only_once_a_day()
     {
         //退勤済みのユーザーを作成
@@ -75,9 +77,10 @@ class AttendanceStampTest extends TestCase
         $response = $this->get('/attendance');
         $response->assertSee('退勤済');
         $response->assertDontSee('出勤');
+        $response->assertDontSee('attendance/clockIn');
     }
 
-    //出勤時刻が勤怠一覧画面で確認できる
+    /* 出勤時刻が勤怠一覧画面で確認できる */
     public function test_show_clock_in_time_at_attendance_list()
     {
         $user = User::factory()->create();
@@ -92,14 +95,13 @@ class AttendanceStampTest extends TestCase
         $response = $this->post('attendance/clockIn');
         $response = $this->get('/attendance/list');
         $attendance = Attendance::where('user_id', $user->id)->first();
-        $response->assertSee(now()->format('H:i'));
         $response->assertSeeInOrder([
             $attendance->date->isoFormat('M月D日'),
-            $attendance->clock_in->format('H:i'),
+            $attendance->clock_in_formatted,
         ]);
     }
 
-    //退勤ボタンが機能する
+    /* 退勤ボタンが機能する */
     public function test_user_can_stamp_clock_out()
     {
         //ステータスが出勤中のユーザーにログイン
@@ -122,7 +124,10 @@ class AttendanceStampTest extends TestCase
         $response->assertSee('退勤済');
         $response->assertDontSee('出勤');
         $attendance = Attendance::where('user_id', $user->id)->first();
-        $this->assertNotNull($attendance->clock_out);
+        $this->assertDatabaseHas('attendances', [
+            'user_id' => $user->id,
+            'clock_out' => $attendance->clock_out->format('H:i:s'),
+        ]);
 
         //詳細画面でも打刻した時刻が表示されている
         $response = $this->get('/attendance/' . $attendance->id);
@@ -136,7 +141,7 @@ class AttendanceStampTest extends TestCase
         );
     }
 
-    //退勤時刻が勤怠一覧画面で確認できる
+    /* 退勤時刻が勤怠一覧画面で確認できる */
     public function test_show_clock_out_time_at_attendance_list()
     {
         $user = User::factory()->create();
