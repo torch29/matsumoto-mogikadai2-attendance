@@ -18,9 +18,8 @@
             </a>
         </div>
         <div class="list__current-date">
-            <i for="datepicker" class="fa-solid fa-calendar-days"></i>
+            <i for="datepicker" class="fa-regular fa-calendar-days"></i>
             <span><input type="text" id="monthPicker" class="month-selector" value="{{ $selectDate->format('Y/m') }}">
-                {{-- value="{{ \Carbon\Carbon::parse(request('date') ?? now())->format('Y/m') }}" --}}
             </span>
         </div>
         <div class=" list__guide-link">
