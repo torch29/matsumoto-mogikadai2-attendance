@@ -14,11 +14,6 @@ class AttendanceFactory extends Factory
      */
     public function definition()
     {
-        /* Seederにて指定
-        $date = $this->faker->dateTimeBetween('-1 week', 'now', 'Asia/Tokyo');
-        $clockIn = Carbon::createFromFormat('Y-m-d H:i', $date->format('Y-m-d') . ' ' . $this->faker->dateTimeBetween('8:30', '10:00')->format('H:i'));
-        */
-
         $clockIn = $this->faker->dateTimeBetween('8:30', '10:00');
         $clockOut = (clone $clockIn)->modify('+' . rand(4, 10) . ' hours +' . rand(0, 59) . ' minutes');
 
