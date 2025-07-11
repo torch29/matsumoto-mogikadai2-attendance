@@ -39,14 +39,14 @@ class Attendance extends Model
         'clock_out' => 'datetime',
     ];
 
-    // 指定されたスタッフの「本日分」の勤怠データ（休憩情報含む）を取得する
+    /* 指定されたスタッフの「本日分」の勤怠データ（休憩情報含む）を取得する */
     public function scopeTodayForUser($query, $userId)
     {
         return $query->where('user_id', $userId)
             ->whereDate('date', now()->toDateString())->with('rests');
     }
 
-    // 指定された「日付」の、全ユーザの勤怠一覧を取得
+    /* 指定された「日付」の、全ユーザの勤怠一覧を取得 */
     public function scopeTodayAttendance($query, $date)
     {
         return $query->with(['user', 'rest'])
@@ -54,7 +54,7 @@ class Attendance extends Model
             ->orderBy(User::select('name')->whereColumn('users.id', 'attendances.user_id'));
     }
 
-    //休憩時間の合計を計算
+    /* 休憩時間の合計を計算 */
     public function getTotalRestSecondsAttribute()
     {
         return $this->rests->sum(
@@ -67,7 +67,7 @@ class Attendance extends Model
         );
     }
 
-    //合計休憩時間のフォーマット
+    /* 合計休憩時間のフォーマット */
     public function getTotalRestFormattedAttribute()
     {
         $totalRestSeconds = $this->total_rest_seconds;
@@ -76,7 +76,7 @@ class Attendance extends Model
             : null;
     }
 
-    //実労働時間の合計を計算
+    /* 実労働時間の合計を計算 */
     public function getTotalWorkSecondsAttribute()
     {
         if (!$this->clock_in || !$this->clock_out) {
@@ -89,7 +89,7 @@ class Attendance extends Model
         return $workSeconds - $restSeconds;
     }
 
-    //実労働時間のフォーマット
+    /* 実労働時間のフォーマット */
     public function getTotalWorkFormattedAttribute()
     {
         $totalWorkMinutes = floor($this->total_work_seconds / 60); //秒を分に変換
@@ -109,7 +109,7 @@ class Attendance extends Model
         }
     }
 
-    //出勤時刻のフォーマット
+    /* 出勤時刻のフォーマット */
     public function getClockInFormattedAttribute()
     {
         if (!$this->clock_in) {
@@ -119,7 +119,7 @@ class Attendance extends Model
         return Carbon::parse($this->clock_in)->format('H:i');
     }
 
-    //退勤時刻のフォーマット
+    /* 退勤時刻のフォーマット */
     public function getClockOutFormattedAttribute()
     {
         if (!$this->clock_out) {
@@ -129,13 +129,13 @@ class Attendance extends Model
         return Carbon::parse($this->clock_out)->format('H:i');
     }
 
-    //前月を返す
+    /* 前月を返す */
     public static function getPreviousMonth($baseDate)
     {
         return Carbon::parse($baseDate)->subMonthNoOverflow()->format('Y-m');
     }
 
-    //翌月を返す
+    /* 翌月を返す */
     public static function getNextMonth($baseDate)
     {
         return Carbon::parse($baseDate)->addMonthNoOverflow()->format('Y-m');
