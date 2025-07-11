@@ -3,12 +3,10 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Attendance;
-use App\Models\AttendanceCorrection;
+
 
 class StaffAttendanceCorrectionRequestTest extends TestCase
 {
@@ -20,7 +18,7 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
 
     use RefreshDatabase;
 
-    //勤怠情報を作成
+    /* 勤怠情報を作成 */
     private function createAttendanceData(User $user)
     {
         return $user->attendances()->create([
@@ -31,7 +29,7 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
         ]);
     }
 
-    //職員が修正したいデータを送信して申請する際の、デフォルトデータの設定
+    /* 職員が修正したいデータを送信して申請する際の、デフォルトデータの設定 */
     private function postCorrectionRequest(array $overrides = [])
     {
         $defaultData = [
@@ -50,7 +48,8 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
         return $this->post('correction_request', $requestData);
     }
 
-    //出勤時間が退勤時間より後になっている場合、エラーメッセージが表示される
+    /* ここからテスト */
+    /* 出勤時間が退勤時間より後になっている場合、エラーメッセージが表示される */
     public function test_show_error_message_when_clock_in_time_is_after_clock_out_time_at_attendance_detail_page()
     {
         //勤怠情報があるユーザーにログイン
@@ -69,7 +68,7 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
         ]);
     }
 
-    //休憩開始時間が退勤時間より後の時刻になっている場合、エラーメッセージが表示される：既存の休憩を上書き修正して申請
+    /* 休憩開始時間が退勤時間より後の時刻になっている場合、エラーメッセージが表示される：既存の休憩を上書き修正して申請 */
     public function test_show_error_message_when_rest_start_overwrite_time_is_after_clock_out_time_at_attendance_detail_page()
     {
         //勤怠情報（休憩つき）があるユーザーにログイン
@@ -96,7 +95,7 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
         ]);
     }
 
-    //休憩開始時間が退勤時間より後の時刻になっている場合、エラーメッセージが表示される：休憩を新規入力して申請
+    /* 休憩開始時間が退勤時間より後の時刻になっている場合、エラーメッセージが表示される：休憩を新規入力して申請 */
     public function test_show_error_message_when_new_rest_start_time_is_after_clock_out_time_at_attendance_detail_page()
     {
         //勤怠情報があるユーザーにログイン
@@ -119,7 +118,7 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
         ]);
     }
 
-    //休憩終了時間が退勤時間より後の時刻になっている場合、エラーメッセージが表示される
+    /* 休憩終了時間が退勤時間より後の時刻になっている場合、エラーメッセージが表示される */
     public function test_show_error_message_when_rest_end_time_is_after_clock_out_time_at_attendance_detail_page()
     {
         //勤怠情報があるユーザーにログイン
@@ -143,7 +142,7 @@ class StaffAttendanceCorrectionRequestTest extends TestCase
         ]);
     }
 
-    //備考欄が未入力の場合エラーメッセージが表示される
+    /* 備考欄が未入力の場合エラーメッセージが表示される */
     public function test_show_error_message_when_correction_request_without_note_at_attendance_detail_page()
     {
         //勤怠情報があるユーザーにログイン

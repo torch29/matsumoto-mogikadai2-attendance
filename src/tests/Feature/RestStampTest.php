@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -25,7 +24,7 @@ class RestStampTest extends TestCase
         $this->travel(15)->seconds();
     }
 
-    //休憩入ボタンが機能する
+    /* 休憩入ボタンが機能する */
     public function test_user_can_stamp_rest_start()
     {
         //ステータスが出勤中のユーザーにログイン
@@ -42,15 +41,21 @@ class RestStampTest extends TestCase
         $response->assertSee('出勤中');
         $response->assertSee('休憩入');
 
-        //出勤ボタンを押下するとステータスが出勤中に変わる。データベースに打刻したユーザーのIDがあり、clock_inカラムにデータが存在することを確認
+        //休憩入ボタンを押下するとステータスが出勤中に変わる。データベースにデータが存在することを確認
         $response = $this->post('attendance/restStart');
         $response = $this->get('/attendance');
         $response->assertSee('休憩中');
         $rest = Rest::where('attendance_id', $attendance->id)->first();
-        $this->assertNotNull($rest->rest_start);
+        $this->assertDatabaseHas('rests', [
+            'attendance_id' => $attendance->id,
+            'rest_start' => $rest->rest_start->format('H:i:s'),
+        ]);
 
         //詳細画面でも打刻した時刻が表示されている
         $response = $this->get('/attendance/' . $attendance->id);
+        $response->assertViewHas('attendance', function ($records) use ($rest) {
+            return $records->rests->first()->rest_start->format('H:i:s') === $rest->rest_start->format('H:i:s');
+        });
         $response->assertSeeInOrder(
             [
                 $user->name,
@@ -61,7 +66,7 @@ class RestStampTest extends TestCase
         );
     }
 
-    //休憩は一日に何回もできる
+    /* 休憩は一日に何回もできる */
     public function test_user_can_stamp_rest_start_several_times_a_day()
     {
         $user = User::factory()->create();
@@ -85,7 +90,7 @@ class RestStampTest extends TestCase
         $this->travelBack();
     }
 
-    //休憩戻ボタンが機能する
+    /* 休憩戻ボタンが機能する */
     public function test_user_can_stamp_end_start()
     {
         $user = User::factory()->create();
@@ -103,15 +108,21 @@ class RestStampTest extends TestCase
         $this->travelForStamp();
         $response = $this->post('/attendance/restEnd');
 
-        //打刻画面にアクセスし、[休憩入]ボタンが表示されていることを確認
+        //打刻画面にアクセスし、[休憩入]ボタンが表示されていることを確認＆データベースにデータが存在する
         $response = $this->get('/attendance');
         $response->assertSee('出勤中');
         $this->travelBack();
         $rest = Rest::where('attendance_id', $attendance->id)->first();
-        $this->assertNotNull($rest->rest_end);
+        $this->assertDatabaseHas('rests', [
+            'attendance_id' => $attendance->id,
+            'rest_end' => $rest->rest_end->format('H:i:s'),
+        ]);
 
         //詳細画面でも打刻した時刻が表示されている
         $response = $this->get('/attendance/' . $attendance->id);
+        $response->assertViewHas('attendance', function ($records) use ($rest) {
+            return $records->rests->first()->rest_end->format('H:i:s') === $rest->rest_end->format('H:i:s');
+        });
         $response->assertSeeInOrder(
             [
                 $user->name,
@@ -122,7 +133,7 @@ class RestStampTest extends TestCase
         );
     }
 
-    //休憩戻は一日に何回でも可能
+    /* 休憩戻は一日に何回でも可能 */
     public function test_user_can_stamp_rest_end_several_times_a_day()
     {
         $user = User::factory()->create();
@@ -149,7 +160,7 @@ class RestStampTest extends TestCase
         $this->travelBack();
     }
 
-    //休憩時間が勤怠一覧画面で確認できる
+    /* 休憩時間が勤怠一覧画面で確認できる */
     public function test_show_rest_time_at_attendance_list()
     {
         //勤務中のユーザーにログイン
@@ -173,7 +184,7 @@ class RestStampTest extends TestCase
         $response->assertSeeInOrder(
             [
                 now()->isoFormat('M月D日'),
-                ('0:10'), //休憩合計時間10分間のため0:10と表記される
+                $attendance->total_rest_formatted,
             ]
         );
 

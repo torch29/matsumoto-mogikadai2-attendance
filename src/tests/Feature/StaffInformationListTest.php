@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -18,7 +17,7 @@ class StaffInformationListTest extends TestCase
 
     use RefreshDatabase;
 
-    //職員の勤怠情報を作成
+    /* 職員の勤怠情報を作成 */
     private function createAttendanceData(User $user)
     {
         return $user->attendances()->create([
@@ -29,7 +28,7 @@ class StaffInformationListTest extends TestCase
         ]);
     }
 
-    //管理者は、スタッフ一覧画面にて全職員の氏名とメールアドレスを確認できる
+    /* 管理者は、スタッフ一覧画面にて全職員の氏名とメールアドレスを確認できる */
     public function test_admin_can_check_all_staffs_information()
     {
         //職員を3人作成
@@ -61,7 +60,7 @@ class StaffInformationListTest extends TestCase
         }
     }
 
-    //選択した職員の「スタッフ別勤怠一覧画面」が表示される
+    /* 選択した職員の「スタッフ別勤怠一覧画面」が表示される */
     public function test_admin_can_check_attendance_list_of_selected_staff()
     {
         //勤怠情報のある職員を作成
@@ -85,13 +84,13 @@ class StaffInformationListTest extends TestCase
         $response->assertSeeInOrder([
             $staff->name . 'さんの勤怠',
             now()->isoFormat('M月D日（ddd）'),
-            $attendance->clock_in->format('H:i'),
-            $attendance->clock_out->format('H:i'),
+            $attendance->clock_in_formatted,
+            $attendance->clock_out_formatted,
             $attendance->total_work_formatted,
         ]);
     }
 
-    //「前月」を押下したときに前月の情報が表示される
+    /*「前月」を押下したときに前月の情報が表示される */
     public function test_show_previous_month_when_click_previous_month_link_at_attendance_list_for_admin()
     {
         //前月に勤怠情報のある職員を作成
@@ -114,13 +113,13 @@ class StaffInformationListTest extends TestCase
         $response->assertSeeInOrder([
             $staff->name . 'さんの勤怠',
             Carbon::parse($previousMonth)->isoFormat('M月D日（ddd）'),
-            $attendance->clock_in->format('H:i'),
-            $attendance->clock_out->format('H:i'),
+            $attendance->clock_in_formatted,
+            $attendance->clock_out_formatted,
             $attendance->total_work_formatted,
         ]);
     }
 
-    //「翌月」を押下したときに、翌月の情報が表示される
+    /*「翌月」を押下したときに、翌月の情報が表示される */
     public function test_show_next_month_when_click_next_month_link_at_attendance_list_for_admin()
     {
         //勤怠情報のある職員を作成
@@ -140,13 +139,13 @@ class StaffInformationListTest extends TestCase
             Carbon::parse($nextMonth)->isoFormat('M月D日（ddd）'),
         ]);
         $response->assertDontSee([
-            $attendance->clock_in->format('H:i'),
-            $attendance->clock_out->format('H:i'),
+            $attendance->clock_in_formatted,
+            $attendance->clock_out_formatted,
             $attendance->total_work_formatted,
         ]);
     }
 
-    //スタッフ別勤怠一覧画面から「詳細」を押下すると、該当の勤怠詳細画面に遷移する
+    /* スタッフ別勤怠一覧画面から「詳細」を押下すると、該当の勤怠詳細画面に遷移する */
     public function test_admin_can_transition_detail_page_when_click_detail_link_at_attendance_list()
     {
         //勤怠情報のある職員を作成
@@ -165,8 +164,8 @@ class StaffInformationListTest extends TestCase
             $staff->name,
             $attendance->date->isoFormat('Y年'),
             $attendance->date->isoFormat('M月D日'),
-            $attendance->clock_in->format('H:i'),
-            $attendance->clock_out->format('H:i'),
+            $attendance->clock_in_formatted,
+            $attendance->clock_out_formatted,
         ]);
     }
 }

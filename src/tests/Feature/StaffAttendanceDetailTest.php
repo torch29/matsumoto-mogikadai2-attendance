@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 use App\Models\User;
@@ -19,7 +18,7 @@ class StaffAttendanceDetailTest extends TestCase
 
     use RefreshDatabase;
 
-    //勤怠詳細画面の「名前」がログインユーザの氏名になっている
+    /* 勤怠詳細画面の「名前」がログインユーザの氏名になっている */
     public function test_show_users_own_name_at_attendance_detail_page()
     {
         //当日に勤怠情報があるユーザーにログイン
@@ -36,6 +35,9 @@ class StaffAttendanceDetailTest extends TestCase
         $response = $this->get('/attendance/list');
         $response = $this->get('/attendance/' . $attendance->id);
         $response->assertViewIs('staff.attendance.detail');
+        $response->assertViewHas('attendance', function ($record) use ($user) {
+            return $record->user->name === $user->name;
+        });
         $response->assertSeeInOrder(
             [
                 '名前',
@@ -44,7 +46,7 @@ class StaffAttendanceDetailTest extends TestCase
         );
     }
 
-    //勤怠詳細画面の「日付」が選択した日付になっている
+    /* 勤怠詳細画面の「日付」が選択した日付になっている */
     public function test_show_selected_date_at_attendance_detail_page()
     {
         //当日に勤怠情報があるユーザーにログイン
@@ -70,7 +72,7 @@ class StaffAttendanceDetailTest extends TestCase
         );
     }
 
-    //「出勤・退勤」欄に表示されている時間がログインユーザーの情報と一致している
+    /*「出勤・退勤」欄に表示されている時間がログインユーザーの情報と一致している */
     public function test_show_clock_in_and_clock_out_time_at_attendance_detail_page()
     {
         //当日に勤怠情報があるユーザーにログイン
@@ -90,18 +92,22 @@ class StaffAttendanceDetailTest extends TestCase
         //勤怠一覧画面から当日の詳細画面へ遷移し、登録された出勤・退勤時刻が表示されていることを確認
         $response = $this->get('/attendance/list');
         $response = $this->get('/attendance/' . $attendance->id);
+        $response->assertViewHas('attendance', function ($record) use ($attendance) {
+            return $record->clock_in_formatted === $attendance->clock_in_formatted
+                && $record->clock_out_formatted === $attendance->clock_out_formatted;
+        });
         $response->assertSeeInOrder(
             [
                 $user->name,
                 $attendance->date->isoFormat('M月D日'),
                 '出勤・退勤',
-                $attendance->clock_in->format('H:i'),
-                $attendance->clock_out->format('H:i'),
+                $attendance->clock_in_formatted,
+                $attendance->clock_out_formatted,
             ]
         );
     }
 
-    //「休憩」欄に表示されている時間がログインユーザーの情報と一致する
+    /*詳細画面の「休憩」欄に表示されている時間がログインユーザーの情報と一致する */
     public function test_show_rest_time_at_attendance_detail_page()
     {
         //当日に勤怠情報があるユーザーにログイン
@@ -122,6 +128,10 @@ class StaffAttendanceDetailTest extends TestCase
         $response = $this->get('/attendance/list');
         $response = $this->get('/attendance/' . $attendance->id);
         $rest = Rest::where('attendance_id', $attendance->id)->first();
+        $response->assertViewHas('attendance', function ($record) use ($rest) {
+            return $record->rests->first()->rest_start->format('H:i:s') === $rest->rest_start->format('H:i:s')
+                && $record->rests->first()->rest_end->format('H:i:s');
+        });
         $response->assertSeeInOrder(
             [
                 $user->name,
