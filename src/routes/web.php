@@ -7,7 +7,6 @@ use App\Http\Controllers\AttendanceStampController;
 use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Models\AttendanceCorrection;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
