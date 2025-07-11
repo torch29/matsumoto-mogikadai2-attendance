@@ -48,7 +48,7 @@ class AttendanceSeeder extends Seeder
         ]);
 
 
-        //直近20日程度
+        //前日以前の直近20日程度
         $dates = collect(range(1, 20))
             ->map(fn($i) => Carbon::today()->subDays($i))
             ->shuffle();

@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="list__content">
-    {{-- 管理者でログイン時の申請一覧表示 --}}
+    {{-- 管理者用：申請一覧表示 --}}
     <div class="list__title">
         <h3>申請一覧</h3>
     </div>

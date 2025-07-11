@@ -114,15 +114,6 @@
                     </td>
                 </tr>
             </table>
-            @if ($errors->any())
-            <div class="form__error">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
 
             @if ( $latestCorrection && $latestCorrection->approve_status === 'pending' )
             <div class="detail__status-message">*職員からの修正申請があります。先に承認してください。</div>
