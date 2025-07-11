@@ -1,4 +1,6 @@
-# coachtech 勤怠管理アプリ 制作中です
+# coachtech 勤怠管理アプリ
+
+シンプルなインターフェースの勤怠管理アプリ（課題）です。
 
 ## 環境構築
 
@@ -7,7 +9,7 @@
 以下を実行します
 
 1. ```
-   git clone git@github.com:torch29/matsumoto-mogikadai1.git
+   git clone git@github.com:torch29/matsumoto-mogikadai2-attendance.git
    ```
 2. docker desktop アプリを起動する
 
@@ -104,7 +106,10 @@
 
 ### テストの準備と実行
 
-PHPUnit によるテストを実行するための設定をします。
+テストを実行するための設定をします。
+
+- ほとんどのテストは PHPUnit によるテストで実行されます。
+- 勤怠打刻画面の時刻表示に JavaScript を用いているため、そのテストのために一部 Laravel Dusk を使用しています。
 
 1. MySQL コンテナから、テスト用のデータベースを作成します。
 
@@ -118,17 +123,18 @@ PHPUnit によるテストを実行するための設定をします。
    $ mysql -u root -p
    ```
 
-   ログインできたら、test データベースを作成します。（データベース名は任意です。）
+   ログインできたら、データベース test と dusk_test を作成します。（データベース名は任意です。）
 
    ```.mysql
    > CREATE DATABASE test;
+   > CREATE DATABASE dusk_test;
    > SHOW DATABASES;
 
    ```
 
-2. テスト用に.env ファイルを作成します。
+2. PHPUnit テスト用の.env ファイルを作成します。
 
-   PHP コンテナに入り、下記を実行して .env をコピーした .env.testing を作成
+   - PHP コンテナに入り、.env をコピーした .env.testing を作成
 
    ```
    $ cp .env .env.testing
@@ -137,7 +143,6 @@ PHPUnit によるテストを実行するための設定をします。
    `.env.testing` を開き、文頭の `APP_ENV` と `APP_KEY` を編集します。
 
    ```.env
-   APP_NAME=Laravel
    APP_ENV=test
    APP_KEY=
    ```
@@ -150,7 +155,33 @@ PHPUnit によるテストを実行するための設定をします。
    DB_PASSWORD=root
    ```
 
-3. アプリケーションキーの作成とマイグレーションを実行します
+3. Laravel Dusk テスト用の.env ファイルを作成します。
+
+   - PHP コンテナに入り、.env.testing をコピーした .env.dusk.local を作成
+
+   ```
+   $ cp .env.testing .env.dusk.local
+   ```
+
+   `.env.dusk.local` を開き、文頭の `APP_ENV` , `APP_KEY`, `APP_URL` を編集し、`DUSK_DRIVER_URL`を追記します。
+
+   ```.env
+   APP_ENV=dusk.local
+   APP_KEY=
+   APP_URL=http://nginx
+   DUSK_DRIVER_URL=http://chromedriver:4444
+
+   ```
+
+   さらに、.env.dusk.local にデータベースの接続情報を修正/記述します。
+
+   ```.env
+   DB_DATABASE=dusk_test
+   DB_USERNAME=root
+   DB_PASSWORD=root
+   ```
+
+4. アプリケーションキーの作成とマイグレーションを実行します
 
    ```
    $ php artisan key:generate --env=testing
@@ -164,23 +195,30 @@ PHPUnit によるテストを実行するための設定をします。
    $ php artisan migrate --env=testing
    ```
 
-4. テストの実行
+5. テストの実行
 
-   下記コマンドにて、登録されているテストが一括で実行されます
+   - 下記コマンドにて、登録されているテストが一括で実行されます
 
-   ```
-   $ php artisan test
-   ```
+     ```
+     $ php artisan test
+     ```
+
+   - テスト項目の「4. 日時取得機能」と、「16-2. 「認証はこちらから」ボタンを押下するとメール認証サイトに遷移する」は、
+     下記のコマンドにて実行します
+     ```
+     $ php artisan dusk
+     ```
 
 ## 使用技術
 
 - PHP 7.4.9
 - Laravel 8.83.8
 - MySQL 8.0.26
+- nginx 1.21.1
 - MailHog （会員登録時のメール確認用に使用）
 - PHPUnit
+- Laravel Dusk
 - JavaScript
-- nginx 1.21.1
 
 ## ER 図
 
@@ -192,25 +230,43 @@ ER 図は以下をご参照ください。
 
 ## 使用方法
 
-- トップページは、'/' です。
-- 使用方法を追記します
--
-- - インデントされた箇条書きリスト
-  -
+- 一般職員
+- - 勤怠の打刻（出勤・休憩入/戻・退勤）ができます。
+- - 自分の勤怠情報を一覧画面や詳細画面から確認できます。
+- - 修正したい勤怠情報がある場合は、管理者に修正を申請することができます。
 
-- シーディングにてダミーデータを作成すると、「テスト　ユーザー」という名前でログインすることが可能です。
+- 管理者
+- - 当日出勤している職員の勤怠一覧を確認できます。また、職員ごとの勤怠一覧や詳細も確認できます。
+- - 職員から申請された修正したい勤怠情報の一覧を確認し、承認することができます。
+- - 管理者が直接職員の勤怠情報を修正することもできます。
 
-  - テスト　ユーザーでログインすると、
-  - テスト　ユーザーのログイン情報は以下の通りです。
+- シーディングにて以下のダミーデータが作成されます。
 
-    ```
-     メールアドレス： test@example.com
-     パスワード： 12345678
-    ```
+1. ユーザー
+
+- - 管理者（管理者権限を持つ）
+
+  ```
+   メールアドレス： admin@example.com
+   パスワード： 12345678
+  ```
+
+- - テスト　一般職員
+
+  ```
+   メールアドレス： test@example.com
+   パスワード： 12345678
+  ```
+
+2. 勤怠に関する各種データ
+
+- - 職員の勤怠情報
+- - 職員による修正申請（承認待ち 3 件, 承認済み 3 件）
 
 ## URL
 
-- 勤怠管理アプリのトップページ：http://localhost/
+- 勤怠管理アプリ/管理者用ログインページ：http://localhost/admin/login
+- 勤怠管理アプリ/一般職員用ログインページ：http://localhost/login
 - phpMyAdmin：http://localhost:8080/
 - MailHog：http://localhost:8025  
   （会員登録後のボタンクリックからも遷移できます）
