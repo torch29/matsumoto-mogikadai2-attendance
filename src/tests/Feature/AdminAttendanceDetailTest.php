@@ -65,15 +65,15 @@ class AdminAttendanceDetailTest extends TestCase
         $response->assertViewHas('attendance', function ($records) use ($attendance) {
             return $records->user_id === $attendance->user_id
                 && $records->date->format('Y/m/d') === $attendance->date->format('Y/m/d')
-                && $records->clock_in->format('H:i') === $attendance->clock_in->format('H:i')
-                && $records->clock_out->format('H:i') === $attendance->clock_out->format('H:i');
+                && $records->clock_in_formatted === $attendance->clock_in_formatted
+                && $records->clock_out_formatted === $attendance->clock_out_formatted;
         });
         $response->assertSeeInOrder([
             $staff->name,
             $attendance->date->isoFormat('Y年'),
             $attendance->date->isoFormat('M月D日'),
-            $attendance->clock_in->format('H:i'),
-            $attendance->clock_out->format('H:i'),
+            $attendance->clock_in_formatted,
+            $attendance->clock_out_formatted,
         ]);
     }
 
