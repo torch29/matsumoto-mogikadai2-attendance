@@ -6,8 +6,6 @@
 
 ### Docker ビルド
 
-以下を実行します
-
 1. ```
    git clone git@github.com:torch29/matsumoto-mogikadai2-attendance.git
    ```
@@ -175,6 +173,7 @@
    ```
 
    docker-compose.yml に下記の設定が記載されていることを確認。なければ追記します。
+   ※もし追記する場合は Docker を再ビルドします。（chromediriver のイメージをビルド）
 
    ```yml
    chromedriver:
@@ -186,16 +185,10 @@
        - nginx
    ```
 
-   ※もしも 上記を修正した場合は Docker を再ビルドします。（chromediriver のイメージをビルド）
-
-   ```
-   docker-compose up -d --build
-   ```
-
 4. アプリケーションキーの作成とマイグレーションを実行します
 
    ```
-   $ php artisan key:generate --env=testing
+   $ php artisan key:generate
    ```
 
    ```
@@ -203,7 +196,7 @@
    ```
 
    ```
-   $ php artisan migrate --env=testing
+   $ php artisan migrate
    ```
 
 5. テストの実行
@@ -214,7 +207,7 @@
      $ php artisan test
      ```
 
-   - テスト項目の「4. 日時取得機能」と、「16-2. 「認証はこちらから」ボタンを押下するとメール認証サイトに遷移する」は、
+   - テスト項目の「4. 日時取得機能」と、「16-2. "認証はこちらから"ボタンを押下するとメール認証サイトに遷移する」は、
      下記のコマンドにて実行します
      ```
      $ php artisan dusk
@@ -232,10 +225,6 @@
 - JavaScript
 
 ## ER 図
-
-```
-ER 図は以下をご参照ください。
-```
 
 ![ER図](ER.drawio.png)
 
