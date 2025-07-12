@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use App\Http\Requests\LoginRequest;
 
 class AuthenticatedSessionController extends Controller

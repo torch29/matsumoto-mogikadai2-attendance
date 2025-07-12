@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-    /*/ 管理者ログイン画面表示 */
+    /* 管理者ログイン画面表示 */
     public function login()
     {
         return view('admin.auth.login');

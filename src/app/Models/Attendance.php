@@ -32,7 +32,7 @@ class Attendance extends Model
         'clock_out',
     ];
 
-    //指定した型に型変換
+    /* 指定した型に型変換 */
     protected $casts = [
         'date' => 'date',
         'clock_in' => 'datetime',
