@@ -23,6 +23,7 @@ class AttendanceSeeder extends Seeder
         $users = User::whereBetween('id', [2, 6])->pluck('id')->toArray();
 
         DB::transaction(function () {
+            //user.id=2（テスト 一般職員さん）以外の人を指定して当日の勤怠1件目（休憩付き）を作成
             $todayAttendance1 = Attendance::factory()->create([
                 'user_id' => 4,
                 'date' => today(),
@@ -35,11 +36,13 @@ class AttendanceSeeder extends Seeder
                 'rest_end' => '12:20',
             ]);
         });
+        //user.id=2（テスト 一般職員さん）以外の人を指定して当日の勤怠2件目（勤務中）を作成。
         $todayAttendance2 = Attendance::factory()->create([
             'user_id' => 5,
             'date' => today(),
             'clock_in' => '10:00',
         ]);
+        //user.id=2（テスト 一般職員さん）の先月の勤怠を１件は作成されることを保証
         $subMonthAttendance = Attendance::factory()->create([
             'user_id' => 2,
             'date' => today()->subMonth(),

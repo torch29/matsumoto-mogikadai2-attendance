@@ -34,6 +34,15 @@ class UserSeeder extends Seeder
             'is_admin' => 0,
         ]);
 
-        User::factory()->count(4)->create();
+        User::create([
+            'name' => '田中　愛子',
+            'email' => 'test2@example.com',
+            'password' => Hash::make('12345678'),
+            'email_verified_at' => now(),
+            'remember_token' => Str::random(10),
+            'is_admin' => 0,
+        ]);
+
+        User::factory()->count(3)->create();
     }
 }
