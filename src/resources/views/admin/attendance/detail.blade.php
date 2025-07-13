@@ -116,7 +116,7 @@
             </table>
 
             @if ( $latestCorrection && $latestCorrection->approve_status === 'pending' )
-            <div class="detail__status-message">*職員からの修正申請があります。先に承認してください。</div>
+            <div class="detail__status-message">*職員からの修正申請がきています。先に承認画面から承認してください。</div>
             @else
             <div class="detail-form__button">
                 <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">

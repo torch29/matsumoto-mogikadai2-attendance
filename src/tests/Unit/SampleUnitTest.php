@@ -13,7 +13,8 @@ class SampleUnitTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    /* Unitフォルダを維持するためのダミーテスト */
+    public function test_access_successfully()
     {
         $response = $this->get('/login');
 
