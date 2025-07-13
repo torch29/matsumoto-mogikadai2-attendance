@@ -89,9 +89,10 @@ class AttendanceSeeder extends Seeder
 
                 $restStart = Carbon::instance($faker->dateTimeBetween($canRestStart, $clockOut));
                 $restEnd = (clone $restStart)->addMinutes(rand(10, 50));
+                $latestRestEnd = (clone $clockOut)->subMinutes(10); //休憩終了時刻は退勤時刻の10分前を上限とする
 
-                if ($restEnd > $clockOut) {
-                    $restEnd = clone $clockOut;
+                if ($restEnd > $latestRestEnd) {
+                    $restEnd = clone $latestRestEnd;
                 }
 
                 Rest::factory()->create([
