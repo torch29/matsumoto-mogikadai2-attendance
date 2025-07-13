@@ -188,7 +188,8 @@
 4. アプリケーションキーの作成とマイグレーションを実行します
 
    ```
-   $ php artisan key:generate
+   $ php artisan key:generate --env=testing
+   $ php artisan key:generate --env=dusk.local
    ```
 
    ```
