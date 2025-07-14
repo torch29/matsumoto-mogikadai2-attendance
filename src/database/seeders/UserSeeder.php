@@ -42,5 +42,7 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(10),
             'is_admin' => 0,
         ]);
+
+        User::factory()->count(3)->create();
     }
 }

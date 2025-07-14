@@ -60,7 +60,7 @@ class AttendanceSeeder extends Seeder
         //使用されたdate+user_idの組み合わせ、後で重複をスキップするために定義
         $usedPairs = [];
         $count = 0;
-        $max = 40; //ダミーデータの作成件数
+        $max = 50; //ダミーデータの作成件数
 
         while ($count < $max) {
             $date = $seedingDates->random();
