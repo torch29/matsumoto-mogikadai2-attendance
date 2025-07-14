@@ -43,6 +43,11 @@ class UserSeeder extends Seeder
             'is_admin' => 0,
         ]);
 
-        User::factory()->count(3)->create();
+        for ($i = 3; $i <= 5; $i++) {
+
+            User::factory()->create([
+                'email' => 'test' . $i . '@example.com',
+            ]);
+        }
     }
 }
