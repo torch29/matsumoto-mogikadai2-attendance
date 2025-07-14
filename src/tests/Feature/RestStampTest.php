@@ -40,6 +40,7 @@ class RestStampTest extends TestCase
         $response = $this->get('/attendance');
         $response->assertSee('出勤中');
         $response->assertSee('休憩入');
+        $response->assertSee('attendance/restStart');
 
         //休憩入ボタンを押下するとステータスが出勤中に変わる。データベースにデータが存在することを確認
         $response = $this->post('attendance/restStart');
@@ -87,6 +88,7 @@ class RestStampTest extends TestCase
         //打刻画面にアクセスし、[休憩入]ボタンが表示されていることを確認
         $response = $this->get('/attendance');
         $response->assertSee('休憩入');
+        $response->assertSee('attendance/restStart');
         $this->travelBack();
     }
 
@@ -157,6 +159,7 @@ class RestStampTest extends TestCase
         //打刻画面にアクセスし[休憩戻]ボタンが表示されていることを確認
         $response = $this->get('/attendance');
         $response->assertSee('休憩戻');
+        $response->assertSee('attendance/restEnd');
         $this->travelBack();
     }
 
@@ -172,7 +175,7 @@ class RestStampTest extends TestCase
         ]);
         $this->actingAs($user);
 
-        //[休憩入]～[休憩戻]を打刻後、再度[休憩入]を打刻
+        //[休憩入]～[休憩戻]を打刻
         $response = $this->get('/attendance');
         $response = $this->post('attendance/restStart');
         $this->travel(10)->minutes(); //10分間の休憩を取得
