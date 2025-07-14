@@ -27,29 +27,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-    /*
-        // カレンダーを閉じたときの処理
-        onClose: function (selectedDates, dateStr, instance) {
-            // 日付が変更されていれば遷移する
-            const currentDate = getUrlParameter('date') || new Date().toISOString().split('T')[0].replace(/-/g, '/');
-            if (dateStr && dateStr !== currentDate) {
-                navigateToDate(dateStr);
-            }
-        }
-    });
-
-    // 日付入力フィールドでEnterキーが押されたときの処理
-    const dateInput = document.getElementById('datepicker');
-    if (dateInput) {
-        dateInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                const inputDate = e.target.value;
-                if (inputDate) {
-                    navigateToDate(inputDate);
-                }
-            }
-        })
-    }
-
-});
-*/
