@@ -22,8 +22,9 @@ class AttendanceSeeder extends Seeder
         //user.id [2～6] ※管理者以外の5名を指定
         $users = User::whereBetween('id', [2, 6])->pluck('id')->toArray();
 
+        //当日の勤怠データ。user.id=2（テスト 一般職員さん）以外の人を指定して作成。
         DB::transaction(function () {
-            //user.id=2（テスト 一般職員さん）以外の人を指定して当日の勤怠1件目（休憩付き）を作成
+            //当日の勤怠1件目（休憩付き）を作成
             $todayAttendance1 = Attendance::factory()->create([
                 'user_id' => 4,
                 'date' => today(),
@@ -36,13 +37,13 @@ class AttendanceSeeder extends Seeder
                 'rest_end' => '12:20',
             ]);
         });
-        //user.id=2（テスト 一般職員さん）以外の人を指定して当日の勤怠2件目（勤務中）を作成。
+        //user.id=2（テスト 一般職員さん）以外の人を指定し当日の勤怠2件目（勤務中）を作成。
         $todayAttendance2 = Attendance::factory()->create([
             'user_id' => 5,
             'date' => today(),
             'clock_in' => '10:00',
         ]);
-        //user.id=2（テスト 一般職員さん）の先月の勤怠を１件は作成されることを保証
+        //user.id=2（テスト 一般職員さん）の先月の勤怠が１件は作成されることを保証
         $subMonthAttendance = Attendance::factory()->create([
             'user_id' => 2,
             'date' => today()->subMonth(),
@@ -50,9 +51,8 @@ class AttendanceSeeder extends Seeder
             'clock_out' => '17:30',
         ]);
 
-
         //前日以前の直近20日程度
-        $dates = collect(range(1, 20))
+        $seedingDates = collect(range(1, 20))
             ->map(fn($i) => Carbon::today()->subDays($i))
             ->shuffle();
         $faker = Faker::create('ja_JP');
@@ -63,7 +63,7 @@ class AttendanceSeeder extends Seeder
         $max = 40; //ダミーデータの作成件数
 
         while ($count < $max) {
-            $date = $dates->random();
+            $date = $seedingDates->random();
             $user_id = collect($users)->random();
             $key = $date->toDateString() . '-' . $user_id;
 
