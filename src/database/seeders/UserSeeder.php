@@ -42,12 +42,5 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(10),
             'is_admin' => 0,
         ]);
-
-        for ($i = 3; $i <= 5; $i++) {
-
-            User::factory()->create([
-                'email' => 'test' . $i . '@example.com',
-            ]);
-        }
     }
 }
