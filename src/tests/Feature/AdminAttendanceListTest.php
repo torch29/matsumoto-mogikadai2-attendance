@@ -109,8 +109,8 @@ class AdminAttendanceListTest extends TestCase
         $response->assertSeeInOrder(
             [
                 Carbon::parse($previousDay)->isoFormat('Y年M月D日'),
-                $attendance->clock_in->format('H:i'),
-                $attendance->clock_out->format('H:i'),
+                $attendance->clock_in_formatted,
+                $attendance->clock_out_formatted,
                 $attendance->total_work_formatted,
             ]
         );
@@ -141,8 +141,8 @@ class AdminAttendanceListTest extends TestCase
         $response->assertSee(Carbon::parse($nextDay)->isoFormat('Y年M月D日'));
         $response->assertDontSee(
             [
-                $attendance->clock_in->format('H:i'),
-                $attendance->clock_out->format('H:i'),
+                $attendance->clock_in_formatted,
+                $attendance->clock_out_formatted,
                 $attendance->total_work_formatted,
             ]
         );
