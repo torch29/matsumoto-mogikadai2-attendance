@@ -28,6 +28,7 @@ class AttendanceDisplayTest extends TestCase
         $response = $this->get('/attendance');
         $now = Carbon::now();
 
+        //現在の年月日が表示される
         $response->assertSee($now->isoFormat('Y年 M月D日（ddd）'));
     }
 

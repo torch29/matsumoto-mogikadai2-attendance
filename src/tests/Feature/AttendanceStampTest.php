@@ -34,6 +34,7 @@ class AttendanceStampTest extends TestCase
         $response = $this->get('/attendance');
         $response->assertSee('勤務外');
         $response->assertSee('出勤');
+        $response->assertSee('attendance/clockIn');
 
         //出勤ボタンを押下するとステータスが出勤中に変わる。データベースに打刻したユーザーのIDがあり、clock_inカラムにデータが存在することを確認
         $response = $this->post('attendance/clockIn');
@@ -48,14 +49,14 @@ class AttendanceStampTest extends TestCase
         //詳細画面でも打刻した時刻が表示されている
         $response = $this->get('/attendance/' . $attendance->id);
         $response->assertViewHas('attendance', function ($records) use ($attendance) {
-            return $records->clock_in->format('H:i') === $attendance->clock_in->format('H:i');
+            return $records->clock_in_formatted === $attendance->clock_in_formatted;
         });
         $response->assertSeeInOrder(
             [
                 $user->name,
                 $attendance->date->isoFormat('M月D日'),
                 '出勤・退勤',
-                $attendance->clock_in->format('H:i'),
+                $attendance->clock_in_formatted,
             ]
         );
     }
@@ -117,6 +118,7 @@ class AttendanceStampTest extends TestCase
         $response = $this->get('/attendance');
         $response->assertSee('出勤中');
         $response->assertSee('退勤');
+        $response->assertSee('attendance/clockOut');
 
         //退勤ボタンを押下するとステータスが退勤済に変わる。データベースに打刻したユーザーのIDがあり、clock_outカラムにデータが存在することを確認
         $response = $this->post('attendance/clockOut');
@@ -136,7 +138,7 @@ class AttendanceStampTest extends TestCase
                 $user->name,
                 $attendance->date->isoFormat('M月D日'),
                 '出勤・退勤',
-                $attendance->clock_out->format('H:i'),
+                $attendance->clock_out_formatted,
             ]
         );
     }
@@ -161,7 +163,7 @@ class AttendanceStampTest extends TestCase
         $attendance = Attendance::where('user_id', $user->id)->first();
         $response->assertSeeInOrder([
             $attendance->date->isoFormat('M月D日'),
-            $attendance->clock_out->format('H:i'),
+            $attendance->clock_out_formatted,
         ]);
         $this->travelBack();
     }
