@@ -41,7 +41,7 @@ class StaffAttendanceListTest extends TestCase
                 now()->isoFormat('M月D日'),
                 $attendance->clock_in_formatted,
                 $attendance->clock_out_formatted,
-                $attendance->total_rest_formatted, //Attendanceモデルから呼び出し
+                $attendance->total_rest_formatted,
                 $attendance->total_work_formatted,
             ]
         );
@@ -82,9 +82,9 @@ class StaffAttendanceListTest extends TestCase
         $response->assertSeeInOrder(
             [
                 Carbon::parse($previousMonth)->isoFormat('M月D日'),
-                $attendance->clock_in->format('H:i'),
-                $attendance->clock_out->format('H:i'),
-                $attendance->total_rest_formatted, //Attendanceモデルから呼び出し
+                $attendance->clock_in_formatted,
+                $attendance->clock_out_formatted,
+                $attendance->total_rest_formatted,
                 $attendance->total_work_formatted,
             ]
         );
@@ -117,8 +117,8 @@ class StaffAttendanceListTest extends TestCase
             ]
         );
         $response->assertDontSee([
-            $attendance->clock_in->format('H:i'),
-            $attendance->clock_out->format('H:i'),
+            $attendance->clock_in_formatted,
+            $attendance->clock_out_formatted,
             $attendance->total_rest_formatted,
             $attendance->total_work_formatted,
         ]);
