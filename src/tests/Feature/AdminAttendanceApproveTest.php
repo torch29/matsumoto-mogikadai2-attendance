@@ -90,7 +90,7 @@ class AdminAttendanceApproveTest extends TestCase
         foreach ($staffMembers as $staff) {
             $attendance = $this->createAttendanceData($staff);
             $attendanceCorrection = $this->createAttendanceCorrectionData($attendance);
-            $attendanceCorrection->update(['approve_status' => 'approved']);
+            $attendanceCorrection->update(['approve_status' => 'approved']); //承認済み
             $corrections[] = ['staff' => $staff, 'correction' => $attendanceCorrection];
         }
 
@@ -131,7 +131,7 @@ class AdminAttendanceApproveTest extends TestCase
         $response->assertViewIs('admin.request.approve');
         $response->assertViewHas('attendanceCorrection', function ($correction) use ($attendanceCorrection) {
             return $correction->id === $attendanceCorrection->id
-                && $correction->corrected_clock_in == $attendanceCorrection->corrected_clock_in;
+                && $correction->corrected_clock_in->isoFormat('H:mm') === $attendanceCorrection->corrected_clock_in->isoFormat('H:mm');
         });
         $response->assertSeeInOrder([
             $staff->name,
