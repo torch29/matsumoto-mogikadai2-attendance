@@ -34,7 +34,7 @@ class StaffInformationListTest extends TestCase
         //職員を3人作成
         $staffMembers = User::factory()->count(3)->create();
 
-        //管理者としてログイン
+        //管理者を作成し管理者としてログイン
         $admin = User::factory()->create(['is_admin' => 1]);
         $this->actingAs($admin);
 

@@ -99,12 +99,12 @@ class UserAuthTest extends TestCase
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
-
+        //認証されていることと、データベースに登録されていることを確認
         $this->assertAuthenticated();
         $this->assertDatabaseHas('users', [
             'name' => 'Test User',
             'email' => 'dummy@example.com',
-            'is_admin' => 0,
+            'is_admin' => 0, //一般職員（0）として登録されている
         ]);
     }
 
