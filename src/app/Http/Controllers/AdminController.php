@@ -44,19 +44,10 @@ class AdminController extends Controller
         foreach ($staffMembers as $staff) {
             $attendance = $staff->attendances->first();
 
-            //休憩合計時間をAttendanceモデルから取得
-            $rests = optional($attendance)->rests ?? collect();
-
             //viewファイルに渡すための設定
             $attendanceRecords[] = [
                 'name' => $staff->name,
-                'id' => optional($attendance)->id,
-                'clock_in' => optional($attendance)->clock_in_formatted,
-                'clock_out' => optional($attendance)->clock_out_formatted,
-                'total_rest' => optional($attendance)->total_rest_seconds,
-                'total_rest_formatted' => optional($attendance)->total_rest_formatted,
-                'total_work_hours' => optional($attendance)->total_work_minutes,
-                'total_work_formatted' => optional($attendance)->total_work_formatted,
+                'attendance' => $attendance, //nullもしくはAttendanceモデル
             ];
         }
 
