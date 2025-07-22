@@ -44,30 +44,19 @@ class AdminController extends Controller
         foreach ($staffMembers as $staff) {
             $attendance = $staff->attendances->first();
 
-            $clockIn = optional($attendance)->clock_in;
-            $clockOut = optional($attendance)->clock_out;
-            $clockInFormatted = optional($attendance)->clock_in_formatted;
-            $clockOutFormatted = optional($attendance)->clock_out_formatted;
-
             //休憩合計時間をAttendanceモデルから取得
             $rests = optional($attendance)->rests ?? collect();
-            $totalRestSeconds = optional($attendance)->total_rest_seconds;
-            $totalRestFormatted = optional($attendance)->total_rest_formatted;
-
-            //実労働時間をAttendanceモデルから取得
-            $totalWorkHours = optional($attendance)->total_work_minutes;
-            $totalWorkFormatted = optional($attendance)->total_work_formatted;
 
             //viewファイルに渡すための設定
             $attendanceRecords[] = [
                 'name' => $staff->name,
                 'id' => optional($attendance)->id,
-                'clock_in' => $clockInFormatted,
-                'clock_out' => $clockOutFormatted,
-                'total_rest' => $totalRestSeconds,
-                'total_rest_formatted' => $totalRestFormatted,
-                'total_work_hours' => $totalWorkHours,
-                'total_work_formatted' => $totalWorkFormatted,
+                'clock_in' => optional($attendance)->clock_in_formatted,
+                'clock_out' => optional($attendance)->clock_out_formatted,
+                'total_rest' => optional($attendance)->total_rest_seconds,
+                'total_rest_formatted' => optional($attendance)->total_rest_formatted,
+                'total_work_hours' => optional($attendance)->total_work_minutes,
+                'total_work_formatted' => optional($attendance)->total_work_formatted,
             ];
         }
 
