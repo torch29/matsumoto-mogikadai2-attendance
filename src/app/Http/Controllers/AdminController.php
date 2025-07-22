@@ -44,11 +44,31 @@ class AdminController extends Controller
         foreach ($staffMembers as $staff) {
             $attendance = $staff->attendances->first();
 
+            /*
             //viewファイルに渡すための設定
             $attendanceRecords[] = [
                 'name' => $staff->name,
                 'attendance' => $attendance, //nullもしくはAttendanceモデル
             ];
+            */
+
+
+            if (!$attendance) {
+                $attendanceRecords[] = [
+                    'name' => $staff->name,
+                ];
+            } else {
+                $attendanceRecords[] = [
+                    'name' => $staff->name,
+                    'id' => $attendance->id,
+                    'clock_in' => $attendance->clock_in_formatted,
+                    'clock_out' => $attendance->clock_out_formatted,
+                    'total_rest' => $attendance->total_rest_seconds,
+                    'total_rest_formatted' => $attendance->total_rest_formatted,
+                    'total_work_formatted' => $attendance->total_work_formatted,
+                    'total_work_hours' => $attendance->total_work_minutes,
+                ];
+            }
         }
 
         return view('admin.attendance.list_all', compact('attendanceRecords', 'targetDate', 'previousDay', 'nextDay'));
