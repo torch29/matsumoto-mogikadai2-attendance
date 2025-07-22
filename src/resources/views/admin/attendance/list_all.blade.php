@@ -46,7 +46,7 @@
             <td class="attendance-table__data">{{ $attendance->total_rest_formatted }}</td>
             <td class="attendance-table__data {{ $attendance->total_work_hours >= 540 ? 'overtime' : '' }}">{{ $attendance->total_work_formatted }}</td>
             @if(!$attendance)
-            <td class="attendance-table__data">詳細</td>
+            <td class="attendance-table__data"></td>
             @else
             <td class="attendance-table__data"><a href="/admin/attendance/{{ $attendance->id }}">詳細</a></td>
             @endif
@@ -62,7 +62,7 @@
                 <td class="attendance-table__data">{{ optional($attendance['attendance'])->total_rest_formatted }}</td>
                 <td class="attendance-table__data {{ optional($attendance['attendance'])->total_work_minutes >= 540 ? 'overtime' : '' }}">{{ optional($attendance['attendance'])->total_work_formatted }}</td>
                 @if(!$attendance['attendance'])
-                <td class="attendance-table__data">詳細</td>
+                <td class="attendance-table__data"></td>
                 @else
                 <td class="attendance-table__data"><a href="/admin/attendance/{{ $attendance['attendance']->id }}">詳細</a></td>
                 @endif
