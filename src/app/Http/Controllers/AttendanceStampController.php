@@ -17,20 +17,8 @@ class AttendanceStampController extends Controller
         //当日の勤怠情報がある
         $todayAttendance = Attendance::todayForUser(auth()->id())->first();
 
-        //viewに渡すstatusの設定
-        $status = '勤務外'; //デフォルト
-        if ($todayAttendance) {
-            if ($todayAttendance->clock_out !== null) {
-                $status = '退勤済';
-            } else {
-                $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
-                if ($lastRest && $lastRest->rest_end === null) {
-                    $status = '休憩中';
-                } else {
-                    $status = '出勤中';
-                }
-            }
-        }
+        //viewに渡すstatusの設定をモデルから呼び出す
+        $status = $todayAttendance->current_status ?? '勤務外';
 
         return view('staff.attendance.index', compact('todayAttendance', 'today', 'status'));
     }

@@ -39,6 +39,23 @@ class Attendance extends Model
         'clock_out' => 'datetime',
     ];
 
+    /* viewで使われるstatusの設定 */
+    public function getCurrentStatusAttribute()
+    {
+        if (!$this->exists) {   // まだ勤怠レコードがない場合
+            return '勤務外';
+        }
+        if ($this->clock_out !== null) {
+            return '退勤済';
+        }
+        $lastRest = $this->rests()->orderByDesc('id')->first();
+        if ($lastRest && $lastRest->rest_end === null) {
+            return '休憩中';
+        }
+        return '出勤中';
+    }
+
+
     /* 指定されたスタッフの「本日分」の勤怠データ（休憩情報含む）を取得する */
     public function scopeTodayForUser($query, $userId)
     {
