@@ -11,7 +11,6 @@ class AttendanceStampController extends Controller
 {
     public function index()
     {
-        Carbon::setLocale('ja');
         $today = Carbon::now()->format("Y-m-d");
 
         //当日の勤怠情報がある
@@ -27,7 +26,6 @@ class AttendanceStampController extends Controller
     public function clockIn()
     {
         $user = Auth::user();
-        Carbon::setLocale('ja');
         $now = Carbon::now();
         $today = $now->toDateString();
 
@@ -50,7 +48,6 @@ class AttendanceStampController extends Controller
     public function clockOut()
     {
         $user = Auth::user();
-        Carbon::setLocale('ja');
         $now = Carbon::now();
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
@@ -78,7 +75,6 @@ class AttendanceStampController extends Controller
     public function restStart()
     {
         $user = Auth::user();
-        Carbon::setLocale('ja');
         $now = Carbon::now();
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
@@ -112,7 +108,6 @@ class AttendanceStampController extends Controller
     public function restEnd()
     {
         $user = Auth::user();
-        Carbon::setLocale('ja');
         $now = Carbon::now();
         $todayAttendance = Attendance::todayForUser($user->id)->first();
 
