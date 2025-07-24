@@ -11,12 +11,11 @@ class AttendanceStampController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
         Carbon::setLocale('ja');
         $today = Carbon::now()->format("Y-m-d");
 
         //当日の勤怠情報がある
-        $todayAttendance = Attendance::todayForUser($user->id)->first();
+        $todayAttendance = Attendance::todayForUser(auth()->id())->first();
 
         //viewに渡すstatusの設定
         $status = '勤務外'; //デフォルト
@@ -33,7 +32,7 @@ class AttendanceStampController extends Controller
             }
         }
 
-        return view('staff.attendance.index', compact('todayAttendance', 'today', 'user', 'status'));
+        return view('staff.attendance.index', compact('todayAttendance', 'today', 'status'));
     }
 
     /* 出勤打刻 */
