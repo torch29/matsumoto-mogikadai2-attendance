@@ -39,26 +39,17 @@ class AdminController extends Controller
         $previousDay = Carbon::parse($targetDate)->subDay()->toDateString();
         $nextDay = Carbon::parse($targetDate)->addDay()->toDateString();
 
-        $attendanceRecords = [];
+        $attendanceOfEachStaffMembers = [];
 
         foreach ($staffMembers as $staff) {
             $attendance = $staff->attendances->first();
 
-            /*
-            //viewファイルに渡すための設定
-            $attendanceRecords[] = [
-                'name' => $staff->name,
-                'attendance' => $attendance, //nullもしくはAttendanceモデル
-            ];
-            */
-
-
             if (!$attendance) {
-                $attendanceRecords[] = [
+                $attendanceOfEachStaffMembers[] = [
                     'name' => $staff->name,
                 ];
             } else {
-                $attendanceRecords[] = [
+                $attendanceOfEachStaffMembers[] = [
                     'name' => $staff->name,
                     'id' => $attendance->id,
                     'clock_in' => $attendance->clock_in_formatted,
@@ -71,7 +62,7 @@ class AdminController extends Controller
             }
         }
 
-        return view('admin.attendance.list_all', compact('attendanceRecords', 'targetDate', 'previousDay', 'nextDay'));
+        return view('admin.attendance.list_all', compact('attendanceOfEachStaffMembers', 'targetDate', 'previousDay', 'nextDay'));
     }
 
     /* スタッフ一覧の表示 */

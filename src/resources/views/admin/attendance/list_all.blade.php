@@ -37,8 +37,7 @@
                 <th class=" attendance-table__heading">詳細</th>
             </tr>
 
-
-            @foreach( $attendanceRecords as $attendance )
+            @foreach( $attendanceOfEachStaffMembers as $attendance )
             <tr class="attendance-table__row">
                 <td class="attendance-table__data">{{ $attendance['name'] }}</td>
                 <td class="attendance-table__data">{{ optional($attendance)['clock_in'] }}</td>
@@ -52,25 +51,6 @@
                 @endif
             </tr>
             @endforeach
-
-
-            {{--
-            @foreach( $attendanceRecords as $attendance )
-            <tr class="attendance-table__row">
-                <td class="attendance-table__data">{{ $attendance['name'] }}</td>
-            <td class="attendance-table__data">{{ optional($attendance['attendance'])->clock_in_formatted }}</td>
-            <td class="attendance-table__data">{{ optional($attendance['attendance'])->clock_out_formatted }}</td>
-            <td class="attendance-table__data">{{ optional($attendance['attendance'])->total_rest_formatted }}</td>
-            <td class="attendance-table__data {{ optional($attendance['attendance'])->total_work_minutes >= 540 ? 'overtime' : '' }}">{{ optional($attendance['attendance'])->total_work_formatted }}</td>
-            @if(!$attendance['attendance'])
-            <td class="attendance-table__data"></td>
-            @else
-            <td class="attendance-table__data"><a href="/admin/attendance/{{ $attendance['attendance']->id }}">詳細</a></td>
-            @endif
-            </tr>
-            @endforeach
-            --}}
-
         </table>
     </div>
     <script src="{{ asset('js/datepicker.js') }}"></script>
