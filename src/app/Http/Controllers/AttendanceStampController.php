@@ -30,7 +30,7 @@ class AttendanceStampController extends Controller
         $today = $now->toDateString();
 
         //当日の勤怠情報があるか
-        $todayAttendance = Attendance::todayForUser($user->id)->first();
+        $todayAttendance = Attendance::todayForUser(auth()->id())->first();
 
         //当日に出勤情報がなければ出勤打刻する
         if (!$todayAttendance) {
@@ -47,9 +47,8 @@ class AttendanceStampController extends Controller
     /* 退勤打刻 */
     public function clockOut()
     {
-        $user = Auth::user();
         $now = Carbon::now();
-        $todayAttendance = Attendance::todayForUser($user->id)->first();
+        $todayAttendance = Attendance::todayForUser(auth()->id())->first();
 
         $minIntervalResult = $this->checkInterval(optional($todayAttendance)->clock_in);
         if ($minIntervalResult) {
@@ -74,9 +73,8 @@ class AttendanceStampController extends Controller
     /* 休憩入打刻 */
     public function restStart()
     {
-        $user = Auth::user();
         $now = Carbon::now();
-        $todayAttendance = Attendance::todayForUser($user->id)->first();
+        $todayAttendance = Attendance::todayForUser(auth()->id())->first();
 
         $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
         //まだ一度も休憩に入っていないか、前の休憩が終了している場合、新しく休憩に入ることができる
@@ -107,9 +105,8 @@ class AttendanceStampController extends Controller
     /* 休憩戻打刻 */
     public function restEnd()
     {
-        $user = Auth::user();
         $now = Carbon::now();
-        $todayAttendance = Attendance::todayForUser($user->id)->first();
+        $todayAttendance = Attendance::todayForUser(auth()->id())->first();
 
         $lastRest = $todayAttendance->rests()->orderByDesc('id')->first();
         $minIntervalResult = $this->checkInterval(optional($lastRest)->rest_start);
