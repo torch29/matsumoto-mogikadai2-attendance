@@ -44,30 +44,22 @@ class AttendanceController extends Controller
         foreach ($dates as $date) {
             $attendance = $attendances[$date->toDateString()] ?? null;
 
-            $clockIn = optional($attendance)->clock_in;
-            $clockOut = optional($attendance)->clock_out;
-            $clockInFormatted = optional($attendance)->clock_in_formatted;
-            $clockOutFormatted = optional($attendance)->clock_out_formatted;
-
-            //休憩合計時間とそのフォーマットをAttendanceモデルから取得
-            $rests = optional($attendance)->rests ?? collect();
-            $totalRestSeconds = optional($attendance)->total_rest_seconds;
-            $totalRestFormatted = optional($attendance)->total_rest_formatted;
-
-            //実労働時間とそのフォーマットをAttendanceモデルから取得
-            $totalWorkHours = optional($attendance)->total_work_minutes;
-            $totalWorkFormatted = optional($attendance)->total_work_formatted;
-
-            $attendanceRecords[] = [
-                'id' => optional($attendance)->id,
-                'date' => $date->isoFormat('M月D日（ddd）'),
-                'clock_in' => $clockInFormatted,
-                'clock_out' => $clockOutFormatted,
-                'total_rest' => $totalRestSeconds,
-                'total_rest_formatted' => $totalRestFormatted,
-                'total_work_hours' => $totalWorkHours,
-                'total_work_formatted' => $totalWorkFormatted,
-            ];
+            if (!$attendance) {
+                $attendanceRecords[] = [
+                    'date' => $date->isoFormat('M月D日（ddd）'),
+                ];
+            } else {
+                $attendanceRecords[] = [
+                    'id' => $attendance->id,
+                    'date' => $date->isoFormat('M月D日（ddd）'),
+                    'clock_in' => $attendance->clock_in_formatted,
+                    'clock_out' => $attendance->clock_out_formatted,
+                    'total_rest' => $attendance->total_rest_seconds,
+                    'total_rest_formatted' => $attendance->total_rest_formatted,
+                    'total_work_hours' => $attendance->total_work_minutes,
+                    'total_work_formatted' => $attendance->total_work_formatted,
+                ];
+            }
         }
 
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
