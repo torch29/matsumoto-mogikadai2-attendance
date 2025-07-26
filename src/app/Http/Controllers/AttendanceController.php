@@ -39,6 +39,7 @@ class AttendanceController extends Controller
                 return [$attendance->date->toDateString() => $attendance];
             });
 
+        //viewで表示するための設定
         $attendanceRecords = [];
 
         foreach ($dates as $date) {
