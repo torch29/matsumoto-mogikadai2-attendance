@@ -14,7 +14,7 @@ function updateClock() {
     const timeString = serverNow.toLocaleTimeString('ja-JP', timeSetting);
     document.getElementById("clock").textContent = timeString;
 
-    setTimeout(updateClock, 1000);
+    setTimeout(updateClock, 1000 - now.getMilliseconds());
 }
 
 //サーバーの時刻取得する
