@@ -44,7 +44,7 @@
                 <td class="attendance-table__data">{{ optional($attendance)['clock_out'] }}</td>
                 <td class="attendance-table__data">{{ optional($attendance)['total_rest_formatted'] }}</td>
                 <td class="attendance-table__data {{ optional($attendance)['total_work_hours'] >= 540 ? 'overtime' : '' }}">{{ optional($attendance)['total_work_formatted'] }}</td>
-                @if(empty($attendance['id']) )
+                @if( empty($attendance['id']) )
                 <td class="attendance-table__data"></td>
                 @else
                 <td class="attendance-table__data"><a href="/admin/attendance/{{ optional($attendance)['id'] }}">詳細</a></td>

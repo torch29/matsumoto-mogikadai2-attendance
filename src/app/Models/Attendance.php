@@ -130,20 +130,20 @@ class Attendance extends Model
     public function getClockInFormattedAttribute()
     {
         if (!$this->clock_in) {
-            return null;
+            return '';
         }
 
-        return Carbon::parse($this->clock_in)->format('H:i');
+        return $this->clock_in->format('H:i');
     }
 
     /* 退勤時刻のフォーマット */
     public function getClockOutFormattedAttribute()
     {
         if (!$this->clock_out) {
-            return null;
+            return '';
         }
 
-        return Carbon::parse($this->clock_out)->format('H:i');
+        return $this->clock_out->format('H:i');
     }
 
     /* 前月を返す */
