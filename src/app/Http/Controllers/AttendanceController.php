@@ -46,21 +46,11 @@ class AttendanceController extends Controller
             $attendance = $attendances[$date->toDateString()] ?? null;
 
             if (!$attendance) {
-                $attendanceRecords[] = [
-                    'date' => $date->isoFormat('M月D日（ddd）'),
-                ];
-            } else {
-                $attendanceRecords[] = [
-                    'id' => $attendance->id,
-                    'date' => $date->isoFormat('M月D日（ddd）'),
-                    'clock_in' => $attendance->clock_in_formatted,
-                    'clock_out' => $attendance->clock_out_formatted,
-                    'total_rest' => $attendance->total_rest_seconds,
-                    'total_rest_formatted' => $attendance->total_rest_formatted,
-                    'total_work_hours' => $attendance->total_work_minutes,
-                    'total_work_formatted' => $attendance->total_work_formatted,
-                ];
+                $attendance = new Attendance([
+                    'date' => $date,
+                ]);
             }
+            $attendanceRecords[] = $attendance;
         }
 
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
