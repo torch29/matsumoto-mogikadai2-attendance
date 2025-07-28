@@ -52,7 +52,7 @@ body {
     padding-left: 5px;
 }
 
-.detail-table__textarea,
+.detail-form__textarea,
 .detail-form__textarea--approve {
     width: 90%;
     height: 50px;
