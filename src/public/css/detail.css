@@ -34,20 +34,17 @@ body {
     padding-left: 2.5em;
     width: 13em;
 }
-.detail-table__data-left,
-.approve-table__data-left {
+.detail-table__data-left {
     width: 9em;
 }
-.detail-table__data span,
-.detail-table__data-left span,
-.approve-table__data span,
-.approve-table__data-left span {
+.detail-form__table td span,
+.detail-table__data-left span {
     padding-left: 6px;
 }
 
 
-.detail-table__input,
-.approve-table__input {
+.detail-form__input,
+.detail-form__input--approve {
     width: 6em;
     height: 30px;
     border: #E1E1E1 solid 1px;
@@ -56,7 +53,7 @@ body {
 }
 
 .detail-table__textarea,
-.approve-table__textarea {
+.detail-form__textarea--approve {
     width: 90%;
     height: 50px;
     margin: 10px 0;
@@ -64,22 +61,20 @@ body {
     border-radius: 5px;
 }
 
-.approve-table__input,
-.approve-table__textarea {
+.detail-form__input--approve,
+.detail-form__textarea--approve {
     border: none;
     outline: none;
 }
-.approve-table__textarea {
+.detail-form__textarea--approve {
     resize: none;
 }
 
-.detail-form__button,
-.approve-form__button {
+.detail-form__actions {
     margin-top: 30px;
     text-align: right;
 }
-.detail-form__button-submit,
-.approve-form__button-submit {
+.detail-form__submit {
     background-color: #000;
     color: #fff;
     padding: 3px 25px;
@@ -87,7 +82,7 @@ body {
     border-radius: 3px;
     cursor: pointer;
 }
-.approve-form__button-completed {
+.detail-form__completed {
     display: inline-block;
     background-color: #696969;
     color: #fff;
@@ -95,12 +90,14 @@ body {
     border-radius: 3px;
 }
 
+/* 承認ボタンを押せない状態のときにボタンの代わりにメッセージ表示 */
 .detail__status-message {
     color: #F87779;
     text-align: right;
 }
 
-.approve__status-message {
+/* 承認待ちであることを職員に知らせるためのメッセージエリア */
+.approve__status-message--pending {
     background-color: #D0E7DE;
     color: #1C6046;
     margin: 0 2px 10px;
