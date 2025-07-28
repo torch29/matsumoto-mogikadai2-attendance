@@ -56,8 +56,52 @@ class AttendanceController extends Controller
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 
-    /* 勤怠詳細画面の表示 */
+    //旧：勤怠詳細画面の表示
     public function showDetail($id)
+    {
+        $user = Auth::user();
+
+        $attendances = Attendance::with('user', 'rests', 'attendanceCorrections.restCorrections')->find($id);
+
+        //一般職員は自分のデータのみ取得
+        if (!$user->is_admin) {
+            $attendances->where('user_id', $user->id);
+        }
+        $attendance = $attendances->firstOrFail();
+
+        //該当の勤怠データがない場合エラーメッセージを表示して返す
+        if (!$attendance) {
+            return redirect()->back()->with('error', '該当のデータがありません。');
+        }
+
+        //最新の修正申請を取得
+        $latestCorrection = $attendance->attendanceCorrections->sortByDesc('created_at')->first();
+
+        $displayClockIn = optional($latestCorrection)->corrected_clock_in ?? $attendance->clock_in;
+        $displayClockOut = optional($latestCorrection)->corrected_clock_out ?? $attendance->clock_out;
+        $displayNote = optional($latestCorrection)->note ?? null;
+
+        //修正申請があればrest_correctionsを、なければrestsのデータを表示
+        $restRecords = $latestCorrection
+            ? $latestCorrection->restCorrections->map(function ($rest) {
+                return (object)[
+                    'rest_start' => $rest->corrected_rest_start,
+                    'rest_end' => $rest->corrected_rest_end,
+                ];
+            })
+            : $attendance->rests;
+
+        $view = $user->is_admin
+            ? 'admin.attendance.detail'
+            : 'staff.attendance.detail';
+
+        //一般職員用の勤怠詳細画面表示
+        return view($view, compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords', 'latestCorrection'));
+    }
+        /**/
+
+    /* 勤怠詳細画面の表示 */
+    /*public function showDetail(Attendance $attendance)
     {
         $user = Auth::user();
 
@@ -97,5 +141,5 @@ class AttendanceController extends Controller
 
         //一般職員用の勤怠詳細画面表示
         return view($view, compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords', 'latestCorrection'));
-    }
+    }*/
 }
