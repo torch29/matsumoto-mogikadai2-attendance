@@ -56,7 +56,7 @@ class AttendanceController extends Controller
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 
-    //旧：勤怠詳細画面の表示
+    /* 旧：勤怠詳細画面の表示
     public function showDetail($id)
     {
         $user = Auth::user();
@@ -98,23 +98,15 @@ class AttendanceController extends Controller
         //一般職員用の勤怠詳細画面表示
         return view($view, compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords', 'latestCorrection'));
     }
-        /**/
+*/
 
     /* 勤怠詳細画面の表示 */
-    /*public function showDetail(Attendance $attendance)
+    public function showDetail(Attendance $attendance)
     {
         $user = Auth::user();
 
-        $attendances = Attendance::with('user', 'rests', 'attendanceCorrections.restCorrections')->where('id', $id);
-
-        //一般職員は自分のデータのみ取得
-        if (!$user->is_admin) {
-            $attendances->where('user_id', $user->id);
-        }
-        $attendance = $attendances->firstOrFail();
-
-        //該当の勤怠データがない場合エラーメッセージを表示して返す
-        if (!$attendance) {
+        $attendance->load('user', 'rests', 'attendanceCorrections.restCorrections');
+        if (!$user->is_admin && $attendance->user_id !== $user->id) {
             return redirect()->back()->with('error', '該当のデータがありません。');
         }
 
@@ -141,5 +133,5 @@ class AttendanceController extends Controller
 
         //一般職員用の勤怠詳細画面表示
         return view($view, compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords', 'latestCorrection'));
-    }*/
+    }
 }
