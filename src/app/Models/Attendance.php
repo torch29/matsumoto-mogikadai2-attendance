@@ -109,10 +109,10 @@ class Attendance extends Model
     /* 実労働時間のフォーマット */
     public function getTotalWorkFormattedAttribute()
     {
-        $totalWorkMinutes = floor($this->total_work_seconds / 60); //秒を分に変換
-        if ($totalWorkMinutes === null) {
-            return null;
+        if ($this->total_work_seconds === null) {
+            return '';
         }
+        $totalWorkMinutes = floor($this->total_work_seconds / 60); //秒を分に変換
 
         if ($totalWorkMinutes >= 0) {
             return Carbon::createFromTime(0, 0)
