@@ -103,10 +103,11 @@ class AttendanceController extends Controller
     /* 勤怠詳細画面の表示 */
     public function showDetail(Attendance $attendance)
     {
-        $user = Auth::user();
-
+        $user = Auth::user(); //ログイン中のユーザー
         $attendance->load('user', 'rests', 'attendanceCorrections.restCorrections');
-        if (!$user->is_admin && $attendance->user_id !== $user->id) {
+        $staff = $attendance->user; //職員
+
+        if (!$user->is_admin && $attendance->user_id !== $staff->id) {
             return redirect()->back()->with('error', '該当のデータがありません。');
         }
 
@@ -132,6 +133,6 @@ class AttendanceController extends Controller
             : 'staff.attendance.detail';
 
         //一般職員用の勤怠詳細画面表示
-        return view($view, compact('attendance', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords', 'latestCorrection'));
+        return view($view, compact('attendance', 'staff', 'displayClockIn', 'displayClockOut', 'displayNote', 'restRecords', 'latestCorrection'));
     }
 }
