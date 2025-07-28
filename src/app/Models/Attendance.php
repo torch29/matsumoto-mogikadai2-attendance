@@ -55,6 +55,12 @@ class Attendance extends Model
         return '出勤中';
     }
 
+    /* 8時間以上の実労働時間を検出するための設定 */
+    const OVERTIME_MINUTES = 480;
+    public function isOvertime()
+    {
+        return $this->total_work_minutes >= self::OVERTIME_MINUTES;
+    }
 
     /* 指定されたスタッフの「本日分」の勤怠データ（休憩情報含む）を取得する */
     public function scopeTodayForUser($query, $userId)
