@@ -52,10 +52,10 @@ class AdminAttendanceListTest extends TestCase
         $response = $this->get('/admin/attendance/list');
         $response->assertViewIs('admin.attendance.list_all');
         $response->assertViewHas('attendanceOfEachStaffMembers', function ($records) use ($attendance2) {
-            return $records[1]['id'] === $attendance2->id
-                && $records[1]['clock_in'] === $attendance2->clock_in_formatted
-                && $records[1]['clock_out'] === $attendance2->clock_out_formatted
-                && $records[1]['total_rest_formatted'] === $attendance2->total_rest_formatted;
+            return $records[1]->id === $attendance2->id
+                && $records[1]->clock_in_formatted === $attendance2->clock_in_formatted
+                && $records[1]->clock_out_formatted === $attendance2->clock_out_formatted
+                && $records[1]->total_rest_formatted === $attendance2->total_rest_formatted;
         });
         $response->assertSeeInOrder([
             $user1->name,

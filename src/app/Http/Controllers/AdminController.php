@@ -53,7 +53,7 @@ class AdminController extends Controller
                 $attendance;
         }
 
-        return view('admin.attendance.list_all', compact('attendanceOfEachStaffMembers', 'attendance', 'targetDate', 'previousDay', 'nextDay'));
+        return view('admin.attendance.list_all', compact('attendanceOfEachStaffMembers', 'targetDate', 'previousDay', 'nextDay'));
     }
 
     /* スタッフ一覧の表示 */
