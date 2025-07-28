@@ -108,7 +108,7 @@ class AdminController extends Controller
 
             if (!$attendance) {
                 $attendance = new Attendance([
-                    'date' => $date->isoFormat('M月D日（ddd）'),
+                    'date' => $date,
                 ]);
             }
             $attendanceRecords[] = $attendance;
