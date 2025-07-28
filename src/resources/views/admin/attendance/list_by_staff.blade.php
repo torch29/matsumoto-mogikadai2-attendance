@@ -43,7 +43,7 @@
                 <td>{{ $attendance->clock_in_formatted }}</td>
                 <td class="attendance-table__data">{{ $attendance->clock_out_formatted }}</td>
                 <td class="attendance-table__data">{{ $attendance->total_rest_formatted }}</td>
-                <td class="attendance-table__data {{ $attendance->total_work_hours >= 540 ? 'overtime' : '' }}">{{ $attendance->total_work_formatted }}</td>
+                <td class="attendance-table__data {{ $attendance->total_work_minutes >= 540 ? 'overtime' : '' }}">{{ $attendance->total_work_formatted }}</td>
                 @if( empty($attendance->id) )
                 {{-- 勤怠情報がない場合”詳細”を表示しない --}}
                 <td class="attendance-table__data"></td>
