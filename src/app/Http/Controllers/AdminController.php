@@ -44,25 +44,16 @@ class AdminController extends Controller
         foreach ($staffMembers as $staff) {
             $attendance = $staff->attendances->first();
 
+            //勤怠データがない場合、空のインスタンスを作成する
             if (!$attendance) {
-                $attendanceOfEachStaffMembers[] = [
-                    'name' => $staff->name,
-                ];
-            } else {
-                $attendanceOfEachStaffMembers[] = [
-                    'name' => $staff->name,
-                    'id' => $attendance->id,
-                    'clock_in' => $attendance->clock_in_formatted,
-                    'clock_out' => $attendance->clock_out_formatted,
-                    'total_rest' => $attendance->total_rest_seconds,
-                    'total_rest_formatted' => $attendance->total_rest_formatted,
-                    'total_work_formatted' => $attendance->total_work_formatted,
-                    'total_work_hours' => $attendance->total_work_minutes,
-                ];
+                $attendance = new Attendance();
             }
+            $attendance->name = $staff->name;
+            $attendanceOfEachStaffMembers[] =
+                $attendance;
         }
 
-        return view('admin.attendance.list_all', compact('attendanceOfEachStaffMembers', 'targetDate', 'previousDay', 'nextDay'));
+        return view('admin.attendance.list_all', compact('attendanceOfEachStaffMembers', 'attendance', 'targetDate', 'previousDay', 'nextDay'));
     }
 
     /* スタッフ一覧の表示 */
@@ -116,22 +107,11 @@ class AdminController extends Controller
             $attendance = $attendances[$date->toDateString()] ?? null;
 
             if (!$attendance) {
-                $attendanceRecords[] = [
+                $attendance = new Attendance([
                     'date' => $date->isoFormat('M月D日（ddd）'),
-                ];
-            } else {
-                $attendanceRecords[] = [
-                    'id' => $attendance->id,
-                    'name' => $staff->name,
-                    'date' => $date->isoFormat('M月D日（ddd）'),
-                    'clock_in' => $attendance->clock_in_formatted,
-                    'clock_out' => $attendance->clock_out_formatted,
-                    'total_rest' => $attendance->total_rest_seconds,
-                    'total_rest_formatted' => $attendance->total_rest_formatted,
-                    'total_work_formatted' => $attendance->total_work_formatted,
-                    'total_work_hours' => $attendance->total_work_minutes,
-                ];
+                ]);
             }
+            $attendanceRecords[] = $attendance;
         }
 
         return view('admin.attendance.list_by_staff', compact('staff', 'dates', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));

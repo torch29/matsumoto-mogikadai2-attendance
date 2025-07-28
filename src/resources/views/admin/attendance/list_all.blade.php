@@ -39,15 +39,15 @@
 
             @foreach( $attendanceOfEachStaffMembers as $attendance )
             <tr class="attendance-table__row">
-                <td class="attendance-table__data">{{ $attendance['name'] }}</td>
-                <td class="attendance-table__data">{{ optional($attendance)['clock_in'] }}</td>
-                <td class="attendance-table__data">{{ optional($attendance)['clock_out'] }}</td>
-                <td class="attendance-table__data">{{ optional($attendance)['total_rest_formatted'] }}</td>
-                <td class="attendance-table__data {{ optional($attendance)['total_work_hours'] >= 540 ? 'overtime' : '' }}">{{ optional($attendance)['total_work_formatted'] }}</td>
-                @if( empty($attendance['id']) )
+                <td class="attendance-table__data">{{ $attendance->name }}</td>
+                <td class="attendance-table__data">{{ $attendance->clock_in_formatted }}</td>
+                <td class="attendance-table__data">{{ $attendance->clock_out_formatted }}</td>
+                <td class="attendance-table__data">{{ $attendance->total_rest_formatted }}</td>
+                <td class="attendance-table__data {{ $attendance->total_work_hours >= 540 ? 'overtime' : '' }}">{{ $attendance->total_work_formatted }}</td>
+                @if( !$attendance->id)
                 <td class="attendance-table__data"></td>
                 @else
-                <td class="attendance-table__data"><a href="/admin/attendance/{{ optional($attendance)['id'] }}">詳細</a></td>
+                <td class="attendance-table__data"><a href="/admin/attendance/{{ $attendance->id }}">詳細</a></td>
                 @endif
             </tr>
             @endforeach
