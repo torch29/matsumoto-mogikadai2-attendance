@@ -1,5 +1,4 @@
-.detail__title,
-.approve__title {
+.detail__title {
     border-left: 5px solid #333;
     padding-left: 8px;
     margin-bottom: 40px;
@@ -9,34 +8,28 @@ body {
     font-size: 0.9em;
 }
 
-.detail__content,
-.approve__content {
+.detail {
     margin: 65px auto;
     width: 60%;
 }
 
-.detail-table,
-.approve-table {
+.detail-form__table {
     width: 100%;
     background-color: #fff;
     border-radius: 5px;
 }
-.detail-table__heading,
-.approve-table__heading {
+.detail-form__table th {
     font-weight: normal;
     color: #737373;
 }
-.detail-table__row,
-.approve-table__row {
+.detail-form__table tr {
     height: 60px;
 }
-.detail-table__row:not(:last-child),
-.approve-table__row.detail-table__row:not(:last-child) {
+.detail-form__table tr:not(:last-child) {
     border-bottom: 2px solid #E1E1E1;
 }
 
-.detail-table__heading,
-.approve-table__heading {
+.detail-form__table th {
     text-align: left;
     padding-left: 2.5em;
     width: 13em;

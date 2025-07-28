@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="approve__content">
+<div class="detail">
     @if (session('error'))
     <div class="item__alert">
         <input type="checkbox" id="alert-close" class="alert-close">
@@ -15,13 +15,13 @@
         </div>
     </div>
     @endif
-    <div class="approve__title">
+    <div class="detail__title">
         <h3>勤怠詳細</h3>
     </div>
-    <div class="approve-table__wrapper">
-        <table class="approve-table">
-            <tr class="approve-table__row">
-                <th class="approve-table__heading">名前</th>
+    <div class="detail-form__wrapper">
+        <table class="detail-form__table">
+            <tr>
+                <th>名前</th>
                 <td class="approve-table__data-left" colspan="2">{{ $attendanceCorrection->attendance->user->name }}</td>
             </tr>
             <tr class="approve-table__row">
