@@ -8,7 +8,7 @@
 <div class="main__content-wrapper">
     <div class="main__content">
         @if (session('error'))
-        <div class="item__alert">
+        <div class="alert">
             <input type="checkbox" id="alert-close" class="alert-close">
             <div class="alert-message">
                 <label for="alert-close" class="alert-close__button">×</label>

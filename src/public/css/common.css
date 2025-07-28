@@ -86,7 +86,7 @@ a:visited {
 }
 
 /*メッセージの表示と閉じるボタン*/
-.item__alert {
+.alert {
     position: relative;
     margin: 20px 0 25px;
 }
