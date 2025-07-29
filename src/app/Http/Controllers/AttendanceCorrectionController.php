@@ -32,7 +32,7 @@ class AttendanceCorrectionController extends Controller
             $view = 'admin.request.list';
         }
 
-        //tabのステータスによる絞り込み
+        //tabのステータスによる絞り込みと並び替え
         if ($tab === 'approved') {
             $attendanceCorrectionsQuery->where('approve_status', 'approved')
                 ->orderBy('created_at', 'desc');
@@ -42,25 +42,7 @@ class AttendanceCorrectionController extends Controller
         }
         $attendanceCorrections = $attendanceCorrectionsQuery->get();
 
-        //viewファイルに渡すためのフォーマット
-        $stampCorrectionRecords = [];
-
-        foreach ($attendanceCorrections as $attendanceCorrection) {
-            $correctionTargetDateFormatted = $attendanceCorrection->correction_target_date_formatted;
-            $requestedAtFormatted = $attendanceCorrection->requested_at_formatted;
-
-            //viewファイルに渡す配列
-            $stampCorrectionRecords[] = [
-                'id' => $attendanceCorrection->id,
-                'attendance_id' => $attendanceCorrection->attendance_id,
-                'status' => $attendanceCorrection->approvalStatusLabel(),
-                'name' => $attendanceCorrection->attendance->user->name,
-                'correction_target_date' => $correctionTargetDateFormatted,
-                'note' => $attendanceCorrection->note,
-                'requested_at' => $requestedAtFormatted,
-            ];
-        }
-        return view($view, compact('stampCorrectionRecords', 'tab'));
+        return view($view, compact('attendanceCorrections', 'tab'));
     }
 
     /* 一般職員による勤怠データの修正申請 */

@@ -30,14 +30,14 @@
                 <th class="request-table__heading">申請日時</th>
                 <th class=" request-table__heading">詳細</th>
             </tr>
-            @foreach( $stampCorrectionRecords as $correction )
+            @foreach( $attendanceCorrections as $correction )
             <tr class="request-table__row">
-                <td class="request-table__data">{{ $correction['status'] }}</td>
-                <td class="request-table__data">{{ $correction['name'] }}</td>
-                <td class="request-table__data">{{ $correction['correction_target_date'] }}</td>
-                <td class="request-table__data">{{ $correction['note'] }}</td>
-                <td class="request-table__data">{{ $correction['requested_at'] }}</td>
-                <td class="request-table__data"><a href="/admin/stamp_correction_request/approve/{{ $correction['id'] }}">詳細</a></td>
+                <td class="request-table__data">{{ $correction->approvalStatusLabel() }}</td>
+                <td class="request-table__data">{{ $correction->attendance->user->name }}</td>
+                <td class="request-table__data">{{ $correction->correction_target_date_formatted }}</td>
+                <td class="request-table__data">{{ $correction->note }}</td>
+                <td class="request-table__data">{{ $correction->requested_at_formatted }}</td>
+                <td class="request-table__data"><a href="/admin/stamp_correction_request/approve/{{ $correction->id }}">詳細</a></td>
             </tr>
             @endforeach
         </table>
