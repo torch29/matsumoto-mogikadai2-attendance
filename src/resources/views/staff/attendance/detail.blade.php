@@ -122,9 +122,9 @@
             @if ( $latestCorrection && $latestCorrection->approve_status === 'pending' )
             <div class="detail__status-message">*承認待ちのため修正はできません。</div>
             @else
-            <div class="detail-form__button">
+            <div class="detail-form__actions">
                 <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
-                <button class="detail-form__button-submit">修正</button>
+                <button class="detail-form__submit">修正</button>
             </div>
             @endif
         </form>
