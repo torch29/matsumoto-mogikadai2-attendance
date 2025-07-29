@@ -72,7 +72,7 @@ class AdminAttendanceApproveTest extends TestCase
             $response->assertSee($correction['staff']->name);
             $response->assertSee($correction['correction']->note);
         }
-        $response->assertViewHas('stampCorrectionRecords', fn($records) => count($records) === 3);
+        $response->assertViewHas('attendanceCorrections', fn($records) => count($records) === 3);
         $response->assertSeeInOrder([
             '状態',
             '承認待ち',
@@ -105,7 +105,7 @@ class AdminAttendanceApproveTest extends TestCase
             $response->assertSee($correction['staff']->name);
             $response->assertSee($correction['correction']->note);
         }
-        $response->assertViewHas('stampCorrectionRecords', fn($records) => count($records) === 3);
+        $response->assertViewHas('attendanceCorrections', fn($records) => count($records) === 3);
         $response->assertSeeInOrder([
             '状態',
             '承認済み',

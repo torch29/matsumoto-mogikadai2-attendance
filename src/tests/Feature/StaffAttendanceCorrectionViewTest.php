@@ -76,9 +76,9 @@ class StaffAttendanceCorrectionViewTest extends TestCase
         //管理者が申請一覧画面にアクセスし、修正申請されたデータが表示されていることを確認
         $response = $this->get('/admin/stamp_correction_request/list');
         $response->assertViewIs('admin.request.list');
-        $response->assertViewHas('stampCorrectionRecords', function ($records) use ($staff, $correction) {
-            return $records[0]['name'] === $staff->name
-                && $records[0]['note'] === $correction->note;
+        $response->assertViewHas('attendanceCorrections', function ($records) use ($staff, $correction) {
+            return $records[0]->attendance->user->name === $staff->name
+                && $records[0]->note === $correction->note;
         });
         $response->assertSeeInOrder([
             '申請一覧',
