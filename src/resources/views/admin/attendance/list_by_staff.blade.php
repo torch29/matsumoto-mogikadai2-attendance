@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="list__content">
+<div class="list">
     <div class="list__title">
         <h3>{{ $staff->name }}さんの勤怠</h3>
     </div>
@@ -22,24 +22,24 @@
         </div>
         <div class="list__guide-link">
             <a href="{{ route('admin.attendances.list-by-staff', ['id' => $staff->id, 'date' => $nextMonth]) }}">
-                翌月<img src="{{ asset('img/arrow.png') }}" class="link__icon-next" alt="">
+                翌月<img src="{{ asset('img/arrow.png') }}" class="list__guide-link--icon-next" alt="">
             </a>
         </div>
     </div>
 
-    <div class="attendance-table__wrapper">
-        <table class="attendance-table">
-            <tr class="attendance-table__row">
-                <th class="attendance-table__heading">日付</th>
-                <th class="attendance-table__heading">出勤</th>
-                <th class="attendance-table__heading">退勤</th>
-                <th class="attendance-table__heading">休憩</th>
-                <th class="attendance-table__heading">合計</th>
-                <th class=" attendance-table__heading">詳細</th>
+    <div class="list-table__wrapper">
+        <table class="list-table">
+            <tr>
+                <th>日付</th>
+                <th>出勤</th>
+                <th>退勤</th>
+                <th>休憩</th>
+                <th>合計</th>
+                <th>詳細</th>
             </tr>
             @foreach( $attendanceRecords as $attendance )
-            <tr class="attendance-table__row">
-                <th class="attendance-table__data"><span class="attendance-table__data--date">{{ $attendance->date->isoFormat('M月D日（ddd）') }}</span></th>
+            <tr>
+                <th class="list-table__data"><span class="attendance-table__data--date">{{ $attendance->date->isoFormat('M月D日（ddd）') }}</span></th>
                 <td>{{ $attendance->clock_in_formatted }}</td>
                 <td class="attendance-table__data">{{ $attendance->clock_out_formatted }}</td>
                 <td class="attendance-table__data">{{ $attendance->total_rest_formatted }}</td>
@@ -55,8 +55,8 @@
         </table>
         <form action="/admin/export/{{ $staff->id }}" method="get">
             @csrf
-            <div class="export-button">
-                <button class="export-button--submit">CSV出力</button>
+            <div class="list__actions">
+                <button class="list__actions--export-button">CSV出力</button>
             </div>
         </form>
     </div>

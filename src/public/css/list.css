@@ -2,7 +2,7 @@ body {
     background-color: #F0EFF2;
     font-size: 0.9em;
 }
-.list__content {
+.list {
     width: 70%;
     margin: 65px auto;
 }
@@ -33,7 +33,24 @@ body {
 .list__guide-link a:visited {
     color: #737373;
 }
+/* 月・日遷移用アイコンの設定 */
+.link__icon {
+    width: 16px;
+    opacity: 0.3;
+    display: inline-block;
+    margin: auto 0;
+    margin-right: 2px;
+}
+.list__guide-link--icon-next {
+    transform: rotate(180deg);
+    width: 16px;
+    opacity: 0.3;
+    display: inline-block;
+    margin: auto 0;
+    margin-left: 2px;
+}
 
+/* date/month pickerの設定 */
 .date-selector,
 .month-selector {
     border: none;
@@ -49,53 +66,47 @@ body {
     margin-right: 0;
 }
 
-.attendance-table,
-.request-table {
+.list-table {
     background-color: #fff;
     border-radius: 5px;
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
 }
-.attendance-table__heading,
-.request-table__heading {
+.list-table th {
     font-weight: normal;
     border-bottom: 3px solid #E1E1E1;
     color: #737373;
 }
-.attendance-table__heading:first-child,
-.request-table__heading:first-child {
+.list-table__heading {
+    border-bottom: 2px solid #E1E1E1;
+}
+.list-table th:first-child {
     width: 12em;
 }
-.attendance-table__heading:last-child,
-.request-table__heading:last-child {
+.list-table th:last-child {
     padding-right: 30px;
 }
-.attendance-table__row,
-.request-table__row {
+.list-table tr {
     border-collapse: collapse;
     height: 50px;
     text-align: center;
 }
-.attendance-table__row:not(:last-child),
-.request-table__row:not(:last-child) {
+.list-table tr:not(:last-child) {
     border-bottom: 2px solid #E1E1E1;
 }
-.attendance-table__data,
-.request-table__data {
+.list-table__data {
     padding: 3px 8px;
     color: #000;
 }
-.attendance-table__data--date {
+.list-table__data--date {
     color: #737373;
     font-weight: normal;
 }
-.attendance-table__data:first-child,
-.request-table__data:first-child {
+.list-table__data:first-child {
     padding-left: 30px;
 }
-.attendance-table__data:last-child,
-.request-table__data:last-child {
+.list-table__data:last-child {
     font-weight: bold;
     padding: 3px 30px 3px 0px;
 }
@@ -106,22 +117,6 @@ body {
 .table__data--none,
 .table__data--none:visited {
     color: #9b9b9b;
-}
-
-.link__icon {
-    width: 16px;
-    opacity: 0.3;
-    display: inline-block;
-    margin: auto 0;
-    margin-right: 2px;
-}
-.link__icon-next {
-    transform: rotate(180deg);
-    width: 16px;
-    opacity: 0.3;
-    display: inline-block;
-    margin: auto 0;
-    margin-left: 2px;
 }
 
 /* タブの設定 */
@@ -147,11 +142,12 @@ body {
     color: #000;
 }
 
-.export-button {
+/* CSV出力ボタン */
+.list__actions {
     margin: 20px 0;
     text-align: right;
 }
-.export-button--submit {
+.list__actions--export-button {
     background-color: #000;
     color: #fff;
     border: 1px solid #000;

@@ -32,7 +32,7 @@
             <script src="{{ asset('js/display_time.js') }}"></script>
         </div>
 
-        <div class="attendance-form">
+        <div class="attendance-form>
             <div class="attendance-form__button">
                 @if( $status === '勤務外' )
                 <form action="attendance/clockIn" method="post">

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="list__content">
+<div class="list">
     {{-- 一般職員でログイン時の申請一覧表示 --}}
     <div class="list__title">
         <h3>申請一覧</h3>
@@ -20,24 +20,24 @@
             </li>
         </ul>
     </div>
-    <div class="request-table__wrapper">
-        <table class="request-table">
-            <tr class="request-table__row">
-                <th class="request-table__heading">状態</th>
-                <th class="request-table__heading">名前</th>
-                <th class="request-table__heading">対象日時</th>
-                <th class="request-table__heading">申請理由</th>
-                <th class="request-table__heading">申請日時</th>
-                <th class=" request-table__heading">詳細</th>
+    <div class="list-table__wrapper">
+        <table class="list-table">
+            <tr>
+                <th>状態</th>
+                <th>名前</th>
+                <th>対象日時</th>
+                <th>申請理由</th>
+                <th>申請日時</th>
+                <th>詳細</th>
             </tr>
             @foreach( $attendanceCorrections as $correction )
-            <tr class="request-table__row">
-                <td class="request-table__data">{{ $correction->approvalStatusLabel() }}</td>
-                <td class="request-table__data">{{ $correction->attendance->user->name }}</td>
-                <td class="request-table__data">{{ $correction->correction_target_date_formatted }}</td>
-                <td class="request-table__data">{{ $correction->note }}</td>
-                <td class="request-table__data">{{ $correction->requested_at_formatted }}</td>
-                <td class="request-table__data"><a href="/attendance/{{ $correction['attendance_id'] }}">詳細</a></td>
+            <tr>
+                <td>{{ $correction->approvalStatusLabel() }}</td>
+                <td>{{ $correction->attendance->user->name }}</td>
+                <td>{{ $correction->correction_target_date_formatted }}</td>
+                <td>{{ $correction->note }}</td>
+                <td>{{ $correction->requested_at_formatted }}</td>
+                <td><a href="/attendance/{{ $correction['attendance_id'] }}">詳細</a></td>
             </tr>
             @endforeach
         </table>
