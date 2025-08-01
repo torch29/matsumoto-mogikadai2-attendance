@@ -37,7 +37,9 @@
                 <td class="list-table__data">{{ $correction->correction_target_date_formatted }}</td>
                 <td class="list-table__data">{{ $correction->note }}</td>
                 <td class="list-table__data">{{ $correction->requested_at_formatted }}</td>
-                <td class="list-table__data"><a href="/admin/stamp_correction_request/approve/{{ $correction->id }}">詳細</a></td>
+                <td class="list-table__data">
+                    <a href="/admin/stamp_correction_request/approve/{{ $correction->id }}">詳細</a>
+                </td>
             </tr>
             @endforeach
         </table>

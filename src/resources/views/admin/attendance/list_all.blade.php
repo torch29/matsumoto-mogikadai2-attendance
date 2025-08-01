@@ -13,7 +13,7 @@
     <div class="list__guide-area">
         <div class="list__guide-link">
             <a href="{{ route('admin.attendances.list-by-date', ['date' => $previousDay]) }}">
-                <img src="{{ asset('img/arrow.png') }}" class="link__icon" alt="">前日
+                <img src="{{ asset('img/arrow.png') }}" class="list__guide-icon" alt="">前日
             </a>
         </div>
         <div class="list__current-date">
@@ -43,7 +43,9 @@
                 <td class="list-table__data">{{ $attendance->clock_in_formatted }}</td>
                 <td class="list-table__data">{{ $attendance->clock_out_formatted }}</td>
                 <td class="list-table__data">{{ $attendance->total_rest_formatted }}</td>
-                <td class="list-table__data {{ $attendance->isOvertime() ? 'overtime' : '' }}">{{ $attendance->total_work_formatted }}</td>
+                <td class="list-table__data {{ $attendance->isOvertime() ? 'overtime' : '' }}">
+                    {{ $attendance->total_work_formatted }}
+                </td>
                 @if( !$attendance->id)
                 <td class="list-table__data"></td>
                 @else

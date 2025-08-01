@@ -56,7 +56,8 @@ class AttendanceController extends Controller
         return view('staff.attendance.list', compact('attendances', 'user', 'attendanceRecords', 'selectDate', 'previousMonth', 'nextMonth'));
     }
 
-    /* 旧：勤怠詳細画面の表示
+    /*
+旧：勤怠詳細画面の表示
     public function showDetail($id)
     {
         $user = Auth::user();

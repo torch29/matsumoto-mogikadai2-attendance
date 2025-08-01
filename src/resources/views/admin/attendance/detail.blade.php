@@ -18,7 +18,7 @@
     <div class="detail__title">
         <h3>勤怠詳細</h3>
     </div>
-    <div class="detail-table__wrapper">
+    <div class="detail__content">
         <form action="/admin/correction" class="detail-form" method="post">
             @csrf
             <table class="detail-form__table">
@@ -29,15 +29,19 @@
                 <tr>
                     <th>日付</th>
                     <td class="detail-table__data-left"><span>{{ $attendance->date->isoFormat('Y') }}年</span></td>
-                    <td><span>{{ $attendance->date->isoFormat('M') . '月' . $attendance->date->isoFormat('D') . '日'  }}</span></td>
+                    <td>
+                        <span>{{ $attendance->date->isoFormat('M') . '月' . $attendance->date->isoFormat('D') . '日'  }}</span>
+                    </td>
                 </tr>
                 <tr>
                     <th>出勤・退勤</th>
                     <td class="detail-table__data-left">
-                        <input type="time" class="detail-form__input" name="corrected_clock_in" value="{{ old("corrected_clock_in", optional($displayClockIn)->format('H:i')) }}">　～
+                        <input type="time" class="detail-form__input" name="corrected_clock_in"
+                            value="{{ old("corrected_clock_in", optional($displayClockIn)->format('H:i')) }}">　～
                     </td>
                     <td>
-                        <input type="time" class="detail-form__input" name="corrected_clock_out" value="{{ old("corrected_clock_out", optional($displayClockOut)->format('H:i')) }}">
+                        <input type="time" class="detail-form__input" name="corrected_clock_out"
+                            value="{{ old("corrected_clock_out", optional($displayClockOut)->format('H:i')) }}">
                     </td>
                     <td class="table__data--error">
                         <p class="error__message">
